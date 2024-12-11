@@ -19,7 +19,7 @@ Features:
 Edit names here: 
 <ul>
   <li>Sid Patel</li>
-  <li>Team Member #2</li>
+  <li>Tom Martin</li>
   <li>Team Member #3</li>
   <li>Team Member #4</li>
   <li>Team Member #5</li>
