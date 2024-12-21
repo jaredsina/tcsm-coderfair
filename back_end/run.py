@@ -1,11 +1,6 @@
+from app import app
 
-# Create the Flask application instance here (name it app)
-
-
-#if __name__ == '__main__': ensures that the application only runs if the script 
-# is executed directly (not imported as a module elsewhere).
-if __name__ == '__main__':
+if __name__ == '__main__': # ensures code will only run if the script is directly executed (not imported as a module)
     # Run the app with the development server (useful for development)
-    # Example: app.run(debug=True)
-    pass
-
+    app.run(debug=True, host="0.0.0.0", port=5000)
+    # any configurations should be done here
