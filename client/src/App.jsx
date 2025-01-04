@@ -1,21 +1,13 @@
-import { useState } from 'react'
-import './App.css'
-
-
-//My fav component librarys:
-//https://mantine.dev/
-//https://www.chakra-ui.com/
-//https://react-bootstrap.netlify.app/
-//https://mui.com/material-ui/
-
+import React from 'react';
+import './App.css';
+import NavBar from './Components/navbar';
 
 function App() {
-  
   return (
     <>
-      <h1>Hello</h1>
+      <NavBar />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
