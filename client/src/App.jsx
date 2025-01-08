@@ -1,11 +1,13 @@
 import React from 'react';
 import './App.css';
 import NavBar from './Components/navbar';
+import FeaturedProject from './Components/FeaturedProject';
 
 function App() {
   return (
     <>
-      <NavBar />
+      {/* <NavBar /> */}
+      <FeaturedProject/>
     </>
   );
 }
