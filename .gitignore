@@ -1,10 +1,13 @@
-
+.ruff_cache/
 __pycache__/
 
 
 #venv
 back_end_venv/
 venv/ 
+
+# MongoDB config
+config.ini
 
 # Logs
 logs
