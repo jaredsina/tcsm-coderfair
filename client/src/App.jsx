@@ -8,7 +8,8 @@ function App() {
     <>
       <NavBar />
       <ProjectPage />
-      <AccountPage/>
+
+      <AccountPage />
     </>
   );
 }
