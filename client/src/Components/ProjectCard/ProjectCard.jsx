@@ -1,10 +1,10 @@
-import { Card, Image, Text, Badge, Button, Group } from "@mantine/core";
-import "./ProjectCard.css";
+import { Card, Image, Text, Badge, Button, Flex } from '@mantine/core';
+import './ProjectCard.css';
 
 const ProjectCard = ({
-  title = "Project Name",
-  description = "Project Description",
-  language = "Lang.",
+  title = 'Project Name',
+  description = 'Project Description',
+  language = 'Lang.',
 }) => {
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -16,10 +16,13 @@ const ProjectCard = ({
         />
       </Card.Section>
 
-      <Group justify="space-between" mt="md" mb="xs">
+      <Flex justify="space-between" align="center" mt="md" mb="xs">
         <Text fw={500}>{title}</Text>
-        {language && <Badge color="blue">{language}</Badge>}
-      </Group>
+        {/* {language && <Badge color="blue">{language}</Badge>} */}
+        {language.map((projectLanguage) => (
+          <Badge color="blue">{projectLanguage}</Badge>
+        ))}
+      </Flex>
       <Text size="sm" c="dimmed">
         {description}
       </Text>
