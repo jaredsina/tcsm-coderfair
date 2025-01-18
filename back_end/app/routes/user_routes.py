@@ -11,3 +11,15 @@ def get_users():
 @user_routes.route('/<int:user_id>')
 def get_user(user_id):
     return jsonify({'message': f'User with ID {user_id}'})
+
+@user_routes.route('/codefairs/<int:user_id>')
+def get_coderfairs(user_id):
+    return jsonify({'message': f'codefair info with ID {user_id}'})
+
+@user_routes.route('/codefairs/<int:user_id>')
+def update_codefairs(user_id):
+    return jsonify({'message': f'update coderfair info with ID {user_id}'})
+
+@user_routes.route('/codefairs/<int:user_id>')
+def delete_coderfairs(user_id):
+    return jsonify({'message': f'delete coderfair info with ID{user_id}'})
