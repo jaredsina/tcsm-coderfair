@@ -29,8 +29,8 @@ const AccountPage = () => {
           direction="olumn"
           wrap="wrap">
           <Text
-            size="3rem"
-            fw={900}
+            size="1.7rem"
+            fw={{ xs: 100, sm: 300, md: 500, lg: 900}}
             variant="gradient"
             gradient={{ from: 'rgba(186, 186, 186, 1)', to: 'rgba(0, 0, 0, 1)', deg: 199 }}
           >
@@ -42,8 +42,8 @@ const AccountPage = () => {
           <Select label="Select Year" placeholder="Choose Value"
             data={['Current', '2024', '2023', '2022', '2021']}></Select>
 
-          <SimpleGrid cols={3} spacing={{ base: 10, sm: 'xl' }}
-            verticalSpacing={{ base: 'md', sm: 'xl' }}>
+          <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 3 }} spacing={{ base: 10, sm: 'xl' }}
+            verticalSpacing={{ base: 'md', sm: 'xl' }} >
             <ProjectCard />
             <ProjectCard />
             <ProjectCard />
