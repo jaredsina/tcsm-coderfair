@@ -19,3 +19,7 @@ def delete_project(project_id):
 @projects_routes.route('/<int:project_id>')
 def update_project(project_id):
     return jsonify({'message': f'Project with ID {project_id}'})
+
+@projects_routes.route('/<int:project_id>')
+def create_project(project_id):
+    return jsonify({'message': f'Project with ID {project_id}'})
