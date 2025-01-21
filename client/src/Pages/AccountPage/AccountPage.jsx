@@ -1,5 +1,5 @@
 import React from "react"
-import ProjectCard from "../ProjectCard/ProjectCard";
+import ProjectCard from "../../Components/ProjectCard/ProjectCard";
 import { Center, Flex, rem, Select, SimpleGrid, Container, Text, Avatar, Space } from '@mantine/core';
 import "./AccountPage.css"
 
