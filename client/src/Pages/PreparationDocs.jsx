@@ -1,8 +1,9 @@
 import React from 'react';
+import './pages.css';
 
 const PreparationDocs = () => {
   return (
-    <div>
+    <div className="container">
       <h1>PreparationDocs</h1>
       {}
     </div>

@@ -1,0 +1,11 @@
+.results-container {
+  display: flex;
+  justify-content: space-between; /* Space the cards evenly */
+  align-items: center;
+  padding: 20px;
+  gap: 20px; /* Add space between cards */
+  flex-wrap: wrap; /* Allow cards to wrap if needed for responsiveness */
+  background-color: #f8f9fa; /* Light background for contrast */
+  height: 100vh; /* Full viewport height */
+  box-sizing: border-box; /* Ensure padding doesn’t affect layout */
+}

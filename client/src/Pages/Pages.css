@@ -1,0 +1,10 @@
+/* account.css */
+
+.container {
+  padding-top: 60px; /* Adjust this value based on the height of your navigation bar */
+}
+
+h1 {
+  text-align: center;
+  margin-top: 0;
+}

@@ -1,10 +1,10 @@
 import React from 'react';
+import './pages.css';
 
 const Account = () => {
   return (
-    <div>
+    <div className="container">
       <h1>Account</h1>
-      {}
     </div>
   );
 };
