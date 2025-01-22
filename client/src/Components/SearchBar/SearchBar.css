@@ -1,4 +1,11 @@
 .SearchBarContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
   width: 500px;
   margin: 50px auto;
+}
+
+.SearchBar {
+  width: 400px;
 }

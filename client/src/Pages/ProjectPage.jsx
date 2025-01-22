@@ -1,5 +1,5 @@
-import ProjectCard from './ProjectCard/ProjectCard';
-import SearchBar from './SearchBar/SearchBar';
+import ProjectCard from '../Components/ProjectCard/ProjectCard';
+import SearchBar from '../Components/SearchBar/SearchBar';
 const ProjectPage = () => {
   return (
     <main className="ProjectPageMain">
