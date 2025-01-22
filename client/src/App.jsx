@@ -7,7 +7,7 @@ import Results from "./Pages/Results";
 import PreparationDocs from "./Pages/PreparationDocs";
 import Archive from "./Pages/Archive";
 import Account from "./Pages/AccountPage/AccountPage";
-import Home from "./Pages/Home";  // If you want a Home component for the root route
+import Home from "./Pages/HomePage/HomePage";  // If you want a Home component for the root route
 
 function App() {
   return (
