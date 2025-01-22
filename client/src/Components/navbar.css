@@ -9,7 +9,7 @@ body {
     background-color: #f5f5f5; /* Light gray background */
     padding: 10px 20px;
     border-bottom: 1px solid #ccc; /* Subtle border at the bottom */
-    position: fixed; /* Sticks to the top */
+    position: sticky; /* Sticks to the top */
     top: 0;
     width: 100%; /* Full-width navbar */
     z-index: 1000; /* Stay above other content */

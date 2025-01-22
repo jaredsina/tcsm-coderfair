@@ -3,11 +3,11 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import NavBar from "./Components/navbar";
 import ProjectPage from "./Pages/ProjectPage";
-import Results from "./Pages/Results"; 
+import Results from "./Pages/Results";
 import PreparationDocs from "./Pages/PreparationDocs";
 import Archive from "./Pages/Archive";
-import Account from "./Pages/Account";
-import Home from "./Pages/Home";  // If you want a Home component for the root route
+import Account from "./Pages/AccountPage/AccountPage";
+import Home from "./Pages/HomePage/HomePage";  // If you want a Home component for the root route
 
 function App() {
   return (
