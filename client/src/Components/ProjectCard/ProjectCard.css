@@ -6,3 +6,18 @@
   margin-top: 45px;
   padding-left: 50px;
 }
+
+.ProjectCard {
+  padding: 25px;
+}
+
+.ProjectTitle {
+  display: flex;
+  justify-content: center;
+  height: 85px;
+}
+
+h1 {
+  font-size: 50px;
+  font-weight: 200px;
+}

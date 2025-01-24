@@ -8,22 +8,21 @@ const ProjectPage = () => {
 
   return (
     <main className="ProjectPageMain">
+      <div className="ProjectTitle">
+        <h1>Project Gallery</h1>
+      </div>
+
       <SearchBar />
       <div className="ProjectCardList">
-        <Flex
-          mih={50}
-          gap="md"
-          justify="center"
-          align="flex-start"
-          direction="row"
-          wrap="wrap"
-        >
+        <Flex mih={50} gap="md" direction="row" wrap="wrap">
           {ProjectData.map((project) => (
-            <ProjectCard
-              title={project.title}
-              description={project.description}
-              language={project.language}
-            />
+            <div className="ProjectCard">
+              <ProjectCard
+                title={project.title}
+                description={project.description}
+                language={project.language}
+              />
+            </div>
           ))}
         </Flex>
       </div>

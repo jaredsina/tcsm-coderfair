@@ -15,5 +15,11 @@
     "title": "Candy Clicker",
     "description": "Cookie Clicker but candy!",
     "language": ["HTML", "CSS", "JS"]
+  },
+
+  {
+    "title": "Hangman",
+    "description": "Classic Hangman",
+    "language": ["Python"]
   }
 ]
