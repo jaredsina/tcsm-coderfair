@@ -5,9 +5,18 @@ const ProjectCard = ({
   title = 'Project Name',
   description = 'Project Description',
   language = 'Lang.',
+  children,
+  className,
+  style,
 }) => {
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder>
+    <Card
+      style={{ ...style, width: style?.width || 300 }}
+      shadow="sm"
+      padding="lg"
+      radius="md"
+      withBorder
+    >
       <Card.Section>
         <Image
           src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png"

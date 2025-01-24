@@ -6,6 +6,9 @@ __pycache__/
 back_end_venv/
 venv/ 
 
+# MongoDB config
+config.ini
+
 # Logs
 logs
 *.log
