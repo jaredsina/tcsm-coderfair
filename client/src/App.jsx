@@ -7,14 +7,14 @@ import Results from "./Pages/Results";
 import PreparationDocs from "./Pages/PreparationDocs";
 import Archive from "./Pages/Archive";
 import Account from "./Pages/AccountPage/AccountPage";
-import Home from "./Pages/HomePage/HomePage";  // If you want a Home component for the root route
+import Home from "./Pages/HomePage/HomePage";  
 
 function App() {
   return (
     <Router>
       <NavBar />
       <Routes>
-        <Route path="/" element={<Home />} />  {/* Assuming you want a Home page */}
+        <Route path="/" element={<Home />} /> 
         <Route path="/results" element={<Results />} />
         <Route path="/projects" element={<ProjectPage />} />
         <Route path="/preparation-docs" element={<PreparationDocs />} />
