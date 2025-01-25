@@ -1,47 +1,48 @@
+/* Parent Card Styling */
 .result-card {
-  width: 30%; /* Make each card take 30% of the parent container width */
-  height: 60%; /* Adjust the height to fit nicely within the viewport */
-  border: 1px solid #ccc; /* Optional border */
-  border-radius: 8px; /* Rounded corners */
-  background-color: #ffffff; /* White background for better visibility */
-  padding: 20px; /* Internal spacing */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  width: 400px; /* Slightly larger card width */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 25px; /* More space for content */
+}
+
+.result-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Project Box Styling */
+.project-boxes {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
+  gap: 15px;
 }
 
-.result-title {
-  margin: 0;
-  font-size: 24px; /* Increase font size for better readability */
-  font-weight: bold;
+.project-box {
+  background-color: #f8f9fa; /* Light gray for project boxes */
   text-align: center;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.result-block {
-  width: 90%;
-  height: 20%;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff; /* White text for better contrast */
-  font-size: 16px; /* Slightly larger text */
-  text-align: center;
+.project-box:hover {
+  background-color: #d4edda; /* Light green on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.picture-block {
-  background-color: #7a2a2a;
+/* Responsive Design for Cards */
+@media screen and (max-width: 1200px) {
+  .result-card {
+    width: calc(50% - 20px); /* 2 cards per row */
+  }
 }
 
-.frame-block {
-  background-color: #7a2a2a;
-  opacity: 0.9;
+@media screen and (max-width: 768px) {
+  .result-card {
+    width: calc(100% - 20px); /* 1 card per row */
+  }
 }
-
-.additional-block {
-  background-color: #7a2a2a;
-}
-
