@@ -4,7 +4,8 @@
 
 .ProjectPageMain {
   margin-top: 45px;
-  padding-left: 50px;
+  padding: 0px 50px;
+  width: 100%;
 }
 
 .ProjectCard {
