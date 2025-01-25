@@ -1,0 +1,22 @@
+{
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.git": true,
+    "**/venv": true
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  // Backend - Python Ruff Configuration
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit"
+    },
+    "python.formatting.provider": "none",
+    "python.linting.enabled": false,
+    "python.linting.ruffEnabled": true
+  }
+}
