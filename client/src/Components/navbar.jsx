@@ -45,6 +45,11 @@ const NavBar = () => {
             Account
           </Link>
         </li>
+        <li>
+          <Link to="/judging" onClick={()=> setOpened(false)}>
+            Judging
+          </Link>
+        </li>
       </ul>
     </nav>
   );
