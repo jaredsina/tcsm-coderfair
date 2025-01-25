@@ -1,0 +1,12 @@
+.carousel-link {
+  text-decoration: none;
+  padding: 3.9rem;
+  margin: 0;
+  color: white;
+  font-weight: 600;
+  transition: all .3s ease;
+}
+
+.carousel-link:hover {
+  font-weight: 900;
+}
