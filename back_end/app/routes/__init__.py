@@ -3,6 +3,7 @@
 from .user_routes import user_routes
 from .projects_routes import projects_routes
 from .coderfair_routes import coderfair_routes
+from .question_routes import question_routes
 
 # Registering blueprints (routes) here
 def init_routes(app):
@@ -11,3 +12,5 @@ def init_routes(app):
     app.register_blueprint(user_routes, url_prefix='/users')
     app.register_blueprint(projects_routes, url_prefix= '/projects')
     app.register_bluepring(coderfair_routes, url_prefix= '/coderfair')
+    app.register_bluepring(question_routes, url_prefix= '/questions')
+
