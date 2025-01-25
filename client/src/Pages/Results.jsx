@@ -1,10 +1,13 @@
 import React from 'react';
+import './Results.css';
+import ResultCard from '../Components/ResultCard/ResultCard'; // Adjusted relative path
 
 const Results = () => {
   return (
-    <div>
-      <h1>Results</h1>
-      {}
+    <div className="results-container">
+      <ResultCard />
+      <ResultCard />
+      <ResultCard />
     </div>
   );
 };
