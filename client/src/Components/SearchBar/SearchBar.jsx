@@ -1,10 +1,9 @@
-import { TextInput } from '@mantine/core';
-import { Menu, Button, Text, rem } from '@mantine/core';
+import { Menu, Button, Text, rem, TextInput, Flex } from '@mantine/core';
 import './SearchBar.css';
 
 const SearchBar = () => {
   return (
-    <div className="SearchBarContainer">
+    <Flex justify="center" align="center" gap="10px">
       <div className="SearchBar">
         <TextInput placeholder="Search student or project" />
       </div>
@@ -21,7 +20,7 @@ const SearchBar = () => {
           <Menu.Item>Project A-Z</Menu.Item>
         </Menu.Dropdown>
       </Menu>
-    </div>
+    </Flex>
   );
 };
 
