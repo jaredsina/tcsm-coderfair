@@ -1,9 +1,0 @@
-{
-  "recommendations": [
-    "esbenp.prettier-vscode",
-    "dbaeumer.vscode-eslint",
-    //Python Formatting/Linting
-    "ruff.ruff-vscode"
-  ],
-  "unwantedRecommendations": []
-}
