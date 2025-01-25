@@ -1,0 +1,24 @@
+.mantine-Card-root {
+  width: 294px;
+}
+
+.ProjectPageMain {
+  margin-top: 45px;
+  padding: 0px 50px;
+  width: 100%;
+}
+
+.ProjectCard {
+  padding: 25px;
+}
+
+.ProjectTitle {
+  display: flex;
+  justify-content: center;
+  height: 85px;
+}
+
+h1 {
+  font-size: 50px;
+  font-weight: 200px;
+}

@@ -1,44 +1,98 @@
 /* Reset */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Navbar styling */
+.navbar {
+  background-color: #28a745; /* Normal green background */
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Nav header containing logo and burger icon */
+.nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.logo {
+  color: #fff; /* White text for logo */
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.burger-icon {
+  display: none; /* Hide burger icon by default */
+  color: #fff;
+}
+
+.nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 30px; /* Increased space between links on large screens */
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.nav-links li {
+  margin: 0;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #fff; /* White text */
+  font-weight: bold;
+  padding: 10px 20px; /* Increased padding for more space */
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect - Light Green */
+.nav-links a:hover {
+  background-color: #d4edda; /* Light green hover */
+}
+
+/* Mobile styles */
+@media screen and (max-width: 768px) {
+  .burger-icon {
+    display: block; /* Show burger icon */
+    cursor: pointer;
   }
-  
-  /* Navbar styling */
-  .navbar {
-    background-color: #f5f5f5; /* Light gray background */
-    padding: 10px 20px;
-    border-bottom: 1px solid #ccc; /* Subtle border at the bottom */
-    position: fixed; /* Sticks to the top */
-    top: 0;
-    width: 100%; /* Full-width navbar */
-    z-index: 1000; /* Stay above other content */
-  }
-  
+
   .nav-links {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: space-around; /* Evenly distribute links */
-    align-items: center;
+    flex-direction: column; /* Stack links vertically */
+    position: absolute;
+    top: 60px; /* Position below navbar */
+    right: 0;
+    left: 0;
+    background-color: #28a745; /* Normal green background on mobile */
+    padding: 20px 0;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: none; /* Hidden by default */
   }
-  
+
+  .nav-links.open {
+    display: flex; /* Show when burger is clicked */
+  }
+
   .nav-links li {
-    margin: 0;
+    margin: 10px 0; /* Add spacing between links */
   }
-  
-  .nav-links a {
-    text-decoration: none;
-    color: #000; /* Black text */
-    font-weight: bold;
-    padding: 5px 10px;
-  }
-  
-  .nav-links a:hover {
-    background-color: #ddd; /* Highlighted background on hover */
-    border-radius: 5px;
-  }
-  
- 
-  
+}
