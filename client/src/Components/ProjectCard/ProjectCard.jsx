@@ -4,7 +4,7 @@ import './ProjectCard.css';
 const ProjectCard = ({
   title = 'Project Name',
   description = 'Project Description',
-  language = 'Lang.',
+  language = [],
   children,
   className,
   style,
