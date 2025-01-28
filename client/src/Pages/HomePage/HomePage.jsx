@@ -1,13 +1,32 @@
+<<<<<<< HEAD
 import React from "react"
 import ProjectCard from "../../Components/ProjectCard/ProjectCard";
 import { Center, Button, Flex, rem, Select, SimpleGrid, Container, Text, Avatar, Space } from '@mantine/core';
 import "./HomePage.css"
 import { Carousel } from '@mantine/carousel';
 import { Link } from 'react-router-dom';
+=======
+import React from 'react';
+import ProjectCard from '../../Components/ProjectCard/ProjectCard';
+import {
+  Center,
+  Flex,
+  rem,
+  Select,
+  SimpleGrid,
+  Container,
+  Text,
+  Avatar,
+  Space,
+} from '@mantine/core';
+import './HomePage.css';
+
+>>>>>>> development
 const HomePage = () => {
   return (
     <>
       <Container bg="rgba(0, 0, 0, .3)">
+<<<<<<< HEAD
         <Center className="h1"><Text fw={900} size="3em">The Coder Fair</Text></Center>
         <Container bg={'rgba(120, 120, 120)'} width={'100%'}>
           <Center>
@@ -41,3 +60,21 @@ const HomePage = () => {
 }
 
 export default HomePage
+=======
+        <Text>The Coder Fair</Text>
+        <Text
+          size="1.7rem"
+          fw={{ xs: 100, sm: 300, md: 500, lg: 900 }}
+          variant="gradient"
+          gradient={{ from: '#0c4d0b', to: '#0000', deg: 199 }}
+        >
+          Spring '25
+        </Text>
+      </Container>
+    </>
+  );
+};
+
+
+export default HomePage;
+>>>>>>> development
