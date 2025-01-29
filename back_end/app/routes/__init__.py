@@ -6,6 +6,7 @@ from .coderfair_routes import coderfair_routes
 from .role_routes import role_routes
 from .question_routes import question_routes
 from .userroles_routes import userroles_routes
+from .judge_routes import judge_routes
 
 
 # Registering blueprints (routes) here
@@ -17,3 +18,4 @@ def init_routes(app):
     app.register_blueprint(role_routes, url_prefix="/roles")
     app.register_blueprint(question_routes, url_prefix="/questions")
     app.register_blueprint(userroles_routes, url_prefix="/useroles")
+    app.register_blueprint(judge_routes, url_prefix="/judges")
