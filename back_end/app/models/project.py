@@ -4,7 +4,7 @@ from datetime import datetime
 class ProjectModel:
 
   def __init__(self, mongo: PyMongo):
-    self.collection = mongo.db.projects 
+    self.collection = mongo.cx["test"]["projects"]
 
   def create_project(self, id, student_id, coderfair_id, name, description, presentation_video_url, code_access_link, coding_language, project_username, project_password, notes):
     project_data = {
