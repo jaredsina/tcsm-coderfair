@@ -20,6 +20,6 @@ def delete_question(question_id):
 def update_question(question_id):
     return jsonify({'message': f'Question with ID {question_id}'})
 
-@question_routes.route('/<int:coderfair_id>')
+@question_routes.route('/<int:question_id>')
 def create_question(question_id):
     return jsonify({'message': f'Question with ID {question_id}'})
