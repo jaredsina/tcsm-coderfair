@@ -20,5 +20,5 @@ def init_routes(app):
     app.register_blueprint(coderfair_routes, url_prefix= '/coderfair')
     app.register_blueprint(role_routes, url_prefix= '/roles')
     app.register_blueprint(question_routes, url_prefix= '/questions')
-    app.register_blueprint(userroles_routes, url_prefix= '/useroles')
+    app.register_blueprint(userroles_routes, url_prefix= '/userroles')
 
