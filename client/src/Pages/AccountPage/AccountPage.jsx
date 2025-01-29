@@ -10,25 +10,38 @@ import {
   Text,
   Avatar,
   Space,
+  Button,
 } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 import './AccountPage.css';
 
 const AccountPage = () => {
+  const navigate = useNavigate(); // Hook to navigate between routes
+
+  const handleSignOut = () => {
+    navigate('/'); // Redirect to the sign-in page
+  };
+
   return (
     <>
       <Container bg="rgba(0, 0, 0, .3)">
         <Flex
           mih={50}
           gap="md"
-          justify="center"
+          justify="space-between"
           align="center"
           direction="row"
           wrap="wrap"
         >
-          <Avatar src={'Sina.png'} size="lg"></Avatar>
-          <Text size="2em" fw={700}>
-            Joshua Sambol
-          </Text>
+          <Flex gap="md" align="center">
+            <Avatar src={'Sina.png'} size="lg"></Avatar>
+            <Text size="2em" fw={700}>
+              Joshua Sambol
+            </Text>
+          </Flex>
+          <Button color="red" size="md" onClick={handleSignOut}>
+            Sign Out
+          </Button>
         </Flex>
         <Center>
           <Text>Bio</Text>
@@ -79,4 +92,5 @@ const AccountPage = () => {
     </>
   );
 };
+
 export default AccountPage;

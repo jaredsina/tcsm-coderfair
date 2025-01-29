@@ -11,7 +11,7 @@ const NavBar = () => {
     <nav className="navbar">
       {/* Logo or title */}
       <div className="nav-header">
-        <Link to="/" className="logo">
+        <Link to="/home" className="logo">
           CoderFair
         </Link>
         {/* Burger icon for mobile */}
@@ -26,7 +26,7 @@ const NavBar = () => {
       {/* Navigation links */}
       <ul className={`nav-links ${opened ? 'open' : ''}`}>
         <li>
-          <Link to="/" onClick={() => setOpened(false)}>
+          <Link to="/home" onClick={() => setOpened(false)}>
             Home
           </Link>
         </li>
@@ -43,6 +43,11 @@ const NavBar = () => {
         <li>
           <Link to="/account" onClick={() => setOpened(false)}>
             Account
+          </Link>
+        </li>
+        <li>
+          <Link to="/judging" onClick={()=> setOpened(false)}>
+            Judging
           </Link>
         </li>
       </ul>
