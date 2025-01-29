@@ -14,7 +14,7 @@ def init_routes(app):
     # Register user routes blueprint
     app.register_blueprint(user_routes, url_prefix='/users')
     app.register_blueprint(projects_routes, url_prefix= '/projects')
-    app.register_bluepring(coderfair_routes, url_prefix= '/coderfair')
-    app.register_bluepring(role_routes, url_prefix= '/roles')
-    app.register_bluepring(question_routes, url_prefix= '/questions')
-    app.register_bluepring(userroles_routes, url_prefix= '/useroles')
+    app.register_blueprint(coderfair_routes, url_prefix= '/coderfair')
+    app.register_blueprint(role_routes, url_prefix= '/roles')
+    app.register_blueprint(question_routes, url_prefix= '/questions')
+    app.register_blueprint(userroles_routes, url_prefix= '/useroles')
