@@ -7,9 +7,9 @@ import { Link } from 'react-router-dom';
 const HomePage = () => {
   return (
     <>
-      <Container bg="rgba(0, 0, 0, .3)">
+      <Container>
         <Center className="h1"><Text fw={900} size="3em">The Coder Fair</Text></Center>
-        <Container bg={'rgba(120, 120, 120)'} width={'100%'}>
+        <Container width={'100%'}>
           <Center>
             <Text
               size="1.7rem"
@@ -36,6 +36,15 @@ const HomePage = () => {
             </Carousel.Slide>
           </Carousel>
         </Container>
+        <Center>
+          <Flex direction={"row"} align="flex-end">
+            <span className="Rectangle"></span>
+            <span className="Podium"></span>
+            <span className="Bar"></span>
+          </Flex>
+        </Center>
+
+
       </Container>
     </>
   )
