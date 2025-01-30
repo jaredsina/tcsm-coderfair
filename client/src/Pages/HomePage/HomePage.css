@@ -10,3 +10,6 @@
 .carousel-link:hover {
   font-weight: 900;
 }
+.m_64f58e10{
+  max-width: var(--carousel-control-size);
+}
