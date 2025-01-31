@@ -1,13 +1,13 @@
-.carousel-link {
+.link {
   text-decoration: none;
   padding: 3.9rem;
   margin: 0;
-  color: white;
+  color: black;
   font-weight: 600;
   transition: all .3s ease;
 }
 
-.carousel-link:hover {
+.link:hover {
   font-weight: 900;
 }
 
@@ -33,6 +33,7 @@
   display: inline-block;
   margin-right: 30px;
 }
+
 .Rectangle {
   width: 100px;
   height: 200px;
