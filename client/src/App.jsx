@@ -8,7 +8,7 @@ import {
   Routes,
   useLocation,
 } from 'react-router-dom';
-import ProjectPage from './Pages/ProjectPage';
+import ProjectPage from './Pages/ProjectPage/ProjectPage';
 import Results from './Pages/Results';
 import Account from './Pages/AccountPage/AccountPage';
 import Home from './Pages/HomePage/HomePage';
