@@ -28,10 +28,13 @@ const HomePage = () => {
             <Carousel.Slide><Center><ProjectCard style={{ width: "30rem" }} /></Center></Carousel.Slide>
             <Carousel.Slide>
               <Flex mih={300} justify="center" align="center" direction="row">
-                <Button href="/ProjectPage" variant="filled" color="blue" size="xl">
-                  See More
-                  {/* <Link className="carousel-link" to="/projects">See More</Link>               */}
-                </Button>
+                <Link to="/projects" onClick={() => setOpened(false)}>
+                  <Button href="/projects" variant="filled" color="blue" size="xl">
+                    See More
+                    {/* <Link className="carousel-link" to="/projects">See More</Link>               */}
+                  </Button>
+                </Link>
+
               </Flex>
             </Carousel.Slide>
           </Carousel>
