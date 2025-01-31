@@ -3,7 +3,7 @@ from flask_pymongo import PyMongo
 class CoderfairModel:
 
   def __init__(self, mongo: PyMongo):
-    self.collection = mongo.db.coderfairs
+    self.collection = mongo.cx["test"]["coderfairs"]
 
   def create_coderfair(self, id, fair_date, description, created_at, update_at):
     coderfair_data = {
