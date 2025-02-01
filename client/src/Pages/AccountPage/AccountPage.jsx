@@ -24,7 +24,7 @@ const AccountPage = () => {
 
   return (
     <>
-      <Container bg="rgba(0, 0, 0, .3)">
+      <Container>
         <Flex
           mih={50}
           gap="md"
