@@ -5,6 +5,7 @@ class UserModel:
   def __init__(self, mongo: PyMongo):
     self.collection = mongo.db.users
 
+
   def create_user(self, id, first_name, last_name, email, username):
     user_data = {
       "id": id,
@@ -24,3 +25,18 @@ class UserModel:
   
   def list_users(self):
     return list(self.collection.find())
+  
+  def delete_user_by_id(self,id): 
+    """
+    Delete a user by their ID
+    """
+    result = self.collection.delete_one({"id": id})
+    return result.deleted_count > 0 
+  
+  def update_user(self, id, update_data): 
+    result = self.collection.find_one_and_update(
+      {"id":id},
+      {"Set": update_data},
+      return_document=True
+    )
+    return result

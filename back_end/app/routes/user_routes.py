@@ -1,13 +1,51 @@
 # app/routes/user_routes.py
-from flask import Blueprint, jsonify
+from ..models.user import UserModel
+from flask import Blueprint, jsonify, request, current_app
 
 user_routes = Blueprint('user_routes', __name__)
 
 # Define a simple route inside this blueprint
-@user_routes.route('/')
-def get_users():
-    return jsonify({'message': 'List of users will be here'})
+@user_routes.route('/user/<int:user_id>')
+def get_users(user_id):
 
-@user_routes.route('/<int:user_id>')
-def get_user(user_id):
-    return jsonify({'message': f'User with ID {user_id}'})
+    user_model = UserModel(current_app.mongo)
+    user = user_model.find_user_by_id(user_id)
+    if not user:
+        return jsonify({"error" : str(e)}), 500
+    user["_id"] = str(user["_id"])
+    return jsonify(user), 200
+
+
+@user_routes.route('/user/<int:user_id>')
+def create_users(user_id):
+    mongo = current_app.config['MONGO']
+    user_model = UserModel(mongo)
+
+    user = user_model.find_user_by_id(user_id)
+
+    user['_id'] = str[user('_id')]
+    return jsonify(user), 200
+
+@user_routes.route('/user/<int:user_id>')
+def delete_user(user_id):
+    mongo = current_app.config['MONGO']
+    user_model = UserModel(mongo)
+    deleted = user_model.delete_user_by_id(user_id)
+    if not deleted:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify ({'message': f'deleting user with ID {user_id}'})
+
+@user_routes.route("/<int:user_id>", methods=["PUT"])
+def update_user(user_id): 
+    mongo = current_app.config['MONGO']
+    user_model = UserModel(mongo)
+    update_data = request.json
+
+    if not update_data:
+        return jsonify({"error": "Invalid data provider"}), 400
+    
+    updated_user = user_model.update_user(user_id, update_data) 
+
+    if not updated_user: 
+        return jsonify({"error" : "User not found"}), 404
+    return jsonify({"messege" : "User updated succesfuly" , "user": updated_user}), 200
