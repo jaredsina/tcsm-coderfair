@@ -1,6 +1,6 @@
 import React from "react"
 import { Container, Text, Anchor } from "@mantine/core"
-export function Footer() {
+function Footer() {
   return (
     <footer style={{ backgroundColor: '#1a1a1a', color: 'white', padding: '20px 0' }}>
       <Container size="md" style={{ textAlign: 'center' }}>
@@ -13,3 +13,4 @@ export function Footer() {
     </footer>
   )
 }
+export default Footer;
