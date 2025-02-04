@@ -4,9 +4,8 @@ class Question_GradeModel:
   def __init__(self, mongo: PyMongo):
     self.collection = mongo.cx["test"]["question_grades"]
 
-  def create_question_grade(self, id, grade_id, question_id, score, comments):
+  def create_question_grade(self, grade_id, question_id, score, comments):
     question_grade_data = {
-      "id": id,
       "grade_id": grade_id,
       "question_id": question_id,
       "score": score,
