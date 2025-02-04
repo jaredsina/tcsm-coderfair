@@ -4,16 +4,19 @@ class GradeModel:
   def __init__(self, mongo: PyMongo):
     self.collection = mongo.cx["test"]["grades"]
 
-  def create_grade(self, id, judge_id, project_id, overall_comments):
+  def create_grade(self, concept_tier, concept_mastery, presentation, creativity, judge_id, project_id, overall_comments):
     grade_data = {
-      "id": id,
+      "concept_tier": concept_tier,
+      "concept_mastery": concept_mastery,
+      "presentation": presentation,
+      "creativity": creativity,
       "judge_id": judge_id,
       "project_id": project_id,
       "overall_comments": overall_comments,
     }
     result = self.collection.insert_one(grade_data)
     return str(result.inserted_id)
-  
+
   def find_grade_by_id(self, id):
     return self.collection.find_one({"_id": id})
 
