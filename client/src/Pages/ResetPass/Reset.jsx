@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import "./Reset.css";
 
 const Reset = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [showError, setShowError] = useState(false)
   const navigate = useNavigate();
 
-  const handleSignIn = (e) => {
+  const handleChange = (e) => {
     e.preventDefault();
     if (password && passwordConfirm === password) {
-      window.alert("Password has been reset");
-      navigate("/home");
+      navigate("/");
     } else {
-      alert("New Passwords do not match");
+      setShowError(true)
     }
   };
 
@@ -21,7 +21,7 @@ const Reset = () => {
     <div className="sign-in-container">
       <div className="sign-in-card">
         <h2>Reset Password</h2>
-        <form onSubmit={handleSignIn}>
+        <form onSubmit={handleChange}>
           <div className="input-group">
             <label>New Password</label>
             <input
@@ -42,6 +42,7 @@ const Reset = () => {
               required
             />
           </div>
+          {showError && <p>Passwords do not match</p>}
           <button type="submit" className="sign-in-btn">Confirm</button>
         </form>
       </div>

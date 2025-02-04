@@ -9,18 +9,18 @@ import Account from "./Pages/AccountPage/AccountPage";
 import Home from "./Pages/HomePage/HomePage";
 import SignIn from "./Pages/SignIn"; // Import the Sign-In page
 import Reset from "./Pages/ResetPass/Reset";
-
+import Footer from "./Components/Footer";
 function App() {
   // Custom Hook to show/hide NavBar based on the current route
   const location = useLocation();
-  const showNavBar = location.pathname !== "/";
+  const showElements = location.pathname !== "/" && location.pathname !== "/reset";
 
   return (
     <>
-      {showNavBar && <NavBar />} {/* Only show NavBar if not on the SignIn page */}
+      {showElements && <NavBar />} {/* Only show NavBar if not on the SignIn page */}
       <Routes>
         {/* Default route is the Sign-In page */}
-        <Route path="/" element={<SignIn />} /> 
+        <Route path="/" element={<SignIn />} />
         <Route path="/home" element={<Home />} />
         <Route path="/results" element={<Results />} />
         <Route path="/projects" element={<ProjectPage />} />
@@ -28,7 +28,7 @@ function App() {
         <Route path="/judging" element={<JudgingPage />} />
         <Route path="/reset" element={<Reset />} />
       </Routes>
-      
+      {showElements && <Footer />}
     </>
   );
 }

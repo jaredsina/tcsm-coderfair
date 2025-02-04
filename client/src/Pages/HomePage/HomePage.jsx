@@ -113,7 +113,6 @@ const HomePage = () => {
 
 
       </Container >
-      <Footer />
     </>
   )
 }
