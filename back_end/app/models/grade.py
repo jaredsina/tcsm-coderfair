@@ -23,6 +23,9 @@ class GradeModel:
   def list_judge_grades(self, judge_id):
     return list(self.collection.find({"judge_id": judge_id}))
   
+  def list_grades(self):
+    return list(self.collection.find())
+  
   def update_grade(self, id, update_data):
     result = self.collection.update_one({"_id": id}, {"$set": update_data})
     return result
