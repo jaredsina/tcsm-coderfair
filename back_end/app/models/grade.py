@@ -18,11 +18,11 @@ class GradeModel:
     return str(result.inserted_id)
 
   def find_grade_by_id(self, id):
-    return self.collection.find_one({"_id": id})
+    return self.collection.find_one({"_id": id}) 
 
   def list_project_grades(self, project_id):
     return list(self.collection.find({"project_id": project_id}))
-  
+
   def list_judge_grades(self, judge_id):
     return list(self.collection.find({"judge_id": judge_id}))
   
