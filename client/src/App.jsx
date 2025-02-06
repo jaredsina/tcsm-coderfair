@@ -13,6 +13,8 @@ import Results from './Pages/Results';
 import Account from './Pages/AccountPage/AccountPage';
 import Home from './Pages/HomePage/HomePage';
 import SignIn from './Pages/SignIn'; // Import the Sign-In page
+import CreateAccountPage from './Pages/CreateAccountPage/CreateAccountPage';
+import ResetPasswordPage from './Pages/ResetPasswordPage/ResetPasswordPage';
 
 function App() {
   // Custom Hook to show/hide NavBar based on the current route
@@ -26,6 +28,8 @@ function App() {
       <Routes>
         {/* Default route is the Sign-In page */}
         <Route path="/" element={<SignIn />} />
+        <Route path="/create-account" element={<CreateAccountPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/home" element={<Home />} />
         <Route path="/results" element={<Results />} />
         <Route path="/projects" element={<ProjectPage />} />
