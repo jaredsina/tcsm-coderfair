@@ -4,7 +4,7 @@ import { Center, Button, Flex, rem, Select, SimpleGrid, Container, Text, Avatar,
 import "./HomePage.css"
 import { Carousel } from '@mantine/carousel';
 import { Link } from 'react-router-dom';
-
+import { notifications } from "@mantine/notifications";
 const data1 = [
   { rank: 4, name: 'Josh', score: 5000 },
   { rank: 5, name: 'Joshua', score: 4500 },

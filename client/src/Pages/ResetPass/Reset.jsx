@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { redirect, useNavigate } from "react-router-dom";
 import "./Reset.css";
-
+import { Button } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 const Reset = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -12,6 +13,11 @@ const Reset = () => {
     e.preventDefault();
     if (password && passwordConfirm === password) {
       navigate("/");
+      notifications.show({
+        title: 'Password reset',
+        message: 'Your password has successfully been reset. Please log-in again.',
+        position: "top-right"
+      })
     } else {
       setShowError(true)
     }
@@ -43,7 +49,11 @@ const Reset = () => {
             />
           </div>
           {showError && <p>Passwords do not match</p>}
-          <button type="submit" className="sign-in-btn">Confirm</button>
+          <Button
+            type="submit" className="sign-in-btn"
+          >
+            Confirm
+          </Button>
         </form>
       </div>
     </div>
