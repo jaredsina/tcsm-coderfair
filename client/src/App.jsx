@@ -36,6 +36,7 @@ function App() {
         <Route path="/account" element={<Account />} />
         <Route path="/judging" element={<JudgingPage />} />
       </Routes>
+      
     </>
   );
 }
