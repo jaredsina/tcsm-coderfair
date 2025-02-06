@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { Menu, Burger } from '@mantine/core';
 import './navbar.css';
-
+import Notifs from './Notification/Notification';
 const NavBar = () => {
   const [opened, setOpened] = useState(false);
 
@@ -46,11 +46,13 @@ const NavBar = () => {
           </Link>
         </li>
         <li>
-          <Link to="/judging" onClick={()=> setOpened(false)}>
+          <Link to="/judging" onClick={() => setOpened(false)}>
             Judging
           </Link>
         </li>
+        <li><Notifs /></li>
       </ul>
+
     </nav>
   );
 };

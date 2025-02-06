@@ -5,6 +5,7 @@ import "./HomePage.css"
 import { Carousel } from '@mantine/carousel';
 import { Link } from 'react-router-dom';
 import { notifications } from "@mantine/notifications";
+import Notifs from "../../Components/Notification/Notification";
 const data1 = [
   { rank: 4, name: 'Josh', score: 5000 },
   { rank: 5, name: 'Joshua', score: 4500 },
