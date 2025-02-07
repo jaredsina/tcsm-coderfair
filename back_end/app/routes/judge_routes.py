@@ -40,13 +40,9 @@ def get_judge(judge_id):
     return jsonify({"message": f"judge with ID {judge}"}), 200
 
 
-@judge_routes.route("/delete", methods=["DELETE"])
-def delete_judge():
+@judge_routes.route("/delete/<string:judge_id>", methods=["DELETE"])
+def delete_judge(judge_id):
     try:
-        # we will get the judge_id from the request json
-        data = request.get_json()
-        judge_id = data["id"]
-
         # Need to convert the string to an ObjectId to match the data type in the database
         judge_id = ObjectId(judge_id)
         new_judge = JudgeModel(current_app.mongo)
@@ -59,12 +55,11 @@ def delete_judge():
     return jsonify({"message": f"judge with ID {judge_id}"}), 200
 
 
-@judge_routes.route("/update", methods=["PUT"])
-def update_judge():
+@judge_routes.route("/update/<string:judge_id>", methods=["PUT"])
+def update_judge(judge_id):
     try:
         # we will get the judge_id from the request json
         data = request.get_json()
-        judge_id = data["id"]
         updated_judge = data["updated_judge"]
 
         new_judge = JudgeModel(current_app.mongo)
