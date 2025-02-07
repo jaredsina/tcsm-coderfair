@@ -24,9 +24,6 @@ class UserModel:
 
     def find_user_by_id(self, id):
         return self.collection.find_one({"id": id})
-
-    def list_admins(self, is_admin):
-        return self.collection.find({"is_admin": is_admin})
     
     def list_staff(self, is_staff):
         return self.collection.find({"is_staff": is_staff})
