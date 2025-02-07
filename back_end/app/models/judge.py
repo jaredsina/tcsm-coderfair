@@ -24,7 +24,23 @@ class JudgeModel:
         return list(self.collection.find({"coderfair_id": coderfair_id}))
 
     def list_all_judges(self):
-        return list(self.collection.find())
+        # Aggregate is used to get the user data from the users collection and join it with the judges collection
+        judges_with_users = self.collection.aggregate(
+            [
+                {
+                    "$lookup": {
+                        "from": "users",
+                        "localField": "user_id",
+                        "foreignField": "_id",
+                        "as": "user",
+                        "pipeline": [],
+                        "let": {},
+                    }
+                }
+            ]
+        )
+
+        return list(judges_with_users)
 
     # id is used to choose the judge to update
     # update data is the new data for any field
