@@ -8,11 +8,11 @@ function Notifs() {
     <Notification title="Password reset">
       Your password has successfully been reset
     </Notification>,
-    <Notification title="Judge Form">
-      We have recieved your judge form for (put in the proj name using curl brackets)
+    <Notification color="green" title="Props">
+      when notif is needed lets pass a prop to this file to create a notification. we can use state to make an array of notifications that is then put in here
     </Notification>,
-    <Notification title="etc...">
-      etc............
+    <Notification color="red" title="This does not save other notifications yet">
+      BUT ME AND SINA CAN FIX THAT!!!
     </Notification>
   ]);
 

@@ -78,6 +78,11 @@ const HomePage = () => {
   return (
     <>
       <Container>
+        <Button onClick={() =>
+        notifications.show({
+          title: 'Sample',
+          message: 'HEllloooooooooooo',
+        })}>Test Notifcaton</Button>
         <Center className="h1"><Text fw={900} size="2.7em">The Coder Fair</Text></Center>
         <Container width={'100%'}>
           <Center>
