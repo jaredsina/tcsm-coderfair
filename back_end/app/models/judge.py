@@ -14,17 +14,52 @@ class JudgeModel:
         return str(result.inserted_id)
 
     def find_judge_by_id(self, id):
-        return self.collection.find_one({"_id": id})
-
-    # this is for finding who someone was judged by
-    def list_judges_by_user_id(self, user_id):
-        return list(self.collection.find({"user_id": user_id}))
+        return list(
+            self.collection.aggregate(
+                [
+                    {"$match": {"_id": id}},  # find the judge with the user_id
+                    {
+                        "$lookup": {
+                            "from": "users",
+                            "localField": "user_id",
+                            "foreignField": "_id",
+                            "as": "user",
+                        }
+                    },
+                    {
+                        "$project": {
+                            "user_id": 0,
+                            "_id": 0,
+                            "user._id": 0,
+                            "coderfair_id": 0,
+                        }
+                    },
+                ]
+            )
+        )
 
     def list_coderfair_judges(self, coderfair_id):
         return list(self.collection.find({"coderfair_id": coderfair_id}))
 
     def list_all_judges(self):
-        return list(self.collection.find())
+        # Aggregate is used to get the user data from the users collection and join it with the judges collection
+        judges_with_users = self.collection.aggregate(
+            [
+                {
+                    "$lookup": {
+                        "from": "users",
+                        "localField": "user_id",
+                        "foreignField": "_id",
+                        "as": "user",
+                    }
+                },
+                {
+                    "$project": {"user_id": 0, "_id": 0, "user._id": 0}
+                },  # Project lets us choose which fields to include or exclude
+            ]
+        )
+
+        return list(judges_with_users)
 
     # id is used to choose the judge to update
     # update data is the new data for any field
