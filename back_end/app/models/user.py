@@ -23,3 +23,11 @@ class UserModel:
 
     def list_users(self):
         return list(self.collection.find())
+    
+    def update_user(self, id, update_data):
+        result = self.collection.update_one({"_id": id}, {"$set": update_data})
+        return result
+    
+    def delete_user(self, id):
+        result = self.collection.delete_one({"_id": id})
+        return result 

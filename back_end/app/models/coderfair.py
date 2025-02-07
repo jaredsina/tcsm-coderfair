@@ -20,3 +20,11 @@ class CoderfairModel:
   
   def list_coderfairs(self):
     return list(self.collection.find())
+
+  def update_coderfair(self, id, update_data):
+    result = self.collection.update_one({"_id": id}, {"$set": update_data})
+    return result
+  
+  def delete_coderfair(self, id):
+    result = self.collection.delete_one({"_id": id})
+    return result

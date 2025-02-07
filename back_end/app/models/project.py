@@ -52,3 +52,11 @@ class ProjectModel:
   #list all projects
   def list___all_projects(self):
     return list(self.collection.find())
+  
+  def update_project(self, id, update_data):
+    result = self.collection.update_one({"_id": id}, {"$set": update_data})
+    return result
+  
+  def delete_project(self, id):
+    result = self.collection.delete_one({"_id": id})
+    return result
