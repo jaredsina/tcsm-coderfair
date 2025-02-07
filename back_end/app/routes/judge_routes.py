@@ -20,7 +20,7 @@ def get_judges():
         return jsonify({"message": "Error getting judges", "error": str(e)}), 400
 
     # If no exceptions are raised, return a success message and status code 200
-    return jsonify({"message": f"List of judges will be here: {judges}"}), 200
+    return jsonify(judges), 200
 
 
 @judge_routes.route("/<string:judge_id>")
@@ -37,7 +37,7 @@ def get_judge(judge_id):
         return jsonify({"message": "Error getting judge", "error": str(e)}), 400
 
     # If no exceptions are raised, return a success message and status code 200
-    return jsonify({"message": f"judge with ID {judge}"}), 200
+    return jsonify(judge), 200
 
 
 @judge_routes.route("/delete/<string:judge_id>", methods=["DELETE"])
