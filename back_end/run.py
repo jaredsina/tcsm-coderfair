@@ -7,4 +7,4 @@ if __name__ == "__main__":
     app = create_app()
 
     # Run the app with the development server (useful for development)
-    app.run(debug=True)
+    app.run(port=8000, debug=True)
