@@ -20,6 +20,20 @@ export const fetchJudges = createAsyncThunk('judges/fetchJudges', async () => {
   }
 });
 
+// * Create a judge
+export const createJudge = createAsyncThunk(
+  'judges/createJudge',
+  async (judge) => {
+    try {
+      const request = await axios.post(`${judgeBaseURL}/create`, judge);
+      const response = request.data;
+      return response;
+    } catch (err) {
+      return err.response.data;
+    }
+  },
+);
+
 const judgeSlice = createSlice({
   name: 'judges',
   initialState,
@@ -29,11 +43,22 @@ const judgeSlice = createSlice({
       .addCase(fetchJudges.pending, (state) => {
         state.loading = true;
       })
+      .addCase(createJudge.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(fetchJudges.fulfilled, (state, action) => {
         state.loading = false;
         state.judges = action.payload;
       })
+      .addCase(createJudge.fulfilled, (state, action) => {
+        state.loading = false;
+        state.judges.push(action.payload);
+      })
       .addCase(fetchJudges.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(createJudge.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
