@@ -1,6 +1,5 @@
 from flask_pymongo import PyMongo
 
-
 class JudgeModel:
     def __init__(self, mongo: PyMongo):
         self.collection = mongo.cx["test"]["judges"]
