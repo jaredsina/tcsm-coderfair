@@ -9,7 +9,7 @@
 /* Profile section - avatar and name */
 .user-profile {
   display: flex;
-  align-items: left;
+  align-items: center;
   gap: 10px; /* Space between the avatar and name */
   margin-top: 20px; /* Adds space from the navbar */
 }
