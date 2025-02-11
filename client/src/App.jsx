@@ -8,6 +8,8 @@ import Results from "./Pages/Results";
 import Account from "./Pages/AccountPage/AccountPage";
 import Home from "./Pages/HomePage/HomePage";
 import SignIn from "./Pages/SignIn"; // Import the Sign-In page
+import CoachesPage from "./Pages/CoachesPage"; // Import the new page
+
 
 function App() {
   // Custom Hook to show/hide NavBar based on the current route
@@ -25,6 +27,8 @@ function App() {
         <Route path="/projects" element={<ProjectPage />} />
         <Route path="/account" element={<Account />} />
         <Route path="/judging" element={<JudgingPage />} />
+        <Route path="/coach" element={<CoachesPage />} />
+
       </Routes>
       
     </>

@@ -39,6 +39,10 @@ const NavBar = () => {
         <li>
           <Link to="/judging" onClick={() => setOpened(false)}>Judging</Link>
         </li>
+        <li>
+           <Link to="/coach" onClick={() => setOpened(false)}>Coach Dashboard</Link>
+        </li>
+
       </ul>
 
       {/* User Profile Dropdown */}
