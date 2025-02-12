@@ -8,7 +8,7 @@ import Results from "./Pages/Results";
 import Account from "./Pages/AccountPage/AccountPage";
 import Home from "./Pages/HomePage/HomePage";
 import SignIn from "./Pages/SignIn"; // Import the Sign-In page
-import CoachesPage from "./Pages/CoachesPage"; // Import the new page
+import CoachesPage from "./Pages/CoachesPage/CoachesPage"; // Import the new page
 
 
 function App() {
