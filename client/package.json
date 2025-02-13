@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "18": "^0.0.0",
-    "@mantine/carousel": "^7.16.1",
-    "@mantine/core": "^7.15.2",
+    "@mantine/carousel": "^7.16.3",
+    "@mantine/core": "^7.16.3",
     "@mantine/dropzone": "^7.16.3",
-    "@mantine/hooks": "^7.15.2",
+    "@mantine/hooks": "^7.16.3",
     "@mantine/modals": "^7.16.3",
     "embla-carousel-react": "^7.1.0",
     "react": "^18.3.1",
