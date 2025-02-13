@@ -16,7 +16,20 @@ const CoachesPage = () => {
     { id: 1, project: "Project Alpha", grade: "A" },
     { id: 2, project: "Project Beta", grade: "B" }
   ]);
+  const [studentName, setStudentName] = useState("")
+  const [studentBio, setStudentBio] = useState("")
+  const handleSubmit = () => {
+    if (!studentName.trim()) return; // Prevent empty entries
 
+    setStudents([...students, { name: studentName, bio: studentBio, image }]);
+
+    // Reset inputs
+    setStudentName("");
+    setStudentBio("");
+    setImage(null);
+
+    modals.closeAll(); // Close after state updates
+  };
   const addProject = () => {
     const newProject = { id: projects.length + 1, name: "New Project", student: "New Student" };
     setProjects([...projects, newProject]);
@@ -139,40 +152,52 @@ const CoachesPage = () => {
         <Grid.Col span={12} md={5} lg={5}> {/* Adjusting span for wider columns */}
           <div className="section">
             <Title order={2}>Manage Students</Title>
-            <Button onClick={() => {
-              modals.open({
-                centered: true,
-                title: 'Create student account',
-                children: (
-                  <>
-                    <Dropzone
-                      onDrop={(files) => console.log('accepted files', files)}
-                      onReject={(files) => console.log('rejected files', files)}
-                      maxSize={5 * 1024 ** 2}
-                      accept={IMAGE_MIME_TYPE}
-                      {...props}
-                    >
-                      <Group justify="center" gap="xl" mih={220} style={{ pointerEvents: 'none' }}>
+            <Button
+              onClick={() => {
+                modals.open({
+                  centered: true,
+                  title: 'Create student account',
+                  children: (
+                    <>
+                      {/* <Dropzone
+                        onDrop={(files) => console.log('accepted files', files)}
+                        onReject={(files) => console.log('rejected files', files)}
+                        maxSize={5 * 1024 ** 2}
+                        accept={IMAGE_MIME_TYPE} // Ensure this is imported
+                      >
+                        <Group justify="center" gap="xl" mih={220} style={{ pointerEvents: 'none' }}>
+                          <div>
+                            <Text size="xl" inline>
+                              Drag images here or click to select files
+                            </Text>
+                            <Text size="sm" c="dimmed" inline mt={7}>
+                              Attach as many files as you like, each file should not exceed 5mb
+                            </Text>
+                          </div>
+                        </Group>
+                      </Dropzone> */}
+                      <TextInput
+                        label="Student Name"
+                        placeholder="Student Name"
+                        data-autofocus
+                      />
+                      <Textarea
+                        label="Student Bio"
+                        placeholder="Student Bio"
+                        data-autofocus
+                      />
+                      <Button fullWidth mt="md">
+                        Submit
+                      </Button>
+                    </>
+                  ),
+                });
+              }}
+              className="action-button"
+            >
+              Create Student Account
+            </Button>
 
-                        <div>
-                          <Text size="xl" inline>
-                            Drag images here or click to select files
-                          </Text>
-                          <Text size="sm" c="dimmed" inline mt={7}>
-                            Attach as many files as you like, each file should not exceed 5mb
-                          </Text>
-                        </div>
-                      </Group>
-                    </Dropzone>
-                    <TextInput label="Student Name" placeholder="Student Name" data-autofocus />
-                    <Textarea label="Student Bio" placeholder="Student Bio" data-autofocu />
-                    <Button fullWidth onClick={() => modals.closeAll()} mt="md">
-                      Submit
-                    </Button>
-                  </>
-                ),
-              });
-            }} className="action-button">Create Student Account</Button>
             <div className="table-container">
               <Table striped highlightOnHover>
                 <thead>
@@ -180,17 +205,15 @@ const CoachesPage = () => {
                     <th>Name</th>
                     <th>Grade</th>
                     <th>Actions</th>
+                    <th>Bio</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {students.map((student) => (
-                    <tr key={student.id}>
+                  {students.map((student, index) => (
+                    <tr key={index}>
+
                       <td>{student.name}</td>
-                      <td>{student.grade}</td>
-                      <td>
-                        <Button onClick={() => updateStudent(student.id)}>Update</Button>
-                        <Button color="red" onClick={() => deleteStudent(student.id)}>Delete</Button>
-                      </td>
+                      <td>{student.bio}</td>
                     </tr>
                   ))}
                 </tbody>
