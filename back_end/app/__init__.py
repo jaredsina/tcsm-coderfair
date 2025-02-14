@@ -2,10 +2,15 @@ from flask import Flask
 from .routes import init_routes
 from .config import init_config
 from .routes.error_handlers import init_error_handlers
+from flask_cors import CORS
 
 
 def create_app():
     app = Flask("website")
+
+    # Enable cross-origin resource sharing
+    CORS(app)
+
     # config
     init_config(app)
 
