@@ -14,4 +14,34 @@ class StudentModel:
     return str(result.inserted_id)
 
   def find_student_by_id(self, id):
-    pass
+    #essentially, the aggregate thing lets you get properties from a model, remove certain ones, and add related properties form a different model
+    return list(
+      self.collection.aggregate(
+        [
+          {"$match": {"_id": id}},
+          {
+            "$project": {
+            "_id": 0,
+            }
+          },
+        ]
+      )
+    )
+  
+  def list_students(self):
+    students = self.collection.aggregate(
+      [
+        {
+          "$project": {"_id": 0}
+        }
+      ]
+    )
+    return list(students)
+
+  def update_student(self, id, update_data):
+    result = self.collection.update_one({"_id": id}, {"$set": update_data})
+    return result
+  
+  def delete_student(self, id):
+    result = self.collection.delete_one({"_id": id})
+    return result 
