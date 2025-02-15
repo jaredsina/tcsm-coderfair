@@ -1,0 +1,24 @@
+.account-container {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 50px; /* Adds more space below the navbar */
+}
+
+/* Profile section - avatar and name */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between the avatar and name */
+  margin-top: 20px; /* Adds space from the navbar */
+}
+
+.user-name {
+  text-align: center;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: bold;
+}

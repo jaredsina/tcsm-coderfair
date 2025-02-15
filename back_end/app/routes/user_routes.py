@@ -2,7 +2,8 @@
 from ..models.user import UserModel
 from flask import Blueprint, jsonify, request, current_app
 
-user_routes = Blueprint('user_routes', __name__)
+user_routes = Blueprint("user_routes", __name__)
+
 
 # Define a simple route inside this blueprint
 @user_routes.route('/user/<int:user_id>')

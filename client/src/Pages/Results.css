@@ -1,0 +1,30 @@
+.results-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+.results-title {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Ensures 3 columns on desktop */
+  gap: 20px;
+  justify-items: center;
+}
+
+/* Responsive design for smaller screens */
+@media screen and (max-width: 900px) {
+  .results-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .results-grid {
+    grid-template-columns: repeat(1, 1fr); /* 1 column on mobile */
+  }
+}

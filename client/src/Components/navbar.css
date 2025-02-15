@@ -1,44 +1,143 @@
-/* Reset */
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
+/* General Navbar Styles */
+.navbar {
+  background-color: #28a745;
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Nav Header (Logo + Burger) */
+.nav-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* Burger Icon for Mobile */
+.burger-icon {
+  display: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Nav Links */
+.nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-links a:hover {
+  background-color: #d4edda;
+}
+
+/* User Avatar */
+.user-container {
+  position: relative;
+}
+
+.user-avatar {
+  cursor: pointer;
+  background-color: white;
+  border: 2px solid #fff;
+  width: 40px;
+  height: 40px;
+}
+
+/* User Dropdown Menu */
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  display: none;
+  flex-direction: column;
+  width: 150px;
+}
+
+.user-dropdown.open {
+  display: flex;
+}
+
+.user-dropdown a {
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+.user-dropdown a:hover {
+  background-color: #f1f1f1;
+}
+
+/* Sign-Out Button inside Dropdown */
+.sign-out {
+  color: red;
+  font-weight: bold;
+}
+
+/* Mobile Styles */
+@media screen and (max-width: 768px) {
+  .burger-icon {
+    display: block;
   }
-  
-  /* Navbar styling */
-  .navbar {
-    background-color: #f5f5f5; /* Light gray background */
-    padding: 10px 20px;
-    border-bottom: 1px solid #ccc; /* Subtle border at the bottom */
-    position: fixed; /* Sticks to the top */
-    top: 0;
-    width: 100%; /* Full-width navbar */
-    z-index: 1000; /* Stay above other content */
-  }
-  
+
   .nav-links {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    left: 0;
+    background-color: #28a745;
+    padding: 15px 0;
+    display: none;
+  }
+
+  .nav-links.open {
     display: flex;
-    justify-content: space-around; /* Evenly distribute links */
-    align-items: center;
   }
-  
+
   .nav-links li {
-    margin: 0;
+    margin: 10px 0;
   }
-  
-  .nav-links a {
-    text-decoration: none;
-    color: #000; /* Black text */
-    font-weight: bold;
-    padding: 5px 10px;
+
+  /* Position the dropdown menu next to the user icon */
+  .user-container {
+    position: relative;
   }
-  
-  .nav-links a:hover {
-    background-color: #ddd; /* Highlighted background on hover */
-    border-radius: 5px;
+
+  .user-dropdown {
+    top: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    text-align: center;
   }
-  
- 
-  
+}
