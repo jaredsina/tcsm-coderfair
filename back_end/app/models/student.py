@@ -20,8 +20,19 @@ class StudentModel:
         [
           {"$match": {"_id": id}},
           {
+            "$lookup": {
+              "from": "projects",
+              "localField": "_id",
+              "foreignField": "student_id",
+              "as": "project",
+            }
+          },
+          {
             "$project": {
             "_id": 0,
+            "project._id": 0,
+            "project.student_id": 0,
+            "project.coderfair_id": 0,
             }
           },
         ]
