@@ -1,5 +1,4 @@
 from flask_pymongo import PyMongo
-from datetime import datetime
 
 class ProjectModel:
 
@@ -19,8 +18,6 @@ class ProjectModel:
       "project_username": project_username,
       "project_password": project_password,
       "notes": notes,
-      "created_at": datetime.now(datetime.timezone.utc),
-      "updated_at": datetime.now(datetime.timezone.utc),
     }
 
     #insert_one --> add data (document) into collection
