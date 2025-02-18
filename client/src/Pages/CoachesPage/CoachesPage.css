@@ -1,14 +1,14 @@
+/* .coaches-container ensures the page has proper spacing */
 .coaches-container {
-  
   min-height: 100vh;
   padding: 40px 20px;
 }
-.table-container {
-  max-height: 400px; /* You can adjust the height */
 
+/* .table-container makes sure the table is scrollable */
+.table-container {
+  max-height: 400px;
   overflow-y: auto;
 }
-
 
 .coaches-title {
   text-align: center;
@@ -38,7 +38,8 @@ table {
   border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ddd;
   padding: 12px;
   text-align: left;
@@ -51,4 +52,20 @@ th {
 
 button {
   margin-right: 10px;
+}
+
+/* Ensure inputs are visible and not hidden */
+.mantine-TextInput-root input,
+.mantine-Textarea-root textarea {
+  font-size: 1rem;
+  padding: 12px;
+  display: block;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  background-color: white;
+}
+
+/* Force modal visibility */
+.mantine-Modal-modal {
+  display: block !important; /* Ensure modal is shown correctly */
 }

@@ -1,0 +1,36 @@
+/* Overlay that covers the entire screen */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Pop-up box itself */
+.popup-box {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1001; /* Ensure it's above the overlay */
+}
+
+/* Ensure background color for input fields and other elements */
+input, textarea, button {
+  margin-bottom: 12px;
+}
+
+/* Optional: Center the table */
+.table-container {
+  margin-top: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+}
