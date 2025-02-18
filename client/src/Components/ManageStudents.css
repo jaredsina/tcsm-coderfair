@@ -1,36 +1,102 @@
-/* Overlay that covers the entire screen */
+/* Styling for the section container */
+.section {
+  margin-bottom: 40px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for the table container */
+.table-container {
+  margin-top: 20px;
+  overflow-x: auto; /* Allow horizontal scrolling if needed */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background-color: #28a745;
+  color: white;
+}
+
+td {
+  vertical-align: middle;
+}
+
+/* Button styling in table */
+button {
+  margin-right: 10px;
+}
+
+/* Styling for the action buttons (Edit, Delete) */
+.actions-column button {
+  margin: 0 5px;
+  padding: 8px 12px;
+  font-size: 0.875rem; /* Smaller font size */
+}
+
+button.edit-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+button.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Pop-up overlay styling */
 .popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 }
 
-/* Pop-up box itself */
+/* Pop-up box styling */
 .popup-box {
   background-color: #fff;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 10px;
   width: 400px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  position: relative;
-  z-index: 1001; /* Ensure it's above the overlay */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Ensure background color for input fields and other elements */
-input, textarea, button {
-  margin-bottom: 12px;
+.popup-box h3 {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 1.25rem;
+  color: #333;
 }
 
-/* Optional: Center the table */
-.table-container {
-  margin-top: 20px;
-  max-height: 400px;
-  overflow-y: auto;
+.popup-box input,
+.popup-box textarea {
+  margin-bottom: 10px;
+}
+
+.popup-box button {
+  margin-top: 10px;
+}
+
+/* Adjustments for responsiveness */
+@media (max-width: 768px) {
+  .popup-box {
+    width: 90%;
+  }
 }
