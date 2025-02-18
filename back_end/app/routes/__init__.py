@@ -6,6 +6,7 @@ from .coderfair_routes import coderfair_routes
 from .judge_routes import judge_routes
 from .studentmodel_routes import studentmodel_routes
 from .grade_routes import grade_routes
+from .auth_routes import auth_routes
 
 
 # Registering blueprints (routes) here
@@ -18,5 +19,6 @@ def init_routes(app):
     app.register_blueprint(coderfair_routes, url_prefix="/coderfair")
     app.register_blueprint(judge_routes, url_prefix="/judges")
     app.register_blueprint(studentmodel_routes, url_prefix="/students")
+    app.register_blueprint(auth_routes, url_prefix='/auth' )
 
 
