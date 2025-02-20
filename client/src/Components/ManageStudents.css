@@ -10,7 +10,8 @@
 /* Styling for the table container */
 .table-container {
   margin-top: 20px;
-  overflow-x: auto; /* Allow horizontal scrolling if needed */
+  overflow-x: auto;
+  /* Allow horizontal scrolling if needed */
 }
 
 table {
@@ -18,7 +19,8 @@ table {
   border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ddd;
   padding: 12px;
   text-align: left;
@@ -42,7 +44,8 @@ button {
 .actions-column button {
   margin: 0 5px;
   padding: 8px 12px;
-  font-size: 0.875rem; /* Smaller font size */
+  font-size: 0.875rem;
+  /* Smaller font size */
 }
 
 button.edit-btn {
@@ -66,9 +69,11 @@ button.delete-btn {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 6000;
 }
-
+.mantine-MultiSelect-dropdown {
+  z-index: 10000 !important;
+}
 /* Pop-up box styling */
 .popup-box {
   background-color: #fff;

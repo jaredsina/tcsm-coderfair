@@ -28,7 +28,7 @@ const CoachesPage = () => {
 
       <Grid>
         <Grid.Col span={12} md={5} lg={5}>
-          <ManageProjects projects={projects} setProjects={setProjects} />
+          <ManageProjects project={projects} setProjects={setProjects} />
         </Grid.Col>
 
         <Grid.Col span={12} md={5} lg={5}>
