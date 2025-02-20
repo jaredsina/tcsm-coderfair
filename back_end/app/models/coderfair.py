@@ -5,10 +5,11 @@ class CoderfairModel:
   def __init__(self, mongo: PyMongo):
     self.collection = mongo.cx["test"]["coderfairs"]
 
-  def create_coderfair(self, fair_date, description,):
+  def create_coderfair(self, fair_date, description, is_active):
     coderfair_data = {
       "fair_date": fair_date,
       "description": description,
+      "is_active": is_active,
      
     }
     result = self.collection.insert_one(coderfair_data)

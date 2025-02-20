@@ -61,14 +61,14 @@ def update_coderfair(coderfair_id):
     try:
         # we will get the judge_id from the request json
         data = request.get_json()
-        updated_coderfair = data["updated_coderfair"]
+        update_data = data["updated_coderfair"]
 
         new_coderfair = CoderfairModel(current_app.mongo)
-        response = new_coderfair.update_coderfair(ObjectId(coderfair_id), updated_coderfair)
+        response = new_coderfair.update_coderfair(ObjectId(coderfair_id), update_data)
 
     except Exception as e:
         # If an exception is raised, return an error message and status code 400
-        return jsonify({"message": "Error updating coderfiar", "error": str(e)}), 400
+        return jsonify({"message": "Error updating coderfair", "error": str(e)}), 400
 
     # If no exceptions are raised, return a success message and status code 200
     return jsonify({"message": str(response)}), 200
