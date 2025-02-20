@@ -7,13 +7,28 @@ from bson import ObjectId
 grade_routes = Blueprint('grade_routes', __name__)
 
 # Define a simple route inside this blueprint
-@grade_routes.route('/')
+@grade_routes.route('/', methods=["GET"])
 def get_grades():
-    return jsonify({'message': 'List of grades will be here'})
+    try:
+        grade = GradeModel(current_app.mongo)
+        grades = grade.list_grades()
 
-@grade_routes.route('/<string:grade_id>')
+    except Exception as e:
+        return jsonify({"message": "Error getting grades", "error": str(e)}), 400
+    
+    return jsonify([grades]), 200
+
+@grade_routes.route('/<string:grade_id>', methods=["GET"])
 def get_grade(grade_id):
-    return jsonify({'message': f'Grade with ID {grade_id}'})
+    try:
+        grade_id = ObjectId(grade_id)
+        grade = GradeModel(current_app.mongo)
+        grade = grade.find_grade_by_id(grade_id)
+
+    except Exception as e:
+        return jsonify({"message": "Error getting grade", "error": str(e)}), 400
+    
+    return jsonify(grade), 200
 
 @grade_routes.route('/delete/<string:grade_id>', methods=["DELETE"])
 def delete_grade(grade_id):
@@ -58,4 +73,4 @@ def create_grade():
     except Exception as e:
         return jsonify({"message": "Error creating grade", "error": str(e)}), 400
     
-    return jsonify({'message': "Student created sucessfully", "student_id": str(response)}), 201
+    return jsonify({'message': "Grade created sucessfully", "grade_id": str(response)}), 201
