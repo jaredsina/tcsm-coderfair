@@ -1,7 +1,7 @@
 import configparser
 from flask_pymongo import PyMongo
 
-
+#comment
 def init_config(app):
     # Read the configuration file
     config = configparser.ConfigParser()
