@@ -1,4 +1,5 @@
 from flask_pymongo import PyMongo
+from bson import ObjectId
 
 class ProjectModel:
 
@@ -46,8 +47,11 @@ class ProjectModel:
   def list_top_projects(self, coderfair_id, project_ids):
     students = []
     for project_id in project_ids:
+      project_id_str = project_id.get("$oid")
+      project_id = ObjectId(project_id_str)
       result = list(self.collection.aggregate([
         {"$match": {"_id": project_id, "coderfair_id": coderfair_id}},
+        {"$limit": 10},
         {
           "$lookup": {
             "from": "students",

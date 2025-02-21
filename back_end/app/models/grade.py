@@ -25,6 +25,7 @@ class GradeModel:
     return list(self.collection.aggregate([
       {"$sort": {"overall_grade": -1}},
       {"$project": {
+        "_id": 0,
         "concept_tier": 0,
         "concept_mastery": 0,
         "presentation": 0,
