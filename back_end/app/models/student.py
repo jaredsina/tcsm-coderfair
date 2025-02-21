@@ -1,4 +1,5 @@
 from flask_pymongo import PyMongo
+from .grade import GradeModel
 
 class StudentModel:
   def __init__(self, mongo: PyMongo):
@@ -48,6 +49,10 @@ class StudentModel:
       ]
     )
     return list(students)
+  
+  def list_coderfair_students(data, coderfair_id):
+    result = data.find({"coderfair_id": coderfair_id})
+    return result
 
   def update_student(self, id, update_data):
     result = self.collection.update_one({"_id": id}, {"$set": update_data})

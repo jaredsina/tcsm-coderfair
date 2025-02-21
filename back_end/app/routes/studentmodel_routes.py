@@ -1,7 +1,7 @@
 # app/routes/coderfair_routes.py
 from flask import Blueprint, jsonify, current_app, request
 from app.models.student import StudentModel
-
+from app.models.grade import GradeModel
 
 from bson import ObjectId
 
@@ -30,6 +30,12 @@ def get_student(student_id):
         return jsonify({"message": "Error getting student", "error": str(e)}), 400
     
     return jsonify(student), 200
+
+@studentmodel_routes.route('/top/<string:coderfair_id>', methods=["GET"])
+def get_top_students(coderfair_id):
+    grade = GradeModel(current_app.mongo)
+    top_grades = grade.list_top_grades()
+    return jsonify(top_grades)
 
 @studentmodel_routes.route('/delete/<string:student_id>', methods=["DELETE"])
 def delete_student(student_id):
