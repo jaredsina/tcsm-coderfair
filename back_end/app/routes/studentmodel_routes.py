@@ -15,7 +15,7 @@ def get_students():
         students = student.list_students()
 
     except Exception as e:
-        return jsonify({"message": "Error getting students", "error": str(e)})
+        return jsonify({"message": "Error getting students", "error": str(e)}), 400
     
     return jsonify(students), 200
 
