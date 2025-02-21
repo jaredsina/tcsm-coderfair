@@ -5,13 +5,14 @@ class ProjectModel:
   def __init__(self, mongo: PyMongo):
     self.collection = mongo.cx["test"]["projects"]
 
-  def create_project(self, student_id, coderfair_id, name, description, category, presentation_video_url, code_access_link, coding_language, project_username, project_password, notes):
+  def create_project(self, student_id, coderfair_id, name, description, category, project_image, presentation_video_url, code_access_link, coding_language, project_username, project_password, notes):
     project_data = {
       "student_id": student_id,
       "coderfair_id": coderfair_id,
       "name": name,
       "description": description,
       "category": category,
+      "project_image": project_image,
       "presentation_video_url": presentation_video_url,
       "code_access_link": code_access_link,
       "coding_language": coding_language,
