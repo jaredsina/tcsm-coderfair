@@ -12,6 +12,6 @@ def get_users():
     return jsonify({"message": "List of users will be here"})
 
 
-@user_routes.route("/<int:user_id>")
+@user_routes.route("/<string:user_id>")
 def get_user(user_id):
     return jsonify({"message": f"User with ID {user_id}"})

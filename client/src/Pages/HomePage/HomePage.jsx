@@ -89,7 +89,7 @@ const HomePage = () => {
             </Text>
           </Center>
 
-          <Carousel withIndicators slideSize="80%" height={"30rem"} slideGap="md" style={{ width: "100%" }} controlSize={"3rem"} loop>
+          <Carousel withIndicators slideSize="80%" height={"22rem"} slideGap="md" style={{ width: "100%" }} controlSize={"3rem"} loop>
             <Carousel.Slide style={{ width: "100%" }}><Center><ProjectCard style={{ width: "100%" }} /></Center></Carousel.Slide>
             <Carousel.Slide style={{ width: "100%" }}><Center><ProjectCard style={{ width: "100%" }} /></Center></Carousel.Slide>
             <Carousel.Slide style={{ width: "100%" }}><Center><ProjectCard style={{ width: "100%" }} /></Center></Carousel.Slide>
