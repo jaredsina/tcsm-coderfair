@@ -33,34 +33,6 @@ const data = [
   { rank: 2, name: 'Joshua', score: 4500 },
   { rank: 3, name: 'JS', score: 4200 },
 ];
-export function Footer() {
-  return (
-    <footer
-      style={{ backgroundColor: '#1a1a1a', color: 'white', padding: '20px 0' }}
-    >
-      <Container size="md" style={{ textAlign: 'center' }}>
-        <Anchor href="https://www.thecoderschool.com/locations/montgomery/">
-          The Coder School Montgomery
-        </Anchor>
-        <Text>
-          Got a question? Email us at{' '}
-          <Anchor href="mailto:montgomery@thecoderschool.com">
-            montgomery@thecoderschool.com
-          </Anchor>
-        </Text>
-
-        <Text size="sm">
-          &copy; 2014-2022, the Coder School San Francisco, LLC. All Rights,
-          Alright? Don't forget our
-          <Anchor href="https://www.thecoderschool.com/privacy/">
-            {' '}
-            Privacy Policy
-          </Anchor>
-        </Text>
-      </Container>
-    </footer>
-  );
-}
 export function Leaderboard() {
   const rows = data1.map((data1) => (
     <Table.Tr>
@@ -161,40 +133,12 @@ const HomePage = () => {
             </Text>
           </Center>
 
-          <Carousel
-            withIndicators
-            slideSize="80%"
-            height={'30rem'}
-            slideGap="md"
-            style={{ width: '100%' }}
-            controlSize={'3rem'}
-            loop
-          >
-            <Carousel.Slide style={{ width: '100%' }}>
-              <Center>
-                <ProjectCard style={{ width: '100%' }} />
-              </Center>
-            </Carousel.Slide>
-            <Carousel.Slide style={{ width: '100%' }}>
-              <Center>
-                <ProjectCard style={{ width: '100%' }} />
-              </Center>
-            </Carousel.Slide>
-            <Carousel.Slide style={{ width: '100%' }}>
-              <Center>
-                <ProjectCard style={{ width: '100%' }} />
-              </Center>
-            </Carousel.Slide>
-            <Carousel.Slide style={{ width: '100%' }}>
-              <Center>
-                <ProjectCard style={{ width: '100%' }} />
-              </Center>
-            </Carousel.Slide>
-            <Carousel.Slide style={{ width: '100%' }}>
-              <Center>
-                <ProjectCard style={{ width: '100%' }} />
-              </Center>
-            </Carousel.Slide>
+          <Carousel withIndicators slideSize="80%" height={"22rem"} slideGap="md" style={{ width: "100%" }} controlSize={"3rem"} loop>
+            <Carousel.Slide style={{ width: "100%" }}><Center><ProjectCard style={{ width: "100%" }} /></Center></Carousel.Slide>
+            <Carousel.Slide style={{ width: "100%" }}><Center><ProjectCard style={{ width: "100%" }} /></Center></Carousel.Slide>
+            <Carousel.Slide style={{ width: "100%" }}><Center><ProjectCard style={{ width: "100%" }} /></Center></Carousel.Slide>
+            <Carousel.Slide style={{ width: "100%" }}><Center><ProjectCard style={{ width: "100%" }} /></Center></Carousel.Slide>
+            <Carousel.Slide style={{ width: "100%" }}><Center><ProjectCard style={{ width: "100%" }} /></Center></Carousel.Slide>
             <Carousel.Slide>
               <Flex mih={300} justify="center" align="center" direction="row">
                 <Link to="/projects" onClick={() => setOpened(false)}>
@@ -213,8 +157,9 @@ const HomePage = () => {
         </Container>
         <Podium />
         <Leaderboard />
-      </Container>
-      <Footer />
+
+
+      </Container >
     </>
   );
 };
