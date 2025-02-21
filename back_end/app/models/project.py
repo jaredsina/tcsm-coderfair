@@ -46,15 +46,14 @@ class ProjectModel:
   def list_top_projects(self, coderfair_id, project_ids):
     students = []
     for project_id in project_ids:
-      students.append(self.collection.aggregate(
-        {"$match": {"_id": project_id}},
-        {"$match": {"coderfair_id": coderfair_id}},
+      result = list(self.collection.aggregate([
+        {"$match": {"_id": project_id, "coderfair_id": coderfair_id}},
         {
           "$lookup": {
-            "from": "student",
+            "from": "students",
             "localField": "student_id",
             "foreignField": "_id",
-            "as": "project",
+            "as": "student",
           }
         },
         {
@@ -73,7 +72,9 @@ class ProjectModel:
           "notes": 0,
             }
         },
+      ]
       ))
+      students.extend(result)
     return students
 
   #list projects by coderfair

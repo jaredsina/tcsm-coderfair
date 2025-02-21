@@ -22,10 +22,8 @@ class GradeModel:
     return self.collection.find_one({"_id": id}) 
   
   def list_top_grades(self):
-    return list(self.collection.aggregate(
-      {"$sort": 
-       {"overall_grade": -1}
-      },
+    return list(self.collection.aggregate([
+      {"$sort": {"overall_grade": -1}},
       {"$project": {
         "concept_tier": 0,
         "concept_mastery": 0,
@@ -36,6 +34,7 @@ class GradeModel:
         "overall_comments": 0,
         }
       },
+    ]
     ))
 
   def list_project_grades(self, project_id):

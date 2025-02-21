@@ -16,21 +16,23 @@ def get_students():
         students = student.list_students()
 
     except Exception as e:
-        return jsonify({"message": "Error getting students", "error": str(e)})
+        return jsonify({"message": "Error getting students", "error": str(e)}), 400
     
     return jsonify(students), 200
 
 @studentmodel_routes.route('/top/<string:coderfair_id>', methods=["GET"])
 def get_top_students(coderfair_id):
-    grade = GradeModel(current_app.mongo)
-    project_ids = grade.list_top_grades()
+    try:
+        grade = GradeModel(current_app.mongo)
+        project_ids = grade.list_top_grades()
 
-    project = ProjectModel(current_app.mongo)
-    students = project.list_top_projects(coderfair_id, project_ids)
-    return students
-    #get all the projects for the coderfair
-    #create grade object
-    #run method with loop through projects, return 
+        project = ProjectModel(current_app.mongo)
+        students = project.list_top_projects(coderfair_id, project_ids)
+    
+    except Exception as e:
+        return jsonify({"message": "Error getting top students", "error": str(e)}), 400
+    
+    return jsonify(students), 200
 
 @studentmodel_routes.route('/<string:student_id>', methods=["GET"])
 def get_student(student_id):
