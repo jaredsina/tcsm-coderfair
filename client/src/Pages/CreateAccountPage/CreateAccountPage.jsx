@@ -1,5 +1,4 @@
 import React from 'react';
-import './CreateAccountPage.css';
 import {
   TextInput,
   Paper,
@@ -13,7 +12,14 @@ import { Link } from 'react-router-dom';
 
 const CreateAccountPage = () => {
   return (
-    <Container h="85%" maw="100%" pt="35px">
+    <Container
+      h="100%"
+      maw="100%"
+      pt="35px"
+      flex="1"
+      bg="linear-gradient(to right, #4caf50, #2e7d32)"
+      w="100%"
+    >
       <Center>
         <Paper shadow="xs" p="xl" w="400px" h="fit-content">
           <Title>Create Account</Title>
