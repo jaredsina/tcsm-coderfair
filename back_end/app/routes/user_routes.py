@@ -24,7 +24,7 @@ def get_users(user_id):
 
 #route for creating users
 @user_routes.route('/create/', methods = ['POST'])
-def create_users(user_id):
+def create_users():
     try:
         data = request.get_json()
         first_name = data["first_name"]
@@ -38,7 +38,7 @@ def create_users(user_id):
         user_model = UserModel(mongo)
 
         new_user = user_model(current_app.mongo)
-        response = new_user.create_user(current_app.mongo)
+        response = new_user.create_user(first_name, last_name, email, username, is_admin, is_staff)
 
         user = user_model.find_user_by_id(user_id)
     except Exception as e:
