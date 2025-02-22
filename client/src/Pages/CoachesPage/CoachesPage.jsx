@@ -6,19 +6,20 @@ import ManageGrades from "../../Components/ManageGrades";
 import "./CoachesPage.css";
 
 const CoachesPage = () => {
+  // Initialize states with example data
   const [projects, setProjects] = useState([
     { id: 1, name: "Project Alpha", student: "John Doe" },
-    { id: 2, name: "Project Beta", student: "Jane Smith" }
+    { id: 2, name: "Project Beta", student: "Jane Smith" },
   ]);
 
   const [students, setStudents] = useState([
     { id: 1, name: "John Doe", grade: "A", bio: "Great student!" },
-    { id: 2, name: "Jane Smith", grade: "B", bio: "Needs improvement." }
+    { id: 2, name: "Jane Smith", grade: "B", bio: "Needs improvement." },
   ]);
 
   const [grades, setGrades] = useState([
     { id: 1, project: "Project Alpha", grade: "A" },
-    { id: 2, project: "Project Beta", grade: "B" }
+    { id: 2, project: "Project Beta", grade: "B" },
   ]);
 
   return (
@@ -27,10 +28,12 @@ const CoachesPage = () => {
       <Divider className="section-divider" />
 
       <Grid>
+        {/* Manage Projects Component */}
         <Grid.Col span={12} md={5} lg={5}>
-          <ManageProjects project={projects} setProjects={setProjects} />
+          <ManageProjects projects={projects} setProjects={setProjects} />
         </Grid.Col>
 
+        {/* Manage Students Component */}
         <Grid.Col span={12} md={5} lg={5}>
           <ManageStudents students={students} setStudents={setStudents} />
         </Grid.Col>
@@ -38,6 +41,7 @@ const CoachesPage = () => {
 
       <Divider className="section-divider" />
 
+      {/* Manage Grades Component */}
       <ManageGrades grades={grades} setGrades={setGrades} />
     </Container>
   );

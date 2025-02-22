@@ -11,7 +11,6 @@
 .table-container {
   margin-top: 20px;
   overflow-x: auto;
-  /* Allow horizontal scrolling if needed */
 }
 
 table {
@@ -19,8 +18,7 @@ table {
   border-collapse: collapse;
 }
 
-th,
-td {
+th, td {
   border: 1px solid #ddd;
   padding: 12px;
   text-align: left;
@@ -35,25 +33,18 @@ td {
   vertical-align: middle;
 }
 
-/* Button styling in table */
+/* Button styling */
 button {
   margin-right: 10px;
 }
 
-/* Styling for the action buttons (Edit, Delete) */
-.actions-column button {
-  margin: 0 5px;
-  padding: 8px 12px;
-  font-size: 0.875rem;
-  /* Smaller font size */
-}
-
-button.edit-btn {
+/* Styling for the action buttons */
+.edit-btn {
   background-color: #007bff;
   color: white;
 }
 
-button.delete-btn {
+.delete-btn {
   background-color: #dc3545;
   color: white;
 }
@@ -71,9 +62,11 @@ button.delete-btn {
   align-items: center;
   z-index: 6000;
 }
+
 .mantine-MultiSelect-dropdown {
   z-index: 10000 !important;
 }
+
 /* Pop-up box styling */
 .popup-box {
   background-color: #fff;
