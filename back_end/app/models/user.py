@@ -2,11 +2,12 @@ from flask_pymongo import PyMongo
 
 
 class UserModel:
+    
     def __init__(self, mongo: PyMongo):
         self.collection = mongo.cx["test"]["users"]
 
-
-    def create_user(self, first_name, last_name, email, username):
+                                      
+    def create_user(self, first_name, last_name, email, is_admin, is_staff, username,):
         user_data = {
             "first_name": first_name,
             "last_name": last_name,
@@ -23,13 +24,13 @@ class UserModel:
         return self.collection.find_one({"username": username})
 
     def find_user_by_id(self, id):
-        return self.collection.find_one({"_id": id})
+        return self.collection.find_one({"_id": id}, {"_id":0})
     
     def list_staff(self, is_staff):
         return self.collection.find({"is_staff": is_staff})
 
     def list_users(self):
-        return list(self.collection.find())
+        return list(self.collection.find({},{"_id":0}))
     
     def update_user(self, id, update_data):
         result = self.collection.update_one({"_id": id}, {"$set": update_data})
