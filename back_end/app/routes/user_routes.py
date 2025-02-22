@@ -22,7 +22,7 @@ def get_users(user_id):
         return jsonify(user), 200
 
 
-
+#route for creating users
 @user_routes.route('/create/', methods = ['POST'])
 def create_users(user_id):
     try:
