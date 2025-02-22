@@ -8,6 +8,10 @@ import Results from "./Pages/Results";
 import Account from "./Pages/AccountPage/AccountPage";
 import Home from "./Pages/HomePage/HomePage";
 import SignIn from "./Pages/SignIn"; // Import the Sign-In page
+import CoachesPage from "./Pages/CoachesPage/CoachesPage"; // Import the new page
+
+
+
 import Reset from "./Pages/ResetPass/Reset";
 import Footer from "./Components/Footer";
 import { AppShell } from "@mantine/core";
@@ -18,6 +22,7 @@ function App() {
 
   return (
     <>
+
       <AppShell style={{ minHeight: "100vh" }} footer={<Footer />}>
         {showElements && <NavBar />} {/* Only show NavBar if not on the SignIn page */}
         <div style={{ flexGrow: 1 }}>
@@ -29,6 +34,8 @@ function App() {
             <Route path="/projects" element={<ProjectPage />} />
             <Route path="/account" element={<Account />} />
             <Route path="/judging" element={<JudgingPage />} />
+            <Route path="/coach" element={<CoachesPage />} />
+
             <Route path="/reset" element={<Reset />} />
           </Routes>
         </div>
