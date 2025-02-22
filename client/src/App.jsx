@@ -8,6 +8,7 @@ import {
   Routes,
   useLocation,
 } from 'react-router-dom';
+import { Stack } from '@mantine/core';
 import ProjectPage from './Pages/ProjectPage/ProjectPage';
 import Results from './Pages/Results';
 import Account from './Pages/AccountPage/AccountPage';
@@ -22,7 +23,7 @@ function App() {
   const showNavBar = location.pathname !== '/';
 
   return (
-    <>
+    <Stack gap="0px" mih="100vh">
       {showNavBar && <NavBar />}{' '}
       {/* Only show NavBar if not on the SignIn page */}
       <Routes>
@@ -36,8 +37,7 @@ function App() {
         <Route path="/account" element={<Account />} />
         <Route path="/judging" element={<JudgingPage />} />
       </Routes>
-      
-    </>
+    </Stack>
   );
 }
 
