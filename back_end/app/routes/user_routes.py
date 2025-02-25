@@ -5,7 +5,6 @@ from flask_bcrypt import Bcrypt
 
 
 user_routes = Blueprint("user_routes", __name__)
-bcrypt = Bcrypt(current_app)
 
 
 # # Define a simple route inside this blueprint
@@ -34,6 +33,7 @@ def create_users():
         is_admin = data["is_admin"]
         is_staff = data["is_staff"]
         password = data["password"]
+        bcrypt = Bcrypt(current_app)
         hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
 
         new_user = UserModel(current_app.mongo)
