@@ -46,7 +46,43 @@ class ProjectModel:
 
   #list projects by coderfair
   def list_coderfair_projects(self, coderfair_id):
-    return list(self.collection.find({"coderfair_id": coderfair_id}))
+    return list(self.collection.aggregate(
+      [
+        {"$match": {"coderfair_id": coderfair_id}},
+        {"$lookup": {
+          "from": "grades",
+          "localField": "_id",
+          "foreignField": "project_id",
+          "as": "grade"
+          } 
+        },
+        {"$sort": {"grade.overall_grade": -1}},  
+        {"$limit": 10},
+        {"$project": {
+          "_id": 0,
+          "coderfair_id": 0,
+          "name": 0,
+          "description": 0,
+          "category": 0,
+          "project_image": 0,
+          "presentation_video_url": 0,
+          "code_access_link": 0,
+          "coding_language": 0,
+          "project_username": 0,
+          "project_password": 0,
+          "notes": 0,
+          "grade.concept_tier": 0,
+          "grade.concept_mastery": 0,
+          "grade.presentation": 0,
+          "grade.creativity": 0,
+          "grade.overall_grade": 0,
+          "grade.judge_id": 0,
+          "grade.project_id": 0,
+          "grade.overall_comments": 0,
+          } 
+        },
+      ]
+    ))
 
   #list all projects
   def list___all_projects(self):
