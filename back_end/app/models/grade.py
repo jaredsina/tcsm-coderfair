@@ -18,7 +18,20 @@ class GradeModel:
     return str(result.inserted_id)
 
   def find_grade_by_id(self, id):
-    return self.collection.find_one({"_id": id}) 
+    return list(
+      self.collection.aggregate(
+        [
+          {"$match": {"_id": id}},
+          {
+            "$project": {
+            "_id": 0,
+            "judge_id": 0,
+            "project_id": 0,
+            }
+          },
+        ]
+      )
+    )
 
   def list_project_grades(self, project_id):
     return list(self.collection.find({"project_id": project_id}))
@@ -27,7 +40,14 @@ class GradeModel:
     return list(self.collection.find({"judge_id": judge_id}))
   
   def list_grades(self):
-    return list(self.collection.find())
+    grades = self.collection.aggregate(
+      [
+        {
+          "$project": {"_id": 0}
+        }
+      ]
+    )
+    return list(grades)
   
   def update_grade(self, id, update_data):
     result = self.collection.update_one({"_id": id}, {"$set": update_data})

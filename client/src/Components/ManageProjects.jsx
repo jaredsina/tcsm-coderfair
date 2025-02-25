@@ -1,83 +1,84 @@
 import React, { useState } from "react";
 import { Button, Table, Title, TextInput, Textarea, MultiSelect, Modal, TagsInput} from "@mantine/core";
 
-const ManageProjects = ({ project, setProject }) => {
-  const [formData, setFormData] = useState({
-    student_id: "",
-    coderfair_id: "",
-    name: "",
-    description: "",
-    presentation_video_url: "",
-    code_access_link: "",
-    coding_language: [],
-    project_username: "",
-    project_password: "",
-    notes: "",
-  });
+const ManageProjects = ({ projects, setProjects }) => {
+  const [newProjectName, setNewProjectName] = useState("");
+  const [newDescription, setNewDescription] = useState("");
+  const [newVideoURL, setNewVideoURL] = useState("");
+  const [newCodeLink, setNewCodeLink] = useState("");
+  const [newLanguages, setNewLanguages] = useState([]);
+  const [newNotes, setNewNotes] = useState("");
+  const [newStudentName, setNewStudentName] = useState(""); // New field for student name
   const [showForm, setShowForm] = useState(false);
   const [editingProjectId, setEditingProjectId] = useState(null);
 
-  const handleChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
   const handleAddProject = () => {
-    if (!formData.name.trim()) return;
+    if (!newProjectName.trim() || !newStudentName.trim() || !newDescription.trim()) return;
 
     const newProject = {
-      id: project.length + 1,
-      ...formData,
+      id: projects.length + 1,
+      name: newProjectName,
+      description: newDescription,
+      videoURL: newVideoURL,
+      codeLink: newCodeLink,
+      languages: newLanguages,
+      notes: newNotes,
+      studentName: newStudentName, // Storing student name
     };
 
-    setProject([...project, newProject]);
+    setProjects([...projects, newProject]);
     resetForm();
   };
 
   const handleEditProject = (id) => {
-    const projectToEdit = project.find((proj) => proj.id === id);
-    if (!projectToEdit) return;
-
-    setFormData(projectToEdit);
+    const projectToEdit = projects.find((project) => project.id === id);
+    setNewProjectName(projectToEdit.name);
+    setNewDescription(projectToEdit.description);
+    setNewVideoURL(projectToEdit.videoURL);
+    setNewCodeLink(projectToEdit.codeLink);
+    setNewLanguages(projectToEdit.languages);
+    setNewNotes(projectToEdit.notes);
+    setNewStudentName(projectToEdit.studentName); // Pre-fill student name
     setEditingProjectId(id);
     setShowForm(true);
   };
 
   const handleSaveEdit = () => {
-    if (!formData.name.trim()) return;
+    if (!newProjectName.trim() || !newStudentName.trim() || !newDescription.trim()) return;
 
-    const updatedProjects = project.map((proj) =>
-      proj.id === editingProjectId ? { ...proj, ...formData } : proj
+    const updatedProjects = projects.map((project) =>
+      project.id === editingProjectId
+        ? { ...project, name: newProjectName, description: newDescription, videoURL: newVideoURL, codeLink: newCodeLink, languages: newLanguages, notes: newNotes, studentName: newStudentName }
+        : project
     );
 
-    setProject(updatedProjects);
+    setProjects(updatedProjects);
     resetForm();
   };
 
   const handleDeleteProject = (id) => {
-    setProject(project.filter((proj) => proj.id !== id));
+    setProjects(projects.filter((project) => project.id !== id));
   };
 
   const resetForm = () => {
-    setFormData({
-      student_id: "",
-      coderfair_id: "",
-      name: "",
-      description: "",
-      presentation_video_url: "",
-      code_access_link: "",
-      coding_language: [],
-      project_username: "",
-      project_password: "",
-      notes: "",
-    });
+    setNewProjectName("");
+    setNewDescription("");
+    setNewVideoURL("");
+    setNewCodeLink("");
+    setNewLanguages([]);
+    setNewNotes("");
+    setNewStudentName(""); // Reset student name field
     setEditingProjectId(null);
     setShowForm(false);
   };
 
   return (
     <div className="section">
-      <Title order={2}>Manage Projects</Title>
-      <Button onClick={() => setShowForm(true)} className="action-button">Upload New Project</Button>
+      <h2>Manage Projects</h2>
+
+      <Button onClick={() => setShowForm(true)} className="action-button">
+        Create Project
+      </Button>
 
       {/* Modal for Creating/Editing Projects */}
       <Modal opened={showForm} onClose={resetForm} title={editingProjectId ? "Edit Project" : "Create New Project"} centered overlayProps={{ style: { zIndex: 7000 } }}
@@ -97,27 +98,41 @@ const ManageProjects = ({ project, setProject }) => {
 
       {/* Project Table */}
       <div className="table-container">
-        <Table striped highlightOnHover>
+        <table>
           <thead>
             <tr>
               <th>Project Name</th>
+              <th>Student Name</th>
               <th>Description</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {project.map((proj) => (
-              <tr key={proj.id}>
-                <td>{proj.name}</td>
-                <td>{proj.description}</td>
-                <td>
-                  <Button onClick={() => handleEditProject(proj.id)}>Edit</Button>
-                  <Button color="red" onClick={() => handleDeleteProject(proj.id)}>Delete</Button>
+            {projects.map((project) => (
+              <tr key={project.id}>
+                <td>{project.name}</td>
+                <td>{project.studentName}</td> {/* Displaying student name */}
+                <td>{project.description}</td>
+                <td className="actions-column">
+                  <Button
+                    className="edit-btn"
+                    size="xs"
+                    onClick={() => handleEditProject(project.id)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    className="delete-btn"
+                    size="xs"
+                    onClick={() => handleDeleteProject(project.id)}
+                  >
+                    Delete
+                  </Button>
                 </td>
               </tr>
             ))}
           </tbody>
-        </Table>
+        </table>
       </div>
     </div>
   );
