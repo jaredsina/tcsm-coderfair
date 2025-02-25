@@ -28,10 +28,14 @@ def get_top_students(coderfair_id):
         
         new_student = StudentModel(current_app.mongo)
 
-        '''for student in top_students:
-            student_info = student.find_student_by_id(student)'''
-
         print(top_students)
+
+        '''students = []
+        for top_student in top_students:
+            student = new_student.find_student_by_id(top_student)
+            students.append(student)
+
+        print(students)'''
 
         #convert the ids to information
     

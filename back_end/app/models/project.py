@@ -76,7 +76,6 @@ class ProjectModel:
           "grade.concept_mastery": 0,
           "grade.presentation": 0,
           "grade.creativity": 0,
-          "grade.overall_grade": 0,
           "grade.judge_id": 0,
           "grade.project_id": 0,
           "grade.overall_comments": 0,
