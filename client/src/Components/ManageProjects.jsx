@@ -11,6 +11,23 @@ const ManageProjects = ({ projects, setProjects }) => {
   const [newStudentName, setNewStudentName] = useState(""); // New field for student name
   const [showForm, setShowForm] = useState(false);
   const [editingProjectId, setEditingProjectId] = useState(null);
+  const [formData, setFormData] = useState({
+    student_id: "",
+    coderfair_id: "",
+    name: "",
+    description: "",
+    presentation_video_url: "",
+    code_access_link: "",
+    coding_language: [],
+    project_username: "",
+    project_password: "",
+    notes: "",
+  });
+  
+  const handleChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+        
 
   const handleAddProject = () => {
     if (!newProjectName.trim() || !newStudentName.trim() || !newDescription.trim()) return;
