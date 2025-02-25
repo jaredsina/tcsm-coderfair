@@ -42,9 +42,9 @@ def create_users():
         )
 
     except Exception as e:
-        return jsonify({"message": "Error creating coderfair", "error": str(e)}), 400
+        return jsonify({"message": "Error creating user", "error": str(e)}), 400
     return jsonify(
-        {"message": "Coderfair created successfully", "user_id": str(response)}
+        {"message": "User created successfully", "user_id": str(response)}
     ), 201
 
 
