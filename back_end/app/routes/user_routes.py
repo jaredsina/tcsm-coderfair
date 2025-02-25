@@ -1,11 +1,14 @@
 # app/routes/user_routes.py
 from ..models.user import UserModel
 from flask import Blueprint, jsonify, request, current_app
+from flask_bcrypt import Bcrypt
 
 
 from bson import ObjectId
 
 user_routes = Blueprint("user_routes", __name__)
+bcrypt = Bcrypt(current_app)
+
 
 
 # Define a simple route inside this blueprint
@@ -33,17 +36,18 @@ def create_users():
         username = data["username"]
         is_admin = data ["is_admin"]
         is_staff = data ["is_staff"]
+        password = data ["password"]
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        
 
-        mongo = current_app.config['MONGO']
-        user_model = UserModel(mongo)
+        new_user = UserModel(current_app.mongo)
+        response = new_user.create_user(first_name, last_name, email, username, is_admin, is_staff, hashed_password)
 
-        new_user = user_model(current_app.mongo)
-        response = new_user.create_user(first_name, last_name, email, username, is_admin, is_staff)
-
-        user = user_model.find_user_by_id(user_id)
+        
     except Exception as e:
-        user['_id'] = str[user('_id')]
-        return jsonify(user), 200
+        return jsonify({"message":"Error creating coderfair", "error": str(e)}), 400
+    return jsonify(
+        {"message": "Coderfair created successfully", "user_id": str(response)}), 201
 
 @user_routes.route('/user/delete/<string:user_id>', methods=["DELETE"]) 
 def delete_user(user_id):
