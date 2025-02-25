@@ -57,7 +57,7 @@ class ProjectModel:
           } 
         },
         {"$sort": {"grade.overall_grade": -1}},  
-        {"$limit": 10},
+        {"$limit": 7},
         {"$project": {
           "_id": 0,
           "coderfair_id": 0,
@@ -71,6 +71,7 @@ class ProjectModel:
           "project_username": 0,
           "project_password": 0,
           "notes": 0,
+          "grade._id": 0,
           "grade.concept_tier": 0,
           "grade.concept_mastery": 0,
           "grade.presentation": 0,

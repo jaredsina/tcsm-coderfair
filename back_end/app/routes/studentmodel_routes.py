@@ -26,8 +26,13 @@ def get_top_students(coderfair_id):
         project = ProjectModel(current_app.mongo)
         top_students = project.list_coderfair_projects(ObjectId(coderfair_id))
         
-        student = StudentModel(current_app.mongo)
+        new_student = StudentModel(current_app.mongo)
+
+        '''for student in top_students:
+            student_info = student.find_student_by_id(student)'''
+
         print(top_students)
+
         #convert the ids to information
     
     except Exception as e:
