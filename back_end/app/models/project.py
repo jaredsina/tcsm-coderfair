@@ -54,12 +54,20 @@ class ProjectModel:
           "localField": "_id",
           "foreignField": "project_id",
           "as": "grade"
-          } 
+          }
+        },
+        {"$lookup": {
+          "from": "students",
+          "localField": "student_id",
+          "foreignField": "_id",
+          "as": "student"
+          }
         },
         {"$sort": {"grade.overall_grade": -1}},  
         {"$limit": 7},
         {"$project": {
           "_id": 0,
+          "student_id": 0,
           "coderfair_id": 0,
           "name": 0,
           "description": 0,
@@ -79,6 +87,8 @@ class ProjectModel:
           "grade.judge_id": 0,
           "grade.project_id": 0,
           "grade.overall_comments": 0,
+          "student._id": 0,
+          "student.bio": 0,
           } 
         },
       ]

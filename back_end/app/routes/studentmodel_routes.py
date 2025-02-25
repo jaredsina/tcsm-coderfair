@@ -25,19 +25,6 @@ def get_top_students(coderfair_id):
     try:
         project = ProjectModel(current_app.mongo)
         top_students = project.list_coderfair_projects(ObjectId(coderfair_id))
-        
-        new_student = StudentModel(current_app.mongo)
-
-        print(top_students)
-
-        '''students = []
-        for top_student in top_students:
-            student = new_student.find_student_by_id(top_student)
-            students.append(student)
-
-        print(students)'''
-
-        #convert the ids to information
     
     except Exception as e:
         return jsonify({"message": "Error getting students", "error": str(e)}), 400
