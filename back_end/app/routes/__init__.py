@@ -19,6 +19,4 @@ def init_routes(app):
     app.register_blueprint(coderfair_routes, url_prefix="/coderfair")
     app.register_blueprint(judge_routes, url_prefix="/judges")
     app.register_blueprint(studentmodel_routes, url_prefix="/students")
-    app.register_blueprint(auth_routes, url_prefix='/auth' )
-
-
+    app.register_blueprint(auth_routes, url_prefix="/auth")
