@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Table, Title, TextInput, Textarea, MultiSelect, Modal } from "@mantine/core";
+import { Button, Table, Title, TextInput, Textarea, MultiSelect, Modal, TagsInput} from "@mantine/core";
 
 const ManageProjects = ({ project, setProject }) => {
   const [formData, setFormData] = useState({
@@ -86,9 +86,10 @@ const ManageProjects = ({ project, setProject }) => {
         <Textarea label="Description" placeholder="Describe what the project does" value={formData.description} onChange={(event) => handleChange("description", event.target.value)} required />
         <TextInput label="Presentation Video URL" placeholder="Youtube or other videoplayer link" value={formData.presentation_video_url} onChange={(event) => handleChange("presentation_video_url", event.target.value)} required />
         <TextInput label="Code Access Link" placeholder="Link to repository or project" value={formData.code_access_link} onChange={(event) => handleChange("code_access_link", event.target.value)} required />
-        <MultiSelect label="Coding Languages Used" placeholder="Pick all languages utilized" data={['HTML', 'CSS', 'JavaScript', 'TypeScript', 'Python', 'Java', 'C', 'C++', 'C#', 'Swift', 'PHP', 'Lua', 'Scratch']} value={formData.coding_language} onChange={(value) => handleChange("coding_language", value)} required />
+        <MultiSelect label="Coding Languages Used" placeholder="Pick all languages utilized" data={['HTML', 'CSS', 'JavaScript', 'TypeScript', 'Python', 'Java', 'C', 'C++', 'C#', 'Swift', 'PHP', 'Lua', 'Scratch']} value={formData.coding_language} onChange={(value) => handleChange("coding_language", value)} required /> 
         {/* <TextInput label="Project Username????" value={formData.project_username} onChange={(event) => handleChange("project_username", event.target.value)} />
         <TextInput label="Project Password????" value={formData.project_password} onChange={(event) => handleChange("project_password", event.target.value)} type="password" /> */}
+        {/* <TagsInput label="Enter all code languages utilized" placeholder="Enter tag" /> */}
         <Textarea label="Notes" placeholder="What did the student learn from this" value={formData.notes} onChange={(event) => handleChange("notes", event.target.value)} />
         <Button fullWidth mt="md" onClick={editingProjectId ? handleSaveEdit : handleAddProject}>{editingProjectId ? "Save Changes" : "Submit"}</Button>
         <Button fullWidth mt="md" color="gray" onClick={resetForm}>Cancel</Button>

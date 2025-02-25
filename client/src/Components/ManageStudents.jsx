@@ -82,6 +82,8 @@ const ManageStudents = ({ students, setStudents }) => {
               value={newStudentGrade}
               onChange={(event) => setNewStudentGrade(event.target.value)}
             />
+            <TextInput label="Email" placeholder="Email" mt="md" />
+            
             <Textarea
               label="Student Bio"
               placeholder="Enter student bio"
