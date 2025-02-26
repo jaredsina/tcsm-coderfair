@@ -90,7 +90,23 @@ def get_projects():
 #     try:
 #         #we will get the project data from the request json
 #         data = request.get_json()
+#         "student_id": ObjectId(data["student_id"]),
+#         "coderfair_id": ObjectId(data["coderfair_id"]),
+#         "name": data["name"],
+#         "description": data["description"],
+#         "category": data["category"],
+#         "project_image": data["project_image"],
+#         "presentation_video_url": data["presentation_video_url"],
+#         "code_access_link": data["code_access_link"],
+#         "coding_language": data["coding_language"],
+#         "project_username": data["project_username"],
+#         "project_password": data["project_password"],
+#         "notes": data["notes"],
 
+#          new_project = ProjectModel(current_app.mongo)
+#   except Exception as e:
+#       return jsonify(["message": "Error creating project", "error": str(e)]), 400
 
-
-#     return jsonify({'message': f'Project with ID {project_id}'})
+#   return jsonify(
+#       {"message": "Project created successfully", "project_id": str(response)}
+ #   ), 201
