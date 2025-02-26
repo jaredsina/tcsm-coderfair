@@ -22,7 +22,7 @@ def log_in(user_id):
     user = UserModel(current_app.mongo)
     user_id = ObjectId(user_id)
     response = user.find_user_by_id(user_id)
-    print(response)
+    print(response[0])
     hashed_password = data["hashed_password"]
     is_valid = bcrypt.check_password_hash(hashed_password, 'password')
     return jsonify({'username': 'here', 'password': 'List'})
