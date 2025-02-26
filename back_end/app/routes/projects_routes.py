@@ -104,6 +104,8 @@ def get_projects():
 #         "notes": data["notes"],
 
 #          new_project = ProjectModel(current_app.mongo)
+
+ #         response = new_project.create_judge(student_id, coderfair_id)
 #   except Exception as e:
 #       return jsonify(["message": "Error creating project", "error": str(e)]), 400
 
