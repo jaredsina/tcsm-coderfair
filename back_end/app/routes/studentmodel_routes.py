@@ -1,6 +1,7 @@
 # app/routes/coderfair_routes.py
 from flask import Blueprint, jsonify, current_app, request
 from app.models.student import StudentModel
+from app.models.project import ProjectModel
 
 
 from bson import ObjectId
@@ -18,6 +19,17 @@ def get_students():
         return jsonify({"message": "Error getting students", "error": str(e)}), 400
     
     return jsonify(students), 200
+
+@studentmodel_routes.route('/top/<string:coderfair_id>', methods=["GET"])
+def get_top_students(coderfair_id):
+    try:
+        project = ProjectModel(current_app.mongo)
+        top_students = project.list_coderfair_projects(ObjectId(coderfair_id))
+    
+    except Exception as e:
+        return jsonify({"message": "Error getting students", "error": str(e)}), 400
+    
+    return jsonify(top_students), 200
 
 @studentmodel_routes.route('/<string:student_id>', methods=["GET"])
 def get_student(student_id):

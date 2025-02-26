@@ -85,7 +85,7 @@ def create_judge():
         # we will get the judge data from the request json
         data = request.get_json()
         user_id = ObjectId(data["user_id"])
-        coderfair_id = data["coderfair_id"]
+        coderfair_id = ObjectId(data["coderfair_id"])
 
         # Use the JudgeModel class to create a new judge
         new_judge = JudgeModel(current_app.mongo)
