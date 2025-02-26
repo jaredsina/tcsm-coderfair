@@ -2,5 +2,9 @@
   "name": "tcsm-coderfair",
   "lockfileVersion": 3,
   "requires": true,
-  "packages": {}
+  "packages": {},
+  "devDependencies": {
+    "vite": "^6.1.0",
+    "vite-plugin-css": "^1.0.4"
+  }
 }
