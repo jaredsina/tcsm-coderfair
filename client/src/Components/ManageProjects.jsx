@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Table, Title, TextInput, Textarea, MultiSelect, Modal, TagsInput} from "@mantine/core";
-
+import Delete from "./Delete";
 const ManageProjects = ({ projects, setProjects }) => {
   const [newProjectName, setNewProjectName] = useState("");
   const [newDescription, setNewDescription] = useState("");
@@ -141,8 +141,9 @@ const ManageProjects = ({ projects, setProjects }) => {
                   <Button
                     className="delete-btn"
                     size="xs"
-                    onClick={() => handleDeleteProject(project.id)}
+                    onClick={() => {/*handleDeleteProject(project.id)*/} }
                   >
+                    
                     Delete
                   </Button>
                 </td>
