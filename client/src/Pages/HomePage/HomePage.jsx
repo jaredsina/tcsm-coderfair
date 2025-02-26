@@ -133,12 +133,40 @@ const HomePage = () => {
             </Text>
           </Center>
 
-          <Carousel withIndicators slideSize="80%" height={"22rem"} slideGap="md" style={{ width: "100%" }} controlSize={"3rem"} loop>
-            <Carousel.Slide style={{ width: "100%" }}><Center><ProjectCard style={{ width: "100%" }} /></Center></Carousel.Slide>
-            <Carousel.Slide style={{ width: "100%" }}><Center><ProjectCard style={{ width: "100%" }} /></Center></Carousel.Slide>
-            <Carousel.Slide style={{ width: "100%" }}><Center><ProjectCard style={{ width: "100%" }} /></Center></Carousel.Slide>
-            <Carousel.Slide style={{ width: "100%" }}><Center><ProjectCard style={{ width: "100%" }} /></Center></Carousel.Slide>
-            <Carousel.Slide style={{ width: "100%" }}><Center><ProjectCard style={{ width: "100%" }} /></Center></Carousel.Slide>
+          <Carousel
+            withIndicators
+            slideSize="80%"
+            height={'22rem'}
+            slideGap="md"
+            style={{ width: '100%' }}
+            controlSize={'3rem'}
+            loop
+          >
+            <Carousel.Slide style={{ width: '100%' }}>
+              <Center>
+                <ProjectCard style={{ width: '100%' }} />
+              </Center>
+            </Carousel.Slide>
+            <Carousel.Slide style={{ width: '100%' }}>
+              <Center>
+                <ProjectCard style={{ width: '100%' }} />
+              </Center>
+            </Carousel.Slide>
+            <Carousel.Slide style={{ width: '100%' }}>
+              <Center>
+                <ProjectCard style={{ width: '100%' }} />
+              </Center>
+            </Carousel.Slide>
+            <Carousel.Slide style={{ width: '100%' }}>
+              <Center>
+                <ProjectCard style={{ width: '100%' }} />
+              </Center>
+            </Carousel.Slide>
+            <Carousel.Slide style={{ width: '100%' }}>
+              <Center>
+                <ProjectCard style={{ width: '100%' }} />
+              </Center>
+            </Carousel.Slide>
             <Carousel.Slide>
               <Flex mih={300} justify="center" align="center" direction="row">
                 <Link to="/projects" onClick={() => setOpened(false)}>
@@ -157,9 +185,7 @@ const HomePage = () => {
         </Container>
         <Podium />
         <Leaderboard />
-
-
-      </Container >
+      </Container>
     </>
   );
 };
