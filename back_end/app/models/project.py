@@ -50,7 +50,7 @@ class ProjectModel:
 
   #list all projects
   def list___all_projects(self):
-    return list(self.collection.find())
+    return list(self.collection.find({},{"_id":0, "student_id": 0, "coderfair_id": 0}))
   
   def update_project(self, id, update_data):
     result = self.collection.update_one({"_id": id}, {"$set": update_data})
