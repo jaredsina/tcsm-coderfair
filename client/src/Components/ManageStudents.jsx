@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, TextInput, Textarea, FileInput, Image } from "@mantine/core";
+import { Button, TextInput, Textarea, FileInput, Image, Modal } from "@mantine/core";
 import "./ManageStudents.css";
 
 const ManageStudents = ({ students, setStudents }) => {
@@ -80,56 +80,64 @@ const ManageStudents = ({ students, setStudents }) => {
         Create Student Account
       </Button>
 
-      {showForm && (
-        <div className="popup-overlay" onClick={() => setShowForm(false)}>
-          <div className="popup-box" onClick={(e) => e.stopPropagation()}>
-            <h3>{editingStudentId ? "Edit Student" : "Create New Student"}</h3>
-            <TextInput
-              label="Student Name"
-              placeholder="Enter student name"
-              value={newStudentName}
-              onChange={(event) => setNewStudentName(event.target.value)}
-              required
-            />
-            <FileInput
-              size="md"
-              radius="xl"
-              label="Student Image"
-              placeholder="Click to upload image"
-              onChange={(file) => setNewStudentImage(file)}
-              accept="image/*"
-            />
-            <TextInput
-              label="Username"
-              placeholder="Enter Username"
-              value={newStudentUsername}
-              onChange={(event) => setNewStudentUsername(event.target.value)}
-            />
-            <TextInput label="Email"
-              placeholder="Email" mt="md"
-              value={newStudentEmail}
-              onChange={(event) => setNewStudentEmail(event.target.value)} />
+      <Modal
+        opened={showForm}
+        onClose={resetForm}
+        title={editingStudentId ? "Edit Student" : "Create New Student"}
+        centered
+        overlayProps={{ style: { zIndex: 7000 } }}
+        zIndex={8000}
+      >
+        <TextInput
+          required
+          label="Student Name"
+          placeholder="Enter student name"
+          value={newStudentName}
+          onChange={(event) => setNewStudentName(event.target.value)}
+        />
+        <FileInput
+          size="md"
+          radius="xl"
+          label="Student Image"
+          placeholder="Click to upload image"
+          onChange={(file) => setNewStudentImage(file)}
+          accept="image/*"
+        />
+        <TextInput
+          required
+          label="Username"
+          placeholder="Enter Username"
+          value={newStudentUsername}
+          onChange={(event) => setNewStudentUsername(event.target.value)}
+        />
+        <TextInput
+          required
+          label="Email"
+          placeholder="Email"
+          mt="md"
+          value={newStudentEmail}
+          onChange={(event) => setNewStudentEmail(event.target.value)}
+        />
 
-            <Textarea
-              label="Student Bio"
-              placeholder="Enter student bio"
-              value={newStudentBio}
-              onChange={(event) => setNewStudentBio(event.target.value)}
-            />
-            <Button fullWidth mt="md" onClick={editingStudentId ? handleSaveEdit : handleAddStudent}>
-              {editingStudentId ? "Save Changes" : "Submit"}
-            </Button>
-            <Button
-              fullWidth
-              mt="md"
-              color="gray"
-              onClick={resetForm}
-            >
-              Cancel
-            </Button>
-          </div>
-        </div>
-      )}
+        <Textarea
+          required
+          label="Student Bio"
+          placeholder="Enter student bio"
+          value={newStudentBio}
+          onChange={(event) => setNewStudentBio(event.target.value)}
+        />
+        <Button fullWidth mt="md" onClick={editingStudentId ? handleSaveEdit : handleAddStudent}>
+          {editingStudentId ? "Save Changes" : "Submit"}
+        </Button>
+        <Button
+          fullWidth
+          mt="md"
+          color="gray"
+          onClick={resetForm}
+        >
+          Cancel
+        </Button>
+      </Modal>
 
       <div className="table-container">
         <table>
