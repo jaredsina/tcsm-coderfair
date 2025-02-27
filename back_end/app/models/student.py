@@ -50,22 +50,27 @@ class StudentModel:
     return list(students)
 
   def update_student(self, id, update_data):
+    same_avatar_image = False
+    if "avatar_image" in update_data:
+      student_info = self.collection.find_one({"_id": id}, {"name": 1, "_id": 0})
+      old_public_id = student_info["name"]
+
+    elif "name" in update_data:
+      student_info = self.collection.find_one({"_id": id}, {"name": 1, "_id": 0})
+      old_public_id = student_info["name"]
+      student_info = self.collection.find_one({"_id": id}, {"avatar_image": 1, "_id": 0})
+      same_avatar_image = student_info["avatar_image"]
+
+    else: 
+      old_public_id = False
+
+
     result = self.collection.update_one({"_id": id}, {"$set": update_data})
-    return result
+    new_student_info = self.collection.find_one({"_id": id}, {"name": 1, "_id": 0})
+    public_id = new_student_info["name"]
+    return result, public_id, old_public_id, same_avatar_image
   
   def delete_student(self, id):
-    '''public_id = self.collection.aggregate(
-      [
-        {"$match": {"_id": id}},
-        {
-          "$project": {
-            "_id": 0,
-            "bio": 0,
-            "avatar_image": 0,
-            }
-        },
-      ]
-    )'''
     student_info = self.collection.find_one({"_id": id}, {"name": 1, "_id": 0})
     public_id = student_info["name"]
     self.collection.delete_one({"_id": id})

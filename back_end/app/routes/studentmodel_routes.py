@@ -58,13 +58,52 @@ def update_student(student_id):
         update_data = data["update_data"]
 
         student = StudentModel(current_app.mongo)
-        response = student.update_student(ObjectId(student_id), update_data)
+        result, public_id, old_public_id, same_avatar_image = student.update_student(ObjectId(student_id), update_data)
+        
+        if old_public_id:
+            if same_avatar_image:
+                cloudinary.uploader.destroy(old_public_id)
+                upload_result = cloudinary.uploader.upload(
+                    same_avatar_image,
+                    public_id=public_id,
+                )
+                print(upload_result["secure_url"])
+
+                # Optimize delivery by resizing and applying auto-format and auto-quality
+                optimize_url, _ = cloudinary_url(
+                    public_id, fetch_format="auto", quality="auto")
+                print(optimize_url)
+
+                # Transform the image: auto-crop to square aspect_ratio
+                auto_crop_url, _ = cloudinary_url(
+                    public_id, width=500, height=500, crop="auto", gravity="auto"
+                )
+                print(auto_crop_url)
+
+            else:
+                cloudinary.uploader.destroy(old_public_id)
+                upload_result = cloudinary.uploader.upload(
+                    update_data["avatar_image"],
+                    public_id=public_id,
+                )
+                print(upload_result["secure_url"])
+
+                # Optimize delivery by resizing and applying auto-format and auto-quality
+                optimize_url, _ = cloudinary_url(
+                    public_id, fetch_format="auto", quality="auto")
+                print(optimize_url)
+
+                # Transform the image: auto-crop to square aspect_ratio
+                auto_crop_url, _ = cloudinary_url(
+                    public_id, width=500, height=500, crop="auto", gravity="auto"
+                )
+                print(auto_crop_url)
 
     except Exception as e:
         return jsonify({"message": "Error updating student", "error": str(e)}), 400
 
     return jsonify(
-        {"message": "Student updated sucessfully", "student_id": str(response)}
+        {"message": "Student updated sucessfully", "student_id": str(result)}
     ), 201
 
 
