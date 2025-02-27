@@ -40,7 +40,10 @@ def delete_student(student_id):
     try:
         student_id = ObjectId(student_id)
         student = StudentModel(current_app.mongo)
-        student.delete_student(student_id)
+
+        #deleting image from cloudinary media database
+        public_id = student.delete_student(student_id)
+        cloudinary.uploader.destroy(public_id)
 
     except Exception as e:
         return jsonify({"message": "Error deleting student", "error": str(e)}), 400
@@ -75,18 +78,18 @@ def create_student():
 
         # Upload an image
         upload_result = cloudinary.uploader.upload(
-            "https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg",
-            public_id="shoes",
+            avatar_image,
+            public_id=name,
         )
         print(upload_result["secure_url"])
 
         # Optimize delivery by resizing and applying auto-format and auto-quality
-        optimize_url, _ = cloudinary_url("shoes", fetch_format="auto", quality="auto")
+        optimize_url, _ = cloudinary_url(name, fetch_format="auto", quality="auto")
         print(optimize_url)
 
         # Transform the image: auto-crop to square aspect_ratio
         auto_crop_url, _ = cloudinary_url(
-            "shoes", width=500, height=500, crop="auto", gravity="auto"
+            name, width=500, height=500, crop="auto", gravity="auto"
         )
         print(auto_crop_url)
         # print(name, bio, avatar_image) test

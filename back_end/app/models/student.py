@@ -54,5 +54,19 @@ class StudentModel:
     return result
   
   def delete_student(self, id):
-    result = self.collection.delete_one({"_id": id})
-    return result 
+    '''public_id = self.collection.aggregate(
+      [
+        {"$match": {"_id": id}},
+        {
+          "$project": {
+            "_id": 0,
+            "bio": 0,
+            "avatar_image": 0,
+            }
+        },
+      ]
+    )'''
+    student_info = self.collection.find_one({"_id": id}, {"name": 1, "_id": 0})
+    public_id = student_info["name"]
+    self.collection.delete_one({"_id": id})
+    return public_id 
