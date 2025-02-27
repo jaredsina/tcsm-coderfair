@@ -4,7 +4,8 @@ import "./ManageStudents.css";
 
 const ManageStudents = ({ students, setStudents }) => {
   const [newStudentName, setNewStudentName] = useState("");
-  const [newStudentGrade, setNewStudentGrade] = useState("");
+  const [newStudentUsername, setNewStudentUsername] = useState("");
+  const [newStudentEmail, setNewStudentEmail] = useState("");
   const [newStudentBio, setNewStudentBio] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingStudentId, setEditingStudentId] = useState(null);
@@ -15,7 +16,8 @@ const ManageStudents = ({ students, setStudents }) => {
     const newStudent = {
       id: students.length + 1,
       name: newStudentName,
-      grade: newStudentGrade || "N/A",
+      username: newStudentUsername,
+      email: newStudentEmail,
       bio: newStudentBio,
     };
 
@@ -26,7 +28,8 @@ const ManageStudents = ({ students, setStudents }) => {
   const handleEditStudent = (id) => {
     const studentToEdit = students.find((student) => student.id === id);
     setNewStudentName(studentToEdit.name);
-    setNewStudentGrade(studentToEdit.grade);
+    setNewStudentUsername(studentToEdit.username);
+    setNewStudentEmail(studentToEdit.email);
     setNewStudentBio(studentToEdit.bio);
     setEditingStudentId(id);
     setShowForm(true);
@@ -37,7 +40,13 @@ const ManageStudents = ({ students, setStudents }) => {
 
     const updatedStudents = students.map((student) =>
       student.id === editingStudentId
-        ? { ...student, name: newStudentName, grade: newStudentGrade, bio: newStudentBio }
+        ? {
+          ...student,
+          name: newStudentName,
+          username: newStudentUsername,
+          email: newStudentEmail,
+          bio: newStudentBio
+        }
         : student
     );
 
@@ -51,7 +60,8 @@ const ManageStudents = ({ students, setStudents }) => {
 
   const resetForm = () => {
     setNewStudentName("");
-    setNewStudentGrade("");
+    setNewStudentUsername("");
+    setNewStudentEmail("");
     setNewStudentBio("");
     setEditingStudentId(null);
     setShowForm(false);
@@ -77,13 +87,16 @@ const ManageStudents = ({ students, setStudents }) => {
               required
             />
             <TextInput
-              label="Grade"
-              placeholder="Enter grade (optional)"
-              value={newStudentGrade}
-              onChange={(event) => setNewStudentGrade(event.target.value)}
+              label="Username"
+              placeholder="Enter Username"
+              value={newStudentUsername}
+              onChange={(event) => setNewStudentUsername(event.target.value)}
             />
-            <TextInput label="Email" placeholder="Email" mt="md" />
-            
+            <TextInput label="Email"
+              placeholder="Email" mt="md"
+              value={newStudentEmail}
+              onChange={(event) => setNewStudentEmail(event.target.value)} />
+
             <Textarea
               label="Student Bio"
               placeholder="Enter student bio"
@@ -110,7 +123,8 @@ const ManageStudents = ({ students, setStudents }) => {
           <thead>
             <tr>
               <th>Name</th>
-              <th>Grade</th>
+              <th>Username</th>
+              <th>Email</th>
               <th>Bio</th>
               <th>Actions</th>
             </tr>
@@ -119,19 +133,20 @@ const ManageStudents = ({ students, setStudents }) => {
             {students.map((student) => (
               <tr key={student.id}>
                 <td>{student.name}</td>
-                <td>{student.grade}</td>
+                <td>{student.username}</td>
+                <td>{student.email}</td>
                 <td>{student.bio}</td>
                 <td className="actions-column">
                   <Button
-                    className="edit-btn"
-                    size="xs"
+                    color="blue"
+                    size="s"
                     onClick={() => handleEditStudent(student.id)}
                   >
                     Edit
                   </Button>
                   <Button
-                    className="delete-btn"
-                    size="xs"
+                    size="s"
+                    color="red"
                     onClick={() => handleDeleteStudent(student.id)}
                   >
                     Delete

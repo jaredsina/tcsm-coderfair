@@ -24,18 +24,15 @@ const ManageProjects = ({ projects, setProjects }) => {
     notes: "",
   });
 
-  // Sample student names for autofill
   const studentNames = [
-    'John Smith',
-    'Emma Johnson',
-    'Michael Brown',
-    'Sarah Davis',
-    'James Wilson',
-    'Emily Taylor',
-    'William Anderson',
-    'Olivia Martinez',
-    'Daniel Thompson',
-    'Sophia Garcia'
+    'Joshua Sambol',
+    'Joshua Sambol1',
+    'Joshua Sambol2',
+    'Joshua Sambol3',
+    'Joshua Sambol4',
+    'Joshua Sambol5',
+    'Joshua Sambol6',
+    'Joshua Sambol7',
   ];
 
   const handleChange = (field, value) => {
@@ -144,7 +141,7 @@ const ManageProjects = ({ projects, setProjects }) => {
         />
         <TextInput label="Project Name" placeholder="Name for the app or project" value={formData.name} onChange={(event) => handleChange("name", event.target.value)} required />
         <Textarea label="Description" placeholder="Describe what the project does" value={formData.description} onChange={(event) => handleChange("description", event.target.value)} required />
-        <TextInput label="Presentation Video URL" placeholder="Youtube or other videoplayer link" value={formData.presentation_video_url} onChange={(event) => handleChange("presentation_video_url", event.target.value)} required />
+        <TextInput label="Presentation Video URL" placeholder="Youtube or other videoplayer link" value={formData.presentation_video_url} onChange={(event) => handleChange("presentation_video_url", event.target.value)} />
         <TextInput label="Code Access Link" placeholder="Link to repository or project" value={formData.code_access_link} onChange={(event) => handleChange("code_access_link", event.target.value)} required />
         <MultiSelect searchable creatable label="Coding Languages Used" placeholder="Pick all languages utilized" data={['HTML', 'CSS', 'JavaScript', 'TypeScript', 'Python', 'Java', 'C', 'C++', 'C#', 'Swift', 'PHP', 'Lua', 'Scratch']} value={formData.coding_language} onChange={(value) => handleChange("coding_language", value)} required />
         <Textarea label="Notes" placeholder="What did the student learn from this" value={formData.notes} onChange={(event) => handleChange("notes", event.target.value)} />
@@ -169,16 +166,15 @@ const ManageProjects = ({ projects, setProjects }) => {
                 <td>{project.studentNames?.join(", ")}</td>
                 <td className="actions-column">
                   <Button
-                    className="edit-btn"
-                    size="xs"
+                    color="blue"
+                    size="s"
                     onClick={() => handleEditProject(project.id)}
                   >
                     Edit
                   </Button>
                   <Button
-                    className="delete-btn"
-                    size="xs"
-                    color="Red"
+                    size="s"
+                    color="red"
                     onClick={() => handleDeleteProject(project.id)}
                   >
                     Delete
