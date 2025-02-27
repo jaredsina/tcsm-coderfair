@@ -1,7 +1,24 @@
-import React from "react"
-import ProjectCard from "../../Components/ProjectCard/ProjectCard";
-import { Center, Button, Flex, rem, Select, SimpleGrid, Container, Text, Avatar, Space, Table, Badge, Grid, Card, Group, Anchor } from '@mantine/core';
-import "./HomePage.css"
+import React from 'react';
+import ProjectCard from '../../Components/ProjectCard/ProjectCard';
+import {
+  Center,
+  Button,
+  Flex,
+  rem,
+  Select,
+  SimpleGrid,
+  Container,
+  Text,
+  Avatar,
+  Space,
+  Table,
+  Badge,
+  Grid,
+  Card,
+  Group,
+  Anchor,
+} from '@mantine/core';
+import './HomePage.css';
 import { Carousel } from '@mantine/carousel';
 import { Link } from 'react-router-dom';
 
@@ -16,25 +33,21 @@ const data = [
   { rank: 2, name: 'Joshua', score: 4500 },
   { rank: 3, name: 'JS', score: 4200 },
 ];
-export function Footer() {
-  return (
-    <footer style={{ backgroundColor: '#1a1a1a', color: 'white', padding: '20px 0' }}>
-      <Container size="md" style={{ textAlign: 'center' }}>
-        <Anchor href="https://www.thecoderschool.com/locations/montgomery/" >The Coder School Montgomery</Anchor>
-        <Text>Got a question? Email us at <Anchor href="mailto:montgomery@thecoderschool.com" >montgomery@thecoderschool.com</Anchor></Text>
-
-        <Text size="sm">&copy; 2014-2022, the Coder School San Francisco, LLC. All Rights, Alright?
-          Don't forget our<Anchor href="https://www.thecoderschool.com/privacy/"> Privacy Policy</Anchor></Text>
-      </Container>
-    </footer>
-  )
-}
 export function Leaderboard() {
   const rows = data1.map((data1) => (
-
     <Table.Tr>
-      <Table.Td><Badge color="blue">{data1.rank}</Badge></Table.Td>
-      <Table.Td><Link className={"link"} to={"/account"} onClick={() => setOpened(false)}>{data1.name}</Link></Table.Td>
+      <Table.Td>
+        <Badge color="blue">{data1.rank}</Badge>
+      </Table.Td>
+      <Table.Td>
+        <Link
+          className={'link'}
+          to={'/account'}
+          onClick={() => setOpened(false)}
+        >
+          {data1.name}
+        </Link>
+      </Table.Td>
       <Table.Td>{data1.score}</Table.Td>
     </Table.Tr>
   ));
@@ -69,12 +82,22 @@ export function Podium() {
               radius="md"
               style={{
                 height: heights[index],
-                background: index === 0 ? '#FFD700' : index === 1 ? '#C0C0C0' : '#CD7F32',
+                background:
+                  index === 0 ? '#FFD700' : index === 1 ? '#C0C0C0' : '#CD7F32',
                 textAlign: 'center',
               }}
             >
-              <Flex mih={300} align="center" direction="column"><Avatar />
-                <Text weight={700}><Link className={"link"} to={"/account"} onClick={() => setOpened(false)}>{player.name}</Link></Text>
+              <Flex mih={300} align="center" direction="column">
+                <Avatar />
+                <Text weight={700}>
+                  <Link
+                    className={'link'}
+                    to={'/account'}
+                    onClick={() => setOpened(false)}
+                  >
+                    {player.name}
+                  </Link>
+                </Text>
                 <Text>{player.score} pts</Text>
               </Flex>
             </Card>
@@ -89,45 +112,82 @@ const HomePage = () => {
   return (
     <>
       <Container>
-        <Center className="h1"><Text fw={900} size="2.7em">The Coder Fair</Text></Center>
+        <Center className="h1">
+          <Text fw={900} size="2.7em">
+            The Coder Fair
+          </Text>
+        </Center>
         <Container width={'100%'}>
           <Center>
             <Text
               size="1.7rem"
               fw={900}
               variant="gradient"
-              gradient={{ from: 'rgba(167, 167, 167, 1)', to: 'rgba(245, 245, 245, 1)', deg: 61 }}>
+              gradient={{
+                from: 'rgba(167, 167, 167, 1)',
+                to: 'rgba(245, 245, 245, 1)',
+                deg: 61,
+              }}
+            >
               Featured Projects
             </Text>
           </Center>
 
-          <Carousel withIndicators slideSize="80%" height={"30rem"} slideGap="md" style={{ width: "100%" }} controlSize={"3rem"} loop>
-            <Carousel.Slide style={{ width: "100%" }}><Center><ProjectCard style={{ width: "100%" }} /></Center></Carousel.Slide>
-            <Carousel.Slide style={{ width: "100%" }}><Center><ProjectCard style={{ width: "100%" }} /></Center></Carousel.Slide>
-            <Carousel.Slide style={{ width: "100%" }}><Center><ProjectCard style={{ width: "100%" }} /></Center></Carousel.Slide>
-            <Carousel.Slide style={{ width: "100%" }}><Center><ProjectCard style={{ width: "100%" }} /></Center></Carousel.Slide>
-            <Carousel.Slide style={{ width: "100%" }}><Center><ProjectCard style={{ width: "100%" }} /></Center></Carousel.Slide>
+          <Carousel
+            withIndicators
+            slideSize="80%"
+            height={'22rem'}
+            slideGap="md"
+            style={{ width: '100%' }}
+            controlSize={'3rem'}
+            loop
+          >
+            <Carousel.Slide style={{ width: '100%' }}>
+              <Center>
+                <ProjectCard style={{ width: '100%' }} />
+              </Center>
+            </Carousel.Slide>
+            <Carousel.Slide style={{ width: '100%' }}>
+              <Center>
+                <ProjectCard style={{ width: '100%' }} />
+              </Center>
+            </Carousel.Slide>
+            <Carousel.Slide style={{ width: '100%' }}>
+              <Center>
+                <ProjectCard style={{ width: '100%' }} />
+              </Center>
+            </Carousel.Slide>
+            <Carousel.Slide style={{ width: '100%' }}>
+              <Center>
+                <ProjectCard style={{ width: '100%' }} />
+              </Center>
+            </Carousel.Slide>
+            <Carousel.Slide style={{ width: '100%' }}>
+              <Center>
+                <ProjectCard style={{ width: '100%' }} />
+              </Center>
+            </Carousel.Slide>
             <Carousel.Slide>
               <Flex mih={300} justify="center" align="center" direction="row">
                 <Link to="/projects" onClick={() => setOpened(false)}>
-                  <Button href="/projects" variant="filled" color="blue" size="xl">
+                  <Button
+                    href="/projects"
+                    variant="filled"
+                    color="blue"
+                    size="xl"
+                  >
                     See More
-
                   </Button>
                 </Link>
-
               </Flex>
             </Carousel.Slide>
           </Carousel>
         </Container>
         <Podium />
         <Leaderboard />
-
-
-      </Container >
-      <Footer />
+      </Container>
     </>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;

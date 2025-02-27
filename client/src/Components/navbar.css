@@ -1,98 +1,143 @@
-/* Reset */
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
-
-/* Navbar styling */
+/* General Navbar Styles */
 .navbar {
-  background-color: #28a745; /* Normal green background */
+  background-color: #28a745;
   padding: 10px 20px;
   position: sticky;
   top: 0;
   width: 100%;
   z-index: 1000;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  justify-content: space-between;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Nav header containing logo and burger icon */
+/* Nav Header (Logo + Burger) */
 .nav-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  width: 100%;
-  max-width: 1200px;
+  gap: 10px;
 }
 
 .logo {
-  color: #fff; /* White text for logo */
+  color: #fff;
   font-size: 1.5rem;
   font-weight: bold;
   text-decoration: none;
 }
 
+/* Burger Icon for Mobile */
 .burger-icon {
-  display: none; /* Hide burger icon by default */
+  display: none;
   color: #fff;
+  cursor: pointer;
 }
 
+/* Nav Links */
 .nav-links {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
-  gap: 30px; /* Increased space between links on large screens */
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.nav-links li {
-  margin: 0;
+  gap: 20px;
 }
 
 .nav-links a {
   text-decoration: none;
-  color: #fff; /* White text */
+  color: #fff;
   font-weight: bold;
-  padding: 10px 20px; /* Increased padding for more space */
+  padding: 10px 15px;
   border-radius: 5px;
   transition: background-color 0.3s ease;
 }
 
-/* Hover effect - Light Green */
 .nav-links a:hover {
-  background-color: #d4edda; /* Light green hover */
+  background-color: #d4edda;
 }
 
-/* Mobile styles */
+/* User Avatar */
+.user-container {
+  position: relative;
+}
+
+.user-avatar {
+  cursor: pointer;
+  background-color: white;
+  border: 2px solid #fff;
+  width: 40px;
+  height: 40px;
+}
+
+/* User Dropdown Menu */
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  display: none;
+  flex-direction: column;
+  width: 150px;
+}
+
+.user-dropdown.open {
+  display: flex;
+}
+
+.user-dropdown a {
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+.user-dropdown a:hover {
+  background-color: #f1f1f1;
+}
+
+/* Sign-Out Button inside Dropdown */
+.sign-out {
+  color: red;
+  font-weight: bold;
+}
+
+/* Mobile Styles */
 @media screen and (max-width: 768px) {
   .burger-icon {
-    display: block; /* Show burger icon */
-    cursor: pointer;
+    display: block;
   }
 
   .nav-links {
-    flex-direction: column; /* Stack links vertically */
+    flex-direction: column;
     position: absolute;
-    top: 60px; /* Position below navbar */
+    top: 60px;
     right: 0;
     left: 0;
-    background-color: #28a745; /* Normal green background on mobile */
-    padding: 20px 0;
-    border-radius: 0 0 10px 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: none; /* Hidden by default */
+    background-color: #28a745;
+    padding: 15px 0;
+    display: none;
   }
 
   .nav-links.open {
-    display: flex; /* Show when burger is clicked */
+    display: flex;
   }
 
   .nav-links li {
-    margin: 10px 0; /* Add spacing between links */
+    margin: 10px 0;
+  }
+
+  /* Position the dropdown menu next to the user icon */
+  .user-container {
+    position: relative;
+  }
+
+  .user-dropdown {
+    top: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    text-align: center;
   }
 }
