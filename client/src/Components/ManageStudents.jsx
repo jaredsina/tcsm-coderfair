@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, TextInput, Textarea } from "@mantine/core";
+import { Button, TextInput, Textarea, FileInput, Image } from "@mantine/core";
 import "./ManageStudents.css";
 
 const ManageStudents = ({ students, setStudents }) => {
@@ -9,6 +9,7 @@ const ManageStudents = ({ students, setStudents }) => {
   const [newStudentBio, setNewStudentBio] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingStudentId, setEditingStudentId] = useState(null);
+  const [newStudentImage, setNewStudentImage] = useState(null);
 
   const handleAddStudent = () => {
     if (!newStudentName.trim()) return;
@@ -19,6 +20,7 @@ const ManageStudents = ({ students, setStudents }) => {
       username: newStudentUsername,
       email: newStudentEmail,
       bio: newStudentBio,
+      image: newStudentImage ? URL.createObjectURL(newStudentImage) : null,
     };
 
     setStudents([...students, newStudent]);
@@ -28,6 +30,7 @@ const ManageStudents = ({ students, setStudents }) => {
   const handleEditStudent = (id) => {
     const studentToEdit = students.find((student) => student.id === id);
     setNewStudentName(studentToEdit.name);
+    setNewStudentImage(studentToEdit.image);
     setNewStudentUsername(studentToEdit.username);
     setNewStudentEmail(studentToEdit.email);
     setNewStudentBio(studentToEdit.bio);
@@ -45,7 +48,8 @@ const ManageStudents = ({ students, setStudents }) => {
           name: newStudentName,
           username: newStudentUsername,
           email: newStudentEmail,
-          bio: newStudentBio
+          bio: newStudentBio,
+          image: newStudentImage ? URL.createObjectURL(newStudentImage) : student.image,
         }
         : student
     );
@@ -63,6 +67,7 @@ const ManageStudents = ({ students, setStudents }) => {
     setNewStudentUsername("");
     setNewStudentEmail("");
     setNewStudentBio("");
+    setNewStudentImage(null);
     setEditingStudentId(null);
     setShowForm(false);
   };
@@ -85,6 +90,14 @@ const ManageStudents = ({ students, setStudents }) => {
               value={newStudentName}
               onChange={(event) => setNewStudentName(event.target.value)}
               required
+            />
+            <FileInput
+              size="md"
+              radius="xl"
+              label="Student Image"
+              placeholder="Click to upload image"
+              onChange={(file) => setNewStudentImage(file)}
+              accept="image/*"
             />
             <TextInput
               label="Username"
@@ -126,6 +139,7 @@ const ManageStudents = ({ students, setStudents }) => {
               <th>Username</th>
               <th>Email</th>
               <th>Bio</th>
+              <th>Image</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -136,6 +150,19 @@ const ManageStudents = ({ students, setStudents }) => {
                 <td>{student.username}</td>
                 <td>{student.email}</td>
                 <td>{student.bio}</td>
+                <td>
+                  {student.image ? (
+                    <Image
+                      src={student.image}
+                      alt={`${student.name}'s photo`}
+                      width={100}
+                      height={100}
+                      fit="contain"
+                    />
+                  ) : (
+                    <div>No image</div>
+                  )}
+                </td>
                 <td className="actions-column">
                   <Button
                     color="blue"
