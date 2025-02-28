@@ -8,8 +8,10 @@ import {
   TextInput,
   Rating,
   Title,
-  MultiSelect,
+  Autocomplete,
 } from "@mantine/core";
+
+const data = ["Sina", "Francis", "David", "Terisa"];
 
 export function Judging() {
   return (
@@ -64,7 +66,12 @@ function JudgingPage() {
                 <Flex direction={"column"} gap={"md"}>
                   <List.Item>
                     <div>Your Name</div>
-                    <TextInput placeholder="Enter Your Response" />
+                    <Autocomplete
+                      placeholder="Enter Your Response"
+                      data={data}
+                      searchable
+                      clearable
+                    />
                   </List.Item>
                   <List.Item>
                     <div>Game Name</div>
