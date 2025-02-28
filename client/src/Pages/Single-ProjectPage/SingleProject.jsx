@@ -20,7 +20,7 @@ export default function SingleProject() {
   return (
     <Flex gap={90} direction={{base:'column', md:'row', xs:"column"}} align={'center'} justify={'center'}>
       <Flex direction={'column'} pl={{md:'100'}} gap={'25'} flex={1}>
-        <Flex direction={'row'} gap={40} pt={50} justify={'center'} align={'center'}>
+        <Flex direction={{base:'column', md:'row'}} gap={40} pt={50} justify={'center'} align={'center'}>
           <Text size="1.5rem" fw={700} Bold>
             Score/Rank
           </Text>
