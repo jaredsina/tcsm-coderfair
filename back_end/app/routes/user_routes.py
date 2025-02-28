@@ -1,5 +1,5 @@
 # app/routes/user_routes.py
-from ..models.user import UserModel
+from app.models.user import UserModel
 from flask import Blueprint, jsonify, request, current_app
 
 
@@ -31,19 +31,16 @@ def create_users():
         last_name = data["last_name"]
         email = data["email"]
         username = data["username"]
-        is_admin = data ["is_admin"]
-        is_staff = data ["is_staff"]
+        is_admin = data["is_admin"]
+        is_staff = data["is_staff"]
 
-        mongo = current_app.config['MONGO']
-        user_model = UserModel(mongo)
+        user_model = UserModel(current_app.mongo)
+        response = user_model.create_user(first_name, last_name, email, username, is_admin, is_staff)
 
-        new_user = user_model(current_app.mongo)
-        response = new_user.create_user(first_name, last_name, email, username, is_admin, is_staff)
-
-        user = user_model.find_user_by_id(user_id)
     except Exception as e:
-        user['_id'] = str[user('_id')]
-        return jsonify(user), 200
+        return jsonify({"message": "Error creating user", "error": str(e)}), 400
+    
+    return jsonify({"message": "User created successfully", "user_id": str(response)}), 201
 
 @user_routes.route('/user/delete/<string:user_id>', methods=["DELETE"]) 
 def delete_user(user_id):

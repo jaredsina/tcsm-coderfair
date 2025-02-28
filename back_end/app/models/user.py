@@ -7,12 +7,13 @@ class UserModel:
         self.collection = mongo.cx["test"]["users"]
 
                                       
-    def create_user(self, first_name, last_name, email, is_admin, is_staff, username,):
+    def create_user(self, first_name, last_name, email, username, avatar_image, is_admin, is_staff):
         user_data = {
             "first_name": first_name,
             "last_name": last_name,
             "email": email,
             "username": username,
+            "avatar_image": avatar_image,
             #is_admin and is_staff are booleans
             "is_admin": is_admin,
             "is_staff": is_staff,
