@@ -34,8 +34,25 @@ class UserModel:
         return list(self.collection.find({},{"_id":0}))
     
     def update_user(self, id, update_data):
+        same_avatar_image = False
+        if "avatar_image" in update_data:
+            user_info = self.collection.find_one({"_id": id}, {"username": 1, "_id": 0})
+            old_public_id = user_info["username"]
+
+        elif "username" in update_data:
+            user_info = self.collection.find_one({"_id": id}, {"username": 1, "_id": 0})
+            old_public_id = user_info["username"]
+            user_info = self.collection.find_one({"_id": id}, {"avatar_image": 1, "_id": 0})
+            same_avatar_image = user_info["avatar_image"]
+
+        else: 
+            old_public_id = False
+
+
         result = self.collection.update_one({"_id": id}, {"$set": update_data})
-        return result
+        new_user_info = self.collection.find_one({"_id": id}, {"username": 1, "_id": 0})
+        public_id = new_user_info["username"]
+        return result, public_id, old_public_id, same_avatar_image
     
     def delete_user(self, id):
         student_info = self.collection.find_one({"_id": id}, {"username": 1, "_id": 0})

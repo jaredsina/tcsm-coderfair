@@ -25,7 +25,7 @@ def get_users(user_id):
 
 
 #route for creating users
-@user_routes.route('/create/', methods = ['POST'])
+@user_routes.route('/create', methods = ['POST'])
 def create_users():
     try:
         data = request.get_json()
@@ -59,7 +59,7 @@ def create_users():
     
     return jsonify({"message": "User created successfully", "user_id": str(response)}), 201
 
-@user_routes.route("delete/<string:user_id>", methods=["DELETE"]) 
+@user_routes.route("/delete/<string:user_id>", methods=["DELETE"]) 
 def delete_user(user_id):
     try: 
         user_id = ObjectId(user_id)
@@ -71,17 +71,55 @@ def delete_user(user_id):
 
     return jsonify ({"message": f"deleted user with ID {user_id}"}), 200
 
-@user_routes.route("update/<string:user_id>", methods=["PUT"])
+@user_routes.route("/update/<string:user_id>", methods=["PUT"])
 def update_user(user_id): 
-    mongo = current_app.config['MONGO']
-    user_model = UserModel(mongo)
-    update_data = request.json
+    try:
+        data = request.get_json()
+        update_data = data["update_data"]
+        user = UserModel(current_app.mongo)
+        result, public_id, old_public_id, same_avatar_image = user.update_user(ObjectId(user_id), update_data)
+        if old_public_id:
+            if same_avatar_image:
+                cloudinary.uploader.destroy(old_public_id)
+                upload_result = cloudinary.uploader.upload(
+                    same_avatar_image,
+                    public_id=public_id,
+                )
+                print(upload_result["secure_url"])
 
-    if not update_data:
-        return jsonify({"error": "Invalid data provider"}), 400
-    
-    updated_user = user_model.update_user(user_id, update_data) 
+                # Optimize delivery by resizing and applying auto-format and auto-quality
+                optimize_url, _ = cloudinary_url(
+                    public_id, fetch_format="auto", quality="auto")
+                print(optimize_url)
 
-    if not updated_user: 
-        return jsonify({"error" : "User not found"}), 404
-    return jsonify({"messege" : "User updated succesfuly" , "user": updated_user}), 200
+                # Transform the image: auto-crop to square aspect_ratio
+                auto_crop_url, _ = cloudinary_url(
+                    public_id, width=500, height=500, crop="auto", gravity="auto"
+                )
+                print(auto_crop_url)
+
+            else:
+                cloudinary.uploader.destroy(old_public_id)
+                upload_result = cloudinary.uploader.upload(
+                    update_data["avatar_image"],
+                    public_id=public_id,
+                )
+                print(upload_result["secure_url"])
+
+                # Optimize delivery by resizing and applying auto-format and auto-quality
+                optimize_url, _ = cloudinary_url(
+                    public_id, fetch_format="auto", quality="auto")
+                print(optimize_url)
+
+                # Transform the image: auto-crop to square aspect_ratio
+                auto_crop_url, _ = cloudinary_url(
+                    public_id, width=500, height=500, crop="auto", gravity="auto"
+                )
+                print(auto_crop_url)
+
+    except Exception as e:
+        return jsonify({"message": "Error updating user", "error": str(e)}), 400
+
+    return jsonify(
+        {"message": "User updated sucessfully", "user_id": str(result)}
+    ), 201
