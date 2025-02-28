@@ -5,7 +5,6 @@ import cloudinary.uploader
 import cloudinary.api
 
 
-# comment
 def init_config(app):
     # Read the configuration file
     config = configparser.ConfigParser()
