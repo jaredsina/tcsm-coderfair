@@ -38,5 +38,7 @@ class UserModel:
         return result
     
     def delete_user(self, id):
-        result = self.collection.delete_one({"_id": id})
-        return result 
+        student_info = self.collection.find_one({"_id": id}, {"username": 1, "_id": 0})
+        public_id = student_info["username"]
+        self.collection.delete_one({"_id": id})
+        return public_id 

@@ -1,6 +1,8 @@
 # app/routes/user_routes.py
 from app.models.user import UserModel
 from flask import Blueprint, jsonify, request, current_app
+import cloudinary
+from cloudinary.utils import cloudinary_url
 
 
 from bson import ObjectId
@@ -9,7 +11,7 @@ user_routes = Blueprint("user_routes", __name__)
 
 
 # Define a simple route inside this blueprint
-@user_routes.route('/user/<string:user_id>')
+@user_routes.route('/<string:user_id>')
 def get_users(user_id):
     try:
         user_id = ObjectId(user_id)
@@ -31,32 +33,45 @@ def create_users():
         last_name = data["last_name"]
         email = data["email"]
         username = data["username"]
+        avatar_image = data["avatar_image"]
         is_admin = data["is_admin"]
         is_staff = data["is_staff"]
 
+        upload_result = cloudinary.uploader.upload(
+            avatar_image,
+            public_id=username,
+        )
+        print(upload_result["secure_url"])
+
+        optimize_url, _ = cloudinary_url(username, fetch_format="auto", quality="auto")
+        print(optimize_url)
+
+        auto_crop_url, _ = cloudinary_url(
+            username, width=500, height=500, crop="auto", gravity="auto"
+        )
+        print(auto_crop_url)
+
         user_model = UserModel(current_app.mongo)
-        response = user_model.create_user(first_name, last_name, email, username, is_admin, is_staff)
+        response = user_model.create_user(first_name, last_name, email, username, avatar_image, is_admin, is_staff)
 
     except Exception as e:
         return jsonify({"message": "Error creating user", "error": str(e)}), 400
     
     return jsonify({"message": "User created successfully", "user_id": str(response)}), 201
 
-@user_routes.route('/user/delete/<string:user_id>', methods=["DELETE"]) 
+@user_routes.route("delete/<string:user_id>", methods=["DELETE"]) 
 def delete_user(user_id):
     try: 
         user_id = ObjectId(user_id)
-        new_user = user_model(current_app.mongo)
-        new_user.delete_user(user_id)
+        new_user = UserModel(current_app.mongo)
+        public_id = new_user.delete_user(user_id)
+        cloudinary.uploader.destroy(public_id)
     except Exception as e:
-        mongo = current_app.config['MONGO']
-        user_model = UserModel(mongo)
-    deleted = user_model.delete_user_by_id(user_id)
-    if not deleted:
-            return jsonify({"error": "User not found"}), 404
-    return jsonify ({'message': f'deleting user with ID {user_id}'})
+        return jsonify({"message": "Error deleting user", "error": str(e)}), 400
 
-@user_routes.route("/user/update/<string:user_id>", methods=["PUT"])
+    return jsonify ({"message": f"deleted user with ID {user_id}"}), 200
+
+@user_routes.route("update/<string:user_id>", methods=["PUT"])
 def update_user(user_id): 
     mongo = current_app.config['MONGO']
     user_model = UserModel(mongo)
