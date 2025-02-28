@@ -120,7 +120,7 @@ const ManageProjects = ({ projects, setProjects }) => {
             />
             <MultiSelect
               label="Coding Languages Used"
-              data={['HTML', 'CSS', 'JavaScript', 'Python', 'Java', 'C++']}
+              data={['HTML', 'CSS', 'JavaScript', 'Python', 'Java', 'C++', 'C#', 'C', 'Ruby', 'PHP', 'Swift', 'TypeScript', 'Rust', 'Kotlin', 'R', 'Scratch/Block Based', 'SQL',]}
               value={newLanguages}
               onChange={setNewLanguages}
               required

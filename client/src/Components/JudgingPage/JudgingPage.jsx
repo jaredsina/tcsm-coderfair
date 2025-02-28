@@ -9,10 +9,13 @@ import {
   Rating,
   Title,
   Autocomplete,
+  MultiSelect,
 } from "@mantine/core";
 
 const data = ["Sina", "Francis", "David", "Terisa"];
 const projectsList = ["Project 1", "Project 2", "Project 3", "Project 4"];
+const studentData = ["Student 1", "Student 2", "Student 3", "Student 4"];
+const languageList = ['HTML', 'CSS', 'JavaScript', 'Python', 'Java', 'C++', 'C#', 'C', 'Ruby', 'PHP', 'Swift', 'TypeScript', 'Rust', 'Kotlin', 'R', 'Scratch/Block Based', 'SQL',]
 export function Judging() {
   return (
     <Title className="PageTitle" ta="center" order={1}>
@@ -84,11 +87,21 @@ function JudgingPage() {
                   </List.Item>
                   <List.Item>
                     <div>Name of Coder</div>
-                    <TextInput placeholder="Enter Your Response" />
+                    <Autocomplete
+                      placeholder="Enter Your Response"
+                      data={studentData}
+                      searchable
+                      clearable
+                    />
                   </List.Item>
                   <List.Item>
                     <div>Programing Language</div>
-                    <TextInput placeholder="Enter Your Response" />
+                    <MultiSelect
+                      placeholder="Enter Your Response"
+                      data={languageList}
+                      searchable
+                      clearable
+                    />
                   </List.Item>
                 </Flex>
                 <Flex direction={"column"} gap={"md"} flex>
