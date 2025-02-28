@@ -18,9 +18,9 @@ export default function SingleProject() {
   const [shared, setShared] = useState(false);
 
   return (
-    <Flex gap={90} direction={{base:'column', md:'row', sm:"column"}} align={'center'}>
-      <Flex direction={'column'} pl={'100'} gap={'25'} flex={1}>
-        <Flex direction={'row'} gap={40} pt={50}>
+    <Flex gap={90} direction={{base:'column', md:'row', xs:"column"}} align={'center'} justify={'center'}>
+      <Flex direction={'column'} pl={{md:'100'}} gap={'25'} flex={1}>
+        <Flex direction={'row'} gap={40} pt={50} justify={'center'} align={'center'}>
           <Text size="1.5rem" fw={700} Bold>
             Score/Rank
           </Text>
@@ -71,15 +71,14 @@ export default function SingleProject() {
           src={
             'https://lincolnliontales.com/wp-content/uploads/2014/02/Flappy-Bird-Teaser.jpg'
           }
-          h={380}
-          w="auto"
+          h="auto"
+          w="100%"
         ></Image>
       </Flex>
       <Flex
         direction={'column'}
-        bg="rgba(0, 145, 7, .8)"
+        //bg="rgba(0, 145, 7, .8)"
         w={455}
-        h= {'100%'}
         gap={40}
       >
         <Text size="2rem" fw={700} Bold tt="uppercase" pl={200} pt={30}>
