@@ -18,9 +18,24 @@ export default function SingleProject() {
   const [shared, setShared] = useState(false);
 
   return (
-    <Flex gap={90} direction={{base:'column', md:'row', xs:"column"}} align={'center'} justify={'center'}>
-      <Flex direction={'column'} pl={{md:'100'}} gap={'25'} flex={1}>
-        <Flex direction={{base:'column', md:'row'}} gap={40} pt={50} justify={'center'} align={'center'}>
+    <Flex
+      gap={{ base: '10', md: '90' }}
+      direction={{ base: 'column', md: 'row', xs: 'column' }}
+      align={'center'}
+      justify={'center'}
+    >
+      <Flex direction={'column'} pl={{ md: '100' }} gap={'25'} flex={1}>
+        <Flex
+          direction={{ base: 'column', md: 'row' }}
+          gap={40}
+          pt={50}
+          justify={'center'}
+          align={'center'}
+        >
+          <Text display={{ md: 'none' }} size="1.75rem" fw={700} Bold>
+            {' '}
+            Flappy Bird
+          </Text>
           <Text size="1.5rem" fw={700} Bold>
             Score/Rank
           </Text>
@@ -79,7 +94,7 @@ export default function SingleProject() {
         direction={'column'}
         //bg="rgba(0, 145, 7, .8)"
         w={455}
-        gap={40}
+        gap={{ md: '40', base: '20' }}
       >
         <Text size="2rem" fw={700} Bold tt="uppercase" pl={200} pt={30}>
           Info:
