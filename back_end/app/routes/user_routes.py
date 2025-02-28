@@ -1,17 +1,75 @@
 # app/routes/user_routes.py
-from flask import Blueprint, jsonify
+from ..models.user import UserModel
+from flask import Blueprint, jsonify, request, current_app
+
+
+from bson import ObjectId
 
 user_routes = Blueprint("user_routes", __name__)
 
 
 # Define a simple route inside this blueprint
-@user_routes.route("/")
-def get_users():
-    # user_model = UserModel(current_app.mongo)
-    # user_model.create_user(1, "John", "Doe", "johndoe@gmail.com", "johndoe")
-    return jsonify({"message": "List of users will be here"})
+@user_routes.route('/user/<string:user_id>')
+def get_users(user_id):
+    try:
+        user_id = ObjectId(user_id)
+        user_model = UserModel(current_app.mongo)
+        user = user_model.find_user_by_id(user_id)
+    #if not user:
+        #return jsonify({"error" : str(e)}), 500
+    except Exception as e:
+        user["_id"] = str(user["_id"])
+        return jsonify(user), 200
 
 
-@user_routes.route("/<string:user_id>")
-def get_user(user_id):
-    return jsonify({"message": f"User with ID {user_id}"})
+#route for creating users
+@user_routes.route('/create/', methods = ['POST'])
+def create_users():
+    try:
+        data = request.get_json()
+        first_name = data["first_name"]
+        last_name = data["last_name"]
+        email = data["email"]
+        username = data["username"]
+        is_admin = data ["is_admin"]
+        is_staff = data ["is_staff"]
+
+        mongo = current_app.config['MONGO']
+        user_model = UserModel(mongo)
+
+        new_user = user_model(current_app.mongo)
+        response = new_user.create_user(first_name, last_name, email, username, is_admin, is_staff)
+
+        user = user_model.find_user_by_id(user_id)
+    except Exception as e:
+        user['_id'] = str[user('_id')]
+        return jsonify(user), 200
+
+@user_routes.route('/user/delete/<string:user_id>', methods=["DELETE"]) 
+def delete_user(user_id):
+    try: 
+        user_id = ObjectId(user_id)
+        new_user = user_model(current_app.mongo)
+        new_user.delete_user(user_id)
+    except Exception as e:
+        mongo = current_app.config['MONGO']
+        user_model = UserModel(mongo)
+    deleted = user_model.delete_user_by_id(user_id)
+    if not deleted:
+            return jsonify({"error": "User not found"}), 404
+    return jsonify ({'message': f'deleting user with ID {user_id}'})
+
+@user_routes.route("/user/update/<string:user_id>", methods=["PUT"])
+def update_user(user_id): 
+    mongo = current_app.config['MONGO']
+    user_model = UserModel(mongo)
+    update_data = request.json
+
+    if not update_data:
+        return jsonify({"error": "Invalid data provider"}), 400
+    
+    updated_user = user_model.update_user(user_id, update_data) 
+
+    if not updated_user: 
+        return jsonify({"error" : "User not found"}), 404
+    return jsonify({"messege" : "User updated succesfuly" , "user": updated_user}), 200
