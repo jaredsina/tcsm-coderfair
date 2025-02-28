@@ -17,6 +17,7 @@ import {
   Card,
   Group,
   Anchor,
+  Paper,
 } from '@mantine/core';
 import './HomePage.css';
 import { Carousel } from '@mantine/carousel';
@@ -52,7 +53,7 @@ export function Leaderboard() {
     </Table.Tr>
   ));
   return (
-    <Table highlightOnHover striped>
+    <Table highlightOnHover striped mt={40} mb={40}>
       <Table.Thead>
         <Table.Tr>
           <Table.Th>Rank</Table.Th>
@@ -69,38 +70,59 @@ export function Leaderboard() {
 const podium = [...data].sort((a, b) => b.score - a.score);
 
 export function Podium() {
-  const heights = [175, 150, 120]; // Different heights for 1st, 2nd, 3rd place
+  const heights = [175, 150, 120];
+  const colors = ['#FFD700', '#C0C0C0', '#CD7F32'];
 
   return (
-    <Grid justify="center" align="end" style={{ height: 200 }}>
+    <Grid justify="center" align="end" style={{ height: 250, marginTop: 40 }}>
       {podium.map((player, index) => (
         <Grid.Col span={4} key={player.name}>
           <Center>
-            <Card
-              shadow="sm"
-              padding="lg"
+            <Paper
+              shadow="lg"
               radius="md"
+              p="xs"
               style={{
                 height: heights[index],
-                background:
-                  index === 0 ? '#FFD700' : index === 1 ? '#C0C0C0' : '#CD7F32',
+                width: '100%',
+                maxWidth: 180,
+                background: `linear-gradient(180deg, ${colors[index]} 0%, ${colors[index]}CC 100%)`,
                 textAlign: 'center',
+                position: 'relative',
+                transform: index === 0 ? 'scale(1.1)' : 'scale(1)',
+                transition: 'transform 0.3s ease',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                overflow: 'hidden',
+                '&:hover': {
+                  transform: 'scale(1.05)',
+                }
               }}
             >
-              <Flex mih={300} align="center" direction="column">
-                <Avatar />
-                <Text weight={700}>
+              <Flex direction="column" gap={5} align="center">
+                <Badge size="md" variant="filled" color={index === 0 ? "yellow" : index === 1 ? "gray" : "orange"}>
+                  #{index + 1}
+                </Badge>
+                <Avatar size="md" radius="xl" />
+                <Text size="xs" weight={700} color="dark" ta="center" style={{
+                  wordBreak: 'break-word',
+                  maxWidth: '90%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
+                }}>
                   <Link
                     className={'link'}
                     to={'/account'}
                     onClick={() => setOpened(false)}
+                    style={{ textDecoration: 'none' }}
                   >
                     {player.name}
                   </Link>
                 </Text>
-                <Text>{player.score} pts</Text>
+                <Text size="xs" weight={500}>{player.score} pts</Text>
               </Flex>
-            </Card>
+            </Paper>
           </Center>
         </Grid.Col>
       ))}
