@@ -8,6 +8,7 @@ import {
   TextInput,
   Rating,
   Title,
+  MultiSelect,
 } from "@mantine/core";
 
 export function Judging() {
