@@ -12,7 +12,7 @@ import {
 } from "@mantine/core";
 
 const data = ["Sina", "Francis", "David", "Terisa"];
-
+const projectsList = ["Project 1", "Project 2", "Project 3", "Project 4"];
 export function Judging() {
   return (
     <Title className="PageTitle" ta="center" order={1}>
@@ -74,8 +74,13 @@ function JudgingPage() {
                     />
                   </List.Item>
                   <List.Item>
-                    <div>Game Name</div>
-                    <TextInput placeholder="Enter Your Response" />
+                    <div>Project Name</div>
+                    <Autocomplete
+                      placeholder="Enter Your Response"
+                      data={projectsList}
+                      searchable
+                      clearable
+                    />
                   </List.Item>
                   <List.Item>
                     <div>Name of Coder</div>
