@@ -42,7 +42,7 @@ class ProjectModel:
   
   #find by id 
   def find_project_by_id(self, id):
-    return self.collection.find_one({"_id": id})
+    return self.collection.find_one({"_id": id},{"_id": 0, "student_id": 0, "coderfair_id": 0})
 
   #list projects by coderfair
   def list_coderfair_projects(self, coderfair_id):
@@ -96,7 +96,7 @@ class ProjectModel:
 
   #list all projects
   def list___all_projects(self):
-    return list(self.collection.find())
+    return list(self.collection.find({},{"_id":0, "student_id": 0, "coderfair_id": 0}))
   
   def update_project(self, id, update_data):
     result = self.collection.update_one({"_id": id}, {"$set": update_data})
