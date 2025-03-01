@@ -37,11 +37,10 @@ def create_users():
         is_staff = request.form.get("is_staff") == "true"
         avatar_image = request.files.get("avatar_image")
 
-        print(username)
         if avatar_image:
             upload_result = cloudinary.uploader.upload(
                 avatar_image,
-                public_id=username,
+                public_id=f"{username}_profile_image",
             )
             print(upload_result["secure_url"])
 
@@ -87,8 +86,25 @@ def delete_user(user_id):
 @user_routes.route("/update/<string:user_id>", methods=["PUT"])
 def update_user(user_id):
     try:
-        data = request.get_json()
-        update_data = data["update_data"]
+        first_name = request.form.get("first_name")
+        last_name = request.form.get("last_name")
+        email = request.form.get("email")
+        username = request.form.get("username")
+        is_admin = request.form.get("is_admin")
+        is_staff = request.form.get("is_staff")
+        avatar_image = request.files.get("avatar_image")
+        if not avatar_image:
+            avatar_image = ""
+        update_data = {
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            username: username,
+            is_admin: is_admin,
+            is_staff: is_staff,
+            avatar_image: avatar_image,
+        }
+        print(update_data)
         user = UserModel(current_app.mongo)
         result, public_id, old_public_id, same_avatar_image = user.update_user(
             ObjectId(user_id), update_data
@@ -96,17 +112,10 @@ def update_user(user_id):
         if old_public_id:
             if same_avatar_image:
                 cloudinary.uploader.destroy(old_public_id)
-                upload_result = cloudinary.uploader.upload(
+                cloudinary.uploader.upload(
                     same_avatar_image,
                     public_id=public_id,
                 )
-                print(upload_result["secure_url"])
-
-                # Optimize delivery by resizing and applying auto-format and auto-quality
-                optimize_url, _ = cloudinary_url(
-                    public_id, fetch_format="auto", quality="auto"
-                )
-                print(optimize_url)
 
                 # Transform the image: auto-crop to square aspect_ratio
                 auto_crop_url, _ = cloudinary_url(
@@ -116,17 +125,10 @@ def update_user(user_id):
 
             else:
                 cloudinary.uploader.destroy(old_public_id)
-                upload_result = cloudinary.uploader.upload(
+                cloudinary.uploader.upload(
                     update_data["avatar_image"],
                     public_id=public_id,
                 )
-                print(upload_result["secure_url"])
-
-                # Optimize delivery by resizing and applying auto-format and auto-quality
-                optimize_url, _ = cloudinary_url(
-                    public_id, fetch_format="auto", quality="auto"
-                )
-                print(optimize_url)
 
                 # Transform the image: auto-crop to square aspect_ratio
                 auto_crop_url, _ = cloudinary_url(

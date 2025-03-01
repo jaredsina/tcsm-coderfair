@@ -34,6 +34,8 @@ class UserModel:
         return list(self.collection.find({}, {"_id": 0}))
 
     def update_user(self, id, update_data):
+        # Need to move this to routes because we need to generate a URL before updating the user in the database
+        # Right now it is trying to upload a file to the database and giving an error
         same_avatar_image = False
         if "avatar_image" in update_data:
             user_info = self.collection.find_one({"_id": id}, {"username": 1, "_id": 0})
