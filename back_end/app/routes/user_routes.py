@@ -28,28 +28,35 @@ def get_users(user_id):
 @user_routes.route("/create", methods=["POST"])
 def create_users():
     try:
-        data = request.get_json()
-        first_name = data["first_name"]
-        last_name = data["last_name"]
-        email = data["email"]
-        username = data["username"]
-        avatar_image = data["avatar_image"]
-        is_admin = data["is_admin"]
-        is_staff = data["is_staff"]
+        # Use form data instead of JSON
+        first_name = request.form.get("first_name")
+        last_name = request.form.get("last_name")
+        email = request.form.get("email")
+        username = request.form.get("username")
+        is_admin = request.form.get("is_admin") == "true"
+        is_staff = request.form.get("is_staff") == "true"
+        avatar_image = request.files.get("avatar_image")
 
-        upload_result = cloudinary.uploader.upload(
-            avatar_image,
-            public_id=username,
-        )
-        print(upload_result["secure_url"])
+        print(username)
+        if avatar_image:
+            upload_result = cloudinary.uploader.upload(
+                avatar_image,
+                public_id=username,
+            )
+            print(upload_result["secure_url"])
 
-        optimize_url, _ = cloudinary_url(username, fetch_format="auto", quality="auto")
-        print(optimize_url)
+            optimize_url, _ = cloudinary_url(
+                username, fetch_format="auto", quality="auto"
+            )
+            print(optimize_url)
 
-        auto_crop_url, _ = cloudinary_url(
-            username, width=500, height=500, crop="auto", gravity="auto"
-        )
-        print(auto_crop_url)
+            auto_crop_url, _ = cloudinary_url(
+                username, width=500, height=500, crop="auto", gravity="auto"
+            )
+            print(auto_crop_url)
+            avatar_image = auto_crop_url
+        else:
+            avatar_image = ""
 
         user_model = UserModel(current_app.mongo)
         response = user_model.create_user(
