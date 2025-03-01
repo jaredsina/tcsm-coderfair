@@ -41,7 +41,6 @@ function JudgingPage() {
         gap="md"
         justify="center"
         align="center"
-        mb={'10rem'}
         wrap={"wrap-reverse"}
       >
         <Flex direction={"column"} gap="md">

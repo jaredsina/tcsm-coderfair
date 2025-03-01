@@ -2,7 +2,7 @@ import React from "react"
 import { Container, Text, Anchor } from "@mantine/core"
 function Footer() {
   return (
-    <footer style={{position: 'absolute', width: '100%', backgroundColor: '#1a1a1a', color: 'white', padding: '20px 0' }}>
+    <footer style={{ marginTop: '10rem', width: '100%', backgroundColor: '#1a1a1a', color: 'white', padding: '20px 0' }}>
       <Container size="md" style={{ textAlign: 'center' }}>
         <Anchor href="https://www.thecoderschool.com/locations/montgomery/" >The Coder School Montgomery</Anchor>
         <Text>Got a question? Email us at <Anchor href="mailto:montgomery@thecoderschool.com" >montgomery@thecoderschool.com</Anchor></Text>
