@@ -3,6 +3,8 @@ from flask import Blueprint, request, jsonify
 import cloudinary
 from cloudinary.utils import cloudinary_url
 
+from bson import ObjectId
+
 projects_routes = Blueprint('projects_routes', __name__)
 
 # Define a simple route inside this blueprint
@@ -16,7 +18,7 @@ def get_project(project_id):
 
 @projects_routes.route('/delete/<string:project_id>')
 def delete_project(project_id):
-    
+
     public_id = new_project.delete_user(project_id)
     cloudinary.uploader.destroy(public_id)
 
@@ -24,6 +26,25 @@ def delete_project(project_id):
 
 @projects_routes.route('/update/<string:project_id>')
 def update_project(project_id):
+
+    result, public_id, old_public_id, same_project_image = project.update_project(ObjectId(project_id), update_data)
+    if old_public_id:
+        if same_project_image:
+            cloudinary.uploader.destroy(old_public_id)
+            upload_result = cloudinary.uploader.upload(
+                same_project_image,
+                public_id = public_id,
+            )
+            print(upload_result["secure_url"])
+
+            optimize_url, _ = cloudinary_url(
+                public_id, fetch_format = "auto", quality ="auto")
+            print(optimize_url)
+
+            auto_crop_url, _ = cloudinary_url(
+                public_id, width=500, height=500, crop="auto", gravity ="auto"
+            )
+            print(auto_crop_url)
 
     return jsonify({'message': f'Project with ID {project_id}'})
 
