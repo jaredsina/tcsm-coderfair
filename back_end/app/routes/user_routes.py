@@ -11,21 +11,21 @@ user_routes = Blueprint("user_routes", __name__)
 
 
 # Define a simple route inside this blueprint
-@user_routes.route('/<string:user_id>')
+@user_routes.route("/<string:user_id>")
 def get_users(user_id):
     try:
         user_id = ObjectId(user_id)
         user_model = UserModel(current_app.mongo)
         user = user_model.find_user_by_id(user_id)
-    #if not user:
-        #return jsonify({"error" : str(e)}), 500
-    except Exception as e:
+    # if not user:
+    # return jsonify({"error" : str(e)}), 500
+    except Exception:
         user["_id"] = str(user["_id"])
         return jsonify(user), 200
 
 
-#route for creating users
-@user_routes.route('/create', methods = ['POST'])
+# route for creating users
+@user_routes.route("/create", methods=["POST"])
 def create_users():
     try:
         data = request.get_json()
@@ -52,16 +52,21 @@ def create_users():
         print(auto_crop_url)
 
         user_model = UserModel(current_app.mongo)
-        response = user_model.create_user(first_name, last_name, email, username, avatar_image, is_admin, is_staff)
+        response = user_model.create_user(
+            first_name, last_name, email, username, avatar_image, is_admin, is_staff
+        )
 
     except Exception as e:
         return jsonify({"message": "Error creating user", "error": str(e)}), 400
-    
-    return jsonify({"message": "User created successfully", "user_id": str(response)}), 201
 
-@user_routes.route("/delete/<string:user_id>", methods=["DELETE"]) 
+    return jsonify(
+        {"message": "User created successfully", "user_id": str(response)}
+    ), 201
+
+
+@user_routes.route("/delete/<string:user_id>", methods=["DELETE"])
 def delete_user(user_id):
-    try: 
+    try:
         user_id = ObjectId(user_id)
         new_user = UserModel(current_app.mongo)
         public_id = new_user.delete_user(user_id)
@@ -69,15 +74,18 @@ def delete_user(user_id):
     except Exception as e:
         return jsonify({"message": "Error deleting user", "error": str(e)}), 400
 
-    return jsonify ({"message": f"deleted user with ID {user_id}"}), 200
+    return jsonify({"message": f"deleted user with ID {user_id}"}), 200
+
 
 @user_routes.route("/update/<string:user_id>", methods=["PUT"])
-def update_user(user_id): 
+def update_user(user_id):
     try:
         data = request.get_json()
         update_data = data["update_data"]
         user = UserModel(current_app.mongo)
-        result, public_id, old_public_id, same_avatar_image = user.update_user(ObjectId(user_id), update_data)
+        result, public_id, old_public_id, same_avatar_image = user.update_user(
+            ObjectId(user_id), update_data
+        )
         if old_public_id:
             if same_avatar_image:
                 cloudinary.uploader.destroy(old_public_id)
@@ -89,7 +97,8 @@ def update_user(user_id):
 
                 # Optimize delivery by resizing and applying auto-format and auto-quality
                 optimize_url, _ = cloudinary_url(
-                    public_id, fetch_format="auto", quality="auto")
+                    public_id, fetch_format="auto", quality="auto"
+                )
                 print(optimize_url)
 
                 # Transform the image: auto-crop to square aspect_ratio
@@ -108,7 +117,8 @@ def update_user(user_id):
 
                 # Optimize delivery by resizing and applying auto-format and auto-quality
                 optimize_url, _ = cloudinary_url(
-                    public_id, fetch_format="auto", quality="auto")
+                    public_id, fetch_format="auto", quality="auto"
+                )
                 print(optimize_url)
 
                 # Transform the image: auto-crop to square aspect_ratio
@@ -120,6 +130,4 @@ def update_user(user_id):
     except Exception as e:
         return jsonify({"message": "Error updating user", "error": str(e)}), 400
 
-    return jsonify(
-        {"message": "User updated sucessfully", "user_id": str(result)}
-    ), 201
+    return jsonify({"message": "User updated sucessfully", "user_id": str(result)}), 201

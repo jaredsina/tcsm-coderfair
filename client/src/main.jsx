@@ -10,6 +10,9 @@ import { MantineProvider } from "@mantine/core";
 import { Provider } from "react-redux";
 import {store} from "./store/store.js";
 import '@mantine/carousel/styles.css';
+import { ModalsProvider } from '@mantine/modals';
+import '@mantine/dropzone/styles.css';
+
 import { Notifications } from "@mantine/notifications";
 
 createRoot(document.getElementById("root")).render(
