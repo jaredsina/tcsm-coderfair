@@ -85,30 +85,31 @@ def update_project(project_id):
     # If no exceptions are raised, return a success message and status code 200
     return jsonify({"message": str(response)}), 200
 
-# @projects_routes.route('/create/<string:project_id>', methods = ["POST"])
-# def create_project(project_id):
-#     try:
-#         #we will get the project data from the request json
-#         data = request.get_json()
-#         "student_id": ObjectId(data["student_id"]),
-#         "coderfair_id": ObjectId(data["coderfair_id"]),
-#         "name": data["name"],
-#         "description": data["description"],
-#         "category": data["category"],
-#         "project_image": data["project_image"],
-#         "presentation_video_url": data["presentation_video_url"],
-#         "code_access_link": data["code_access_link"],
-#         "coding_language": data["coding_language"],
-#         "project_username": data["project_username"],
-#         "project_password": data["project_password"],
-#         "notes": data["notes"],
+@projects_routes.route('/create/<string:project_id>', methods = ["POST"])
+def create_project(project_id):
+    try:
+        #we will get the project data from the request json
+        data = request.get_json()
+        student_id= ObjectId(data["student_id"]),
+        coderfair_id= ObjectId(data["coderfair_id"]),
+        name = data["name"],
+        description =  data["description"],
+        category = data["category"],
+        project_image = data["project_image"],
+        presentation_video_url = data["presentation_video_url"],
+        code_access_link = data["code_access_link"],
+        coding_language =  data["coding_language"],
+        project_username = data["project_username"],
+        project_password = data["project_password"],
+        notes= data["notes"]
 
-#          new_project = ProjectModel(current_app.mongo)
+        new_project = ProjectModel(current_app.mongo)
 
- #         response = new_project.create_judge(student_id, coderfair_id)
-#   except Exception as e:
-#       return jsonify(["message": "Error creating project", "error": str(e)]), 400
+        response = new_project.create_judge(student_id, coderfair_id, name, description, category, project_image, presentation_video_url, code_access_link, coding_language, project_username, project_password, notes)
 
-#   return jsonify(
-#       {"message": "Project created successfully", "project_id": str(response)}
- #   ), 201
+    except Exception as e:
+        return jsonify({"message": "Error creating project", "error": str(e)}), 400
+
+    return jsonify(
+      {"message": "Project created successfully", "project_id": str(response)}
+   ), 201
