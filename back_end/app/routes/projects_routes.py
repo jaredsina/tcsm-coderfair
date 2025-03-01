@@ -21,21 +21,21 @@ def get_projects():
      # If no exceptions are raised, return a success message and status code 200
     return jsonify(project), 200
 
-# @projects_routes.route("/<string:project_id>")
-# def get_project(project_id):
-#     try:
-#      # we will get the project_id from the request json
-#         # Need to convert the string to an ObjectId to match the data type in the database
-#         project_id = ObjectId(project_id)
-#         new_project = ProjectModel(current_app.mongo)
-#         project = new_project.find_project_by_id(project_id)
+@projects_routes.route("/<string:project_id>", methods =["GET"])
+def get_project(project_id):
+    try:
+     # we will get the project_id from the request json
+        # Need to convert the string to an ObjectId to match the data type in the database
+        project_id = ObjectId(project_id)
+        new_project = ProjectModel(current_app.mongo)
+        project = new_project.find_project_by_id(project_id)
 
-#     except Exception as e:
-#          # If an exception is raised, return an error message and status code 400
-#         return jsonify({"message": "Error getting project", "error": str(e)}), 400
+    except Exception as e:
+         # If an exception is raised, return an error message and status code 400
+        return jsonify({"message": "Error getting project", "error": str(e)}), 400
     
-#      # If no exceptions are raised, return a success message and status code 200
-#     return jsonify(project), 200
+     # If no exceptions are raised, return a success message and status code 200
+    return jsonify(project), 200
 
 
 # @projects_routes.route('/delete/<string:project_id>', methods = ["DELETE"])
