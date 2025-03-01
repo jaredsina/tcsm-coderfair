@@ -1,6 +1,6 @@
 # tcsm-coderfair
 
-Features: 
+Features:
 
 <ul>
   <li>Easy to access student projects at the coder fair</li>
@@ -15,8 +15,8 @@ Features:
   <li>Students can upload presentation videos for their projects and they can be easily viewed on the application</li>
 </ul>
 
+Edit names here:
 
-Edit names here: 
 <ul>
   <li>Sid Patel</li>
   <li>Michael Youtz</li>
@@ -26,5 +26,5 @@ Edit names here:
   <li>Ayaan Kalsekar</li>
   <li>Team Member #7</li>
   <li>Shriya Patel</li>
-  <li>Team Member #9</li>
+  <li>Ishita Mathur</li>
 </ul>
