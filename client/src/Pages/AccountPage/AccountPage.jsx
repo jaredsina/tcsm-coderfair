@@ -13,10 +13,10 @@ import './AccountPage.css';
 
 const AccountPage = () => {
   return (
-    
+
     <Container>
       {/* User Profile Section */}
-      
+
       <Flex mih={50} gap="md" justify="center" align="center" direction="row">
         <Avatar src={'Sina.png'} size="lg" />
         <Text size="2em" fw={700} className="user-name">
@@ -41,7 +41,7 @@ const AccountPage = () => {
         >
           Featured Project
         </Text>
-        <ProjectCard style={{ width: '50rem' }} />
+        <ProjectCard style={{ base: '50rem', sm: '25rem' }} />
 
         <Text size="1.5em" fw={700}>
           Other Projects

@@ -18,6 +18,8 @@ import {
   Group,
   Anchor,
   Paper,
+  Title,
+  Box,
 } from '@mantine/core';
 import './HomePage.css';
 import { Carousel } from '@mantine/carousel';
@@ -34,35 +36,40 @@ const data = [
   { rank: 2, name: 'Joshua', score: 4500 },
   { rank: 3, name: 'JS', score: 4200 },
 ];
+
 export function Leaderboard() {
   const rows = data1.map((data1) => (
     <Table.Tr>
       <Table.Td>
-        <Badge color="blue">{data1.rank}</Badge>
+        <Badge color="blue" variant="filled" size="lg">{data1.rank}</Badge>
       </Table.Td>
       <Table.Td>
         <Link
           className={'link'}
           to={'/account'}
           onClick={() => setOpened(false)}
+          style={{ textDecoration: 'none', fontWeight: 600 }}
         >
           {data1.name}
         </Link>
       </Table.Td>
-      <Table.Td>{data1.score}</Table.Td>
+      <Table.Td style={{ fontWeight: 600 }}>{data1.score}</Table.Td>
     </Table.Tr>
   ));
   return (
-    <Table highlightOnHover striped mt={40} mb={40}>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>Rank</Table.Th>
-          <Table.Th>Coder</Table.Th>
-          <Table.Th>Score</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>{rows}</Table.Tbody>
-    </Table>
+    <Box mt={60} mb={60}>
+      <Title order={2} align="center" mb={30}>Leaderboard</Title>
+      <Table highlightOnHover striped withBorder withColumnBorders>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th style={{ textAlign: 'center' }}>Rank</Table.Th>
+            <Table.Th style={{ textAlign: 'center' }}>Coder</Table.Th>
+            <Table.Th style={{ textAlign: 'center' }}>Score</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>{rows}</Table.Tbody>
+      </Table>
+    </Box>
   );
 }
 
@@ -132,83 +139,83 @@ export function Podium() {
 
 const HomePage = () => {
   return (
-    <>
-      <Container>
-        <Center className="h1">
-          <Text fw={900} size="2.7em">
-            The Coder Fair
-          </Text>
-        </Center>
-        <Container width={'100%'}>
-          <Center>
-            <Text
-              size="1.7rem"
-              fw={900}
-              variant="gradient"
-              gradient={{
-                from: 'rgba(167, 167, 167, 1)',
-                to: 'rgba(245, 245, 245, 1)',
-                deg: 61,
-              }}
-            >
-              Featured Projects
-            </Text>
-          </Center>
+    <Container size="xl" py={40}>
+      <Box mb={60}>
+        <Title order={1} align="center" size="3.2rem">
+          The Coder School Fair
+        </Title>
+        <Text align="center" color="dimmed" mt={10}>
+          {new Date().toLocaleString('en-US', { month: 'long' }).match(/March|April|May/) ? 'Spring' :
+            new Date().toLocaleString('en-US', { month: 'long' }).match(/June|July|August/) ? 'Summer' :
+              new Date().toLocaleString('en-US', { month: 'long' }).match(/September|October|November/) ? 'Fall' :
+                'Winter'} {new Date().getFullYear()}
+        </Text>
+      </Box>
 
-          <Carousel
-            withIndicators
-            slideSize="80%"
-            height={'22rem'}
-            slideGap="md"
-            style={{ width: '100%' }}
-            controlSize={'3rem'}
-            loop
-          >
-            <Carousel.Slide style={{ width: '100%' }}>
-              <Center>
-                <ProjectCard style={{ width: '100%' }} />
-              </Center>
-            </Carousel.Slide>
-            <Carousel.Slide style={{ width: '100%' }}>
-              <Center>
-                <ProjectCard style={{ width: '100%' }} />
-              </Center>
-            </Carousel.Slide>
-            <Carousel.Slide style={{ width: '100%' }}>
-              <Center>
-                <ProjectCard style={{ width: '100%' }} />
-              </Center>
-            </Carousel.Slide>
-            <Carousel.Slide style={{ width: '100%' }}>
-              <Center>
-                <ProjectCard style={{ width: '100%' }} />
-              </Center>
-            </Carousel.Slide>
-            <Carousel.Slide style={{ width: '100%' }}>
-              <Center>
-                <ProjectCard style={{ width: '100%' }} />
-              </Center>
-            </Carousel.Slide>
-            <Carousel.Slide>
-              <Flex mih={300} justify="center" align="center" direction="row">
-                <Link to="/projects" onClick={() => setOpened(false)}>
-                  <Button
-                    href="/projects"
-                    variant="filled"
-                    color="blue"
-                    size="xl"
-                  >
-                    See More
-                  </Button>
-                </Link>
-              </Flex>
-            </Carousel.Slide>
-          </Carousel>
-        </Container>
-        <Podium />
-        <Leaderboard />
-      </Container>
-    </>
+      <Box mb={60}>
+        <Title order={2} align="center" mb={30}
+          sx={(theme) => ({
+            background: theme.fn.linearGradient(61, 'rgba(167, 167, 167, 1)', 'rgba(245, 245, 245, 1)'),
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          })}
+        >
+          Featured Projects
+        </Title>
+
+        <Carousel
+          withIndicators
+          slideSize="80%"
+          height={'22rem'}
+          slideGap="md"
+          style={{ width: '100%' }}
+          controlSize={'3rem'}
+          loop
+        >
+          <Carousel.Slide style={{ width: '100%' }}>
+            <Center>
+              <ProjectCard style={{ width: '100%' }} />
+            </Center>
+          </Carousel.Slide>
+          <Carousel.Slide style={{ width: '100%' }}>
+            <Center>
+              <ProjectCard style={{ width: '100%' }} />
+            </Center>
+          </Carousel.Slide>
+          <Carousel.Slide style={{ width: '100%' }}>
+            <Center>
+              <ProjectCard style={{ width: '100%' }} />
+            </Center>
+          </Carousel.Slide>
+          <Carousel.Slide style={{ width: '100%' }}>
+            <Center>
+              <ProjectCard style={{ width: '100%' }} />
+            </Center>
+          </Carousel.Slide>
+          <Carousel.Slide style={{ width: '100%' }}>
+            <Center>
+              <ProjectCard style={{ width: '100%' }} />
+            </Center>
+          </Carousel.Slide>
+          <Carousel.Slide>
+            <Flex mih={300} justify="center" align="center" direction="row">
+              <Link to="/projects" onClick={() => setOpened(false)}>
+                <Button
+                  variant="gradient"
+                  gradient={{ from: 'blue', to: 'cyan' }}
+                  size="xl"
+                >
+                  View All Projects
+                </Button>
+              </Link>
+            </Flex>
+          </Carousel.Slide>
+        </Carousel>
+      </Box>
+
+      <Podium />
+      <Leaderboard />
+    </Container>
   );
 };
 
