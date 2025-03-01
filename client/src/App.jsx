@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavBar from "./Components/navbar";
 import SignIn from "./Pages/SignIn";
-import Home from "./Pages/HomePage/HomePage"; // Import your other pages
+import Home from "./Pages/HomePage/HomePage";
 import Results from "./Pages/Results";
 import CreateAccountPage from './Pages/CreateAccountPage/CreateAccountPage';
 import ProjectPage from './Pages/ProjectPage/ProjectPage';
@@ -18,8 +18,12 @@ const App = () => {
 
   return (
     <Router>
-      <AppShell style={{ minHeight: "100vh" }} footer={<Footer />}>
-        <NavBar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+      {/* Render NavBar at the top of every page */}
+      <NavBar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+
+      <AppShell
+        style={{ minHeight: "100vh" }}
+      >
         <div style={{ flexGrow: 1 }}>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -35,6 +39,9 @@ const App = () => {
           </Routes>
         </div>
       </AppShell>
+
+      {/* Render Footer at the bottom of every page */}
+      <Footer />
     </Router>
   );
 };
