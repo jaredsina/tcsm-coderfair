@@ -16,18 +16,23 @@ def get_project(project_id):
 
 @projects_routes.route('/delete/<string:project_id>')
 def delete_project(project_id):
+    
+    public_id = new_project.delete_user(project_id)
+    cloudinary.uploader.destroy(public_id)
+
     return jsonify({'message': f'Project with ID {project_id}'})
 
 @projects_routes.route('/update/<string:project_id>')
 def update_project(project_id):
+
     return jsonify({'message': f'Project with ID {project_id}'})
 
 @projects_routes.route('/create/<string:project_id>')
 def create_project(project_id):
-    try:
-        data = request.get_json()
-        project_image = data["project_image"]
-        project_username = data["project_username"]
+    
+    data = request.get_json()
+    project_image = data["project_image"]
+    project_username = data["project_username"]
 
     upload_result = cloudinary.uploader.upload(
         project_image,
@@ -40,6 +45,7 @@ def create_project(project_id):
         project_username, width=500, height=500, crop="auto", gravity="auto"
     )
     print(auto_crop_url)
+
 
 
 
