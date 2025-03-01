@@ -38,20 +38,20 @@ def get_project(project_id):
     return jsonify(project), 200
 
 
-# @projects_routes.route('/delete/<string:project_id>', methods = ["DELETE"])
-# def delete_project(project_id):
-#     try:
-#       # Need to convert the string to an ObjectId to match the data type in the database
-#         project_id = ObjectId(project_id)
-#         new_project = ProjectModel(current_app.mongo)
-#         response = new_project.delete_project(project_id)
-#         print(response)
-#     except Exception as e:
-#         # If an exception is raised, return an error message and status code 400
-#         return jsonify({"message": "Error deleting project", "error": str(e)}), 400
+@projects_routes.route('/delete/<string:project_id>', methods = ["DELETE"])
+def delete_project(project_id):
+    try:
+      # Need to convert the string to an ObjectId to match the data type in the database
+        project_id = ObjectId(project_id)
+        new_project = ProjectModel(current_app.mongo)
+        response = new_project.delete_project(project_id)
+        print(response)
+    except Exception as e:
+        # If an exception is raised, return an error message and status code 400
+        return jsonify({"message": "Error deleting project", "error": str(e)}), 400
     
-#     # If no exceptions are raised, return a success message and status code 200
-#     return jsonify({"message": f"project with ID"{project_id}}), 200
+    # If no exceptions are raised, return a success message and status code 200
+    return jsonify({"message": f"project with ID {project_id}"}), 200
 
 # @projects_routes.route('/update/<string:project_id>', methods = ["PUT"])
 # def update_project(project_id):
