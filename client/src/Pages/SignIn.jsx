@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./SignIn.css";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './SignIn.css';
+import { Link } from 'react-router-dom';
 const SignIn = () => {
-  const [accountName, setAccountName] = useState("");
-  const [password, setPassword] = useState("");
+  const [accountName, setAccountName] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleSignIn = (e) => {
     e.preventDefault();
     // Simulated login (Replace with actual authentication logic)
     if (accountName && password) {
-      navigate("/home"); // Redirect to homepage or dashboard
+      navigate('/home'); // Redirect to homepage or dashboard
     } else {
-      alert("Please enter account name and password.");
+      alert('Please enter account name and password.');
     }
   };
 
@@ -42,7 +42,9 @@ const SignIn = () => {
               required
             />
           </div>
-          <button type="submit" className="sign-in-btn">Sign In</button>
+          <button type="submit" className="sign-in-btn">
+            Sign In
+          </button>
           <br />
           <Link to="/reset">Reset Password</Link>
         </form>

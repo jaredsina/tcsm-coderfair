@@ -63,12 +63,13 @@ def create_grade():
         concept_mastery = data["concept_mastery"]
         presentation = data["presentation"]
         creativity = data["creativity"]
-        judge_id = data["judge_id"]
-        project_id = data["project_id"]
+        overall_grade = data["overall_grade"]
+        judge_id = ObjectId(data["judge_id"])
+        project_id = ObjectId(data["project_id"])
         overall_comments = data["overall_comments"]
 
         new_grade = GradeModel(current_app.mongo)
-        response = new_grade.create_grade(concept_tier, concept_mastery, presentation, creativity, judge_id, project_id, overall_comments)
+        response = new_grade.create_grade(concept_tier, concept_mastery, presentation, creativity, overall_grade, judge_id, project_id, overall_comments)
         
     except Exception as e:
         return jsonify({"message": "Error creating grade", "error": str(e)}), 400
