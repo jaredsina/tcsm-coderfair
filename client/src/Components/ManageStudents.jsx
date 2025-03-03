@@ -27,20 +27,16 @@ const ManageStudents = () => {
   },[status, dispatch])
 
   const handleAddStudent = async() => {
-    console.log('Hello')
     if (!newStudentName.trim()) return;
 
     const newStudent = {
-      id: students.length + 1,
       name: newStudentName,
-      username: newStudentUsername,
-      email: newStudentEmail,
       bio: newStudentBio,
-      image: newStudentImage ? URL.createObjectURL(newStudentImage) : null,
+      avatar_image: "" //newStudentImage ? URL.createObjectURL(newStudentImage) : null,
     };
     try{
-      //dispatch(createStudent())
-      setStudents([...students, newStudent]);
+      dispatch(createStudent(newStudent))
+      //setStudents([...students, newStudent]);
     }
     catch (error){
       console.log(error)
@@ -72,7 +68,7 @@ const ManageStudents = () => {
           username: newStudentUsername,
           email: newStudentEmail,
           bio: newStudentBio,
-          image: newStudentImage ? URL.createObjectURL(newStudentImage) : student.image,
+          avatar_image: newStudentImage ? URL.createObjectURL(newStudentImage) : student.avatar_image,
         }
         : student
     );
@@ -126,22 +122,6 @@ const ManageStudents = () => {
           onChange={(file) => setNewStudentImage(file)}
           accept="image/*"
         />
-        <TextInput
-          required
-          label="Username"
-          placeholder="Enter Username"
-          value={newStudentUsername}
-          onChange={(event) => setNewStudentUsername(event.target.value)}
-        />
-        <TextInput
-          required
-          label="Email"
-          placeholder="Email"
-          mt="md"
-          value={newStudentEmail}
-          onChange={(event) => setNewStudentEmail(event.target.value)}
-        />
-
         <Textarea
           required
           label="Student Bio"
