@@ -8,6 +8,7 @@ import Results from "./Pages/Results";
 import Account from "./Pages/AccountPage/AccountPage";
 import Home from "./Pages/HomePage/HomePage";
 import SignIn from "./Pages/SignIn"; // Import the Sign-In page
+import SingleProject from "./Pages/Single-ProjectPage/SingleProject";
 import CoachesPage from "./Pages/CoachesPage/CoachesPage"; // Import the new page
 import Reset from "./Pages/ResetPass/Reset";
 import Footer from "./Components/Footer";
@@ -37,6 +38,7 @@ function App() {
             <Route path="/coach" element={<CoachesPage />} />
             <Route path="/reset" element={<Reset />} />
             <Route path="/create-account" element={<CreateAccountPage />} />
+            <Route path="single-project" element = {<SingleProject></SingleProject>}/>
           </Routes>
         </div>
         {showElements && <Footer />}
