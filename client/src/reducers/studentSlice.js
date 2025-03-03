@@ -17,7 +17,7 @@ export const fetchStudents = createAsyncThunk(
   'students/fetchStudents',
   async () => {
     try {
-      const request = await axios.get(`${studentBaseUrl}`);
+      const request = await axios.get(`${studentBaseUrl}/`);
       const response = request.data;
       return response;
     } catch (err) {
@@ -37,7 +37,9 @@ export const createStudent = createAsyncThunk(
   'students/createStudent',
   async (student) => {
     try {
-      const request = await axios.post(`${studentBaseUrl}/create`, student);
+      const request = await axios.post(`${studentBaseUrl}/create`, student, {
+        headers: { 'Content-Type': 'application/json' },
+      });
       const response = request.data;
       notifications.show({
         title: 'Student Created',
@@ -130,7 +132,10 @@ const studentSlice = createSlice({
     builder
       .addMatcher(
         (action) => {
-          return action.type === fetchStudents.pending.type;
+          return (
+            action.type === fetchStudents.pending.type ||
+            action.type === createStudent.pending.type
+          );
         },
         (state) => {
           state.loading = true;
@@ -150,7 +155,20 @@ const studentSlice = createSlice({
       )
       .addMatcher(
         (action) => {
-          return action.type === fetchStudents.rejected.type;
+          return action.type === createStudent.fulfilled.type;
+        },
+        (state, action) => {
+          state.loading = false;
+          state.status = 'fullfilled';
+          state.studentInfo.push(action.payload);
+        },
+      )
+      .addMatcher(
+        (action) => {
+          return (
+            action.type === fetchStudents.rejected.type ||
+            action.type === createStudent.rejected.type
+          );
         },
         (state, action) => {
           state.loading = false;
