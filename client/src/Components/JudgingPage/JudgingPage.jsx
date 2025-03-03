@@ -8,8 +8,14 @@ import {
   TextInput,
   Rating,
   Title,
+  Autocomplete,
+  MultiSelect,
 } from "@mantine/core";
-
+import { Podium } from "../../Pages/HomePage/HomePage";
+const data = ["Sina", "Francis", "David", "Terisa"];
+const projectsList = ["Project 1", "Project 2", "Project 3", "Project 4"];
+const studentData = ["Student 1", "Student 2", "Student 3", "Student 4"];
+const languageList = ['HTML', 'CSS', 'JavaScript', 'Python', 'Java', 'C++', 'C#', 'C', 'Ruby', 'PHP', 'Swift', 'TypeScript', 'Rust', 'Kotlin', 'R', 'Scratch/Block Based', 'SQL',]
 export function Judging() {
   return (
     <Title className="PageTitle" ta="center" order={1}>
@@ -25,13 +31,6 @@ export function Form() {
   );
 }
 
-export function Podium() {
-  return (
-    <Text size="xl" fw={500} Semibold>
-      Top Coder
-    </Text>
-  );
-}
 
 function JudgingPage() {
   return (
@@ -45,12 +44,8 @@ function JudgingPage() {
         wrap={"wrap-reverse"}
       >
         <Flex direction={"column"} gap="md">
+          <Text size="xl" fw={500} ta="center">Top Coders</Text>
           <Podium />
-          <Flex direction={"row"} align="flex-end">
-            <span className="Rectangle"></span>
-            <span className="Podium"></span>
-            <span className="Bar"></span>
-          </Flex>
         </Flex>
         <Flex direction={"column"} gap="md">
           <Form />
@@ -63,19 +58,39 @@ function JudgingPage() {
                 <Flex direction={"column"} gap={"md"}>
                   <List.Item>
                     <div>Your Name</div>
-                    <TextInput placeholder="Enter Your Response" />
+                    <Autocomplete
+                      placeholder="Enter Your Response"
+                      data={data}
+                      searchable
+                      clearable
+                    />
                   </List.Item>
                   <List.Item>
-                    <div>Game Name</div>
-                    <TextInput placeholder="Enter Your Response" />
+                    <div>Project Name</div>
+                    <Autocomplete
+                      placeholder="Enter Your Response"
+                      data={projectsList}
+                      searchable
+                      clearable
+                    />
                   </List.Item>
                   <List.Item>
                     <div>Name of Coder</div>
-                    <TextInput placeholder="Enter Your Response" />
+                    <Autocomplete
+                      placeholder="Enter Your Response"
+                      data={studentData}
+                      searchable
+                      clearable
+                    />
                   </List.Item>
                   <List.Item>
                     <div>Programing Language</div>
-                    <TextInput placeholder="Enter Your Response" />
+                    <MultiSelect
+                      placeholder="Enter Your Response"
+                      data={languageList}
+                      searchable
+                      clearable
+                    />
                   </List.Item>
                 </Flex>
                 <Flex direction={"column"} gap={"md"} flex>
@@ -112,7 +127,7 @@ function JudgingPage() {
             </List>
           </Flex>
         </Flex>
-      </Flex>
+      </Flex >
     </main>
   );
 }

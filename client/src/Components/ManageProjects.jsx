@@ -125,29 +125,70 @@ const ManageProjects = ({ projects, setProjects }) => {
         Create Project
       </Button>
 
-      {/* Modal for Creating/Editing Projects */}
-      <Modal opened={showForm} onClose={resetForm} title={editingProjectId ? "Edit Project" : "Create New Project"} centered overlayProps={{ style: { zIndex: 7000 } }}
-        zIndex={8000}>
-        <MultiSelect
-          label="Student Name(s)"
-          placeholder="Select students involved in the project"
-          data={studentNames}
-          value={formData.student_names}
-          onChange={(value) => handleChange("student_names", value)}
-          searchable
-          creatable
-          getCreateLabel={(query) => `+ Add ${query}`}
-          required
-        />
-        <TextInput label="Project Name" placeholder="Name for the app or project" value={formData.name} onChange={(event) => handleChange("name", event.target.value)} required />
-        <Textarea label="Description" placeholder="Describe what the project does" value={formData.description} onChange={(event) => handleChange("description", event.target.value)} required />
-        <TextInput label="Presentation Video URL" placeholder="Youtube or other videoplayer link" value={formData.presentation_video_url} onChange={(event) => handleChange("presentation_video_url", event.target.value)} />
-        <TextInput label="Code Access Link" placeholder="Link to repository or project" value={formData.code_access_link} onChange={(event) => handleChange("code_access_link", event.target.value)} required />
-        <MultiSelect searchable creatable label="Coding Languages Used" placeholder="Pick all languages utilized" data={['HTML', 'CSS', 'JavaScript', 'TypeScript', 'Python', 'Java', 'C', 'C++', 'C#', 'Swift', 'PHP', 'Lua', 'Scratch']} value={formData.coding_language} onChange={(value) => handleChange("coding_language", value)} required />
-        <Textarea label="Notes" placeholder="What did the student learn from this" value={formData.notes} onChange={(event) => handleChange("notes", event.target.value)} />
-        <Button fullWidth mt="md" onClick={editingProjectId ? handleSaveEdit : handleAddProject}>{editingProjectId ? "Save Changes" : "Submit"}</Button>
-        <Button fullWidth mt="md" color="gray" onClick={resetForm}>Cancel</Button>
-      </Modal>
+      {showForm && (
+        <div className="popup-overlay" onClick={() => setShowForm(false)}>
+          <div className="popup-box" onClick={(e) => e.stopPropagation()}>
+            <h3>{editingProjectId ? "Edit Project" : "Create New Project"}</h3>
+            <TextInput
+              label="Project Name "
+              placeholder="Enter project name"
+              value={newProjectName}
+              onChange={(event) => setNewProjectName(event.target.value)}
+              required
+            />
+            <TextInput
+              label="Student Name "
+              placeholder="Enter student name"
+              value={newStudentName}
+              onChange={(event) => setNewStudentName(event.target.value)}
+              required
+            />
+            <Textarea
+              label="Description "
+              placeholder="Enter project description"
+              value={newDescription}
+              onChange={(event) => setNewDescription(event.target.value)}
+              required
+            />
+            <TextInput
+              label="Presentation Video URL"
+              placeholder="Enter URL"
+              value={newVideoURL}
+              onChange={(event) => setNewVideoURL(event.target.value)}
+            />
+            <TextInput
+              label="Code Access Link"
+              placeholder="Enter URL"
+              value={newCodeLink}
+              onChange={(event) => setNewCodeLink(event.target.value)}
+            />
+            <MultiSelect
+              label="Coding Languages Used"
+              data={['HTML', 'CSS', 'JavaScript', 'Python', 'Java', 'C++', 'C#', 'C', 'Ruby', 'PHP', 'Swift', 'TypeScript', 'Rust', 'Kotlin', 'R', 'Scratch/Block Based', 'SQL',]}
+              value={newLanguages}
+              onChange={setNewLanguages}
+              required
+            />
+            <Textarea
+              label="Notes"
+              placeholder="Enter any notes"
+              value={newNotes}
+              onChange={(event) => setNewNotes(event.target.value)}
+            />
+            <Button fullWidth mt="md" onClick={editingProjectId ? handleSaveEdit : handleAddProject}>
+              {editingProjectId ? "Save Changes" : "Submit"}
+            </Button>
+            <Button
+              fullWidth
+              mt="md"
+              color="gray"
+              onClick={resetForm}
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Project Table */}
       <div className="table-container">

@@ -22,10 +22,21 @@ function App() {
 
   return (
     <>
-
-      <AppShell style={{ minHeight: "100vh" }} footer={<Footer />}>
-        {showElements && <NavBar />} {/* Only show NavBar if not on the SignIn page */}
-        <div style={{ flexGrow: 1 }}>
+      <AppShell
+        styles={{
+          root: {
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column'
+          },
+          main: {
+            flex: 1,
+            paddingBottom: 0
+          }
+        }}
+      >
+        {showElements && <NavBar />}
+        <div>
           <Routes>
             {/* Default route is the Sign-In page */}
             <Route path="/" element={<SignIn />} />
