@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { Button, TextInput, Textarea } from "@mantine/core";
+import { Button, TextInput, Textarea, FileInput, Image, Modal } from "@mantine/core";
 import "./ManageStudents.css";
 
 const ManageStudents = ({ students, setStudents }) => {
   const [newStudentName, setNewStudentName] = useState("");
-  const [newStudentGrade, setNewStudentGrade] = useState("");
+  const [newStudentUsername, setNewStudentUsername] = useState("");
+  const [newStudentEmail, setNewStudentEmail] = useState("");
   const [newStudentBio, setNewStudentBio] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingStudentId, setEditingStudentId] = useState(null);
+  const [newStudentImage, setNewStudentImage] = useState(null);
 
   const handleAddStudent = () => {
     if (!newStudentName.trim()) return;
@@ -15,8 +17,10 @@ const ManageStudents = ({ students, setStudents }) => {
     const newStudent = {
       id: students.length + 1,
       name: newStudentName,
-      grade: newStudentGrade || "N/A",
+      username: newStudentUsername,
+      email: newStudentEmail,
       bio: newStudentBio,
+      image: newStudentImage ? URL.createObjectURL(newStudentImage) : null,
     };
 
     setStudents([...students, newStudent]);
@@ -26,7 +30,9 @@ const ManageStudents = ({ students, setStudents }) => {
   const handleEditStudent = (id) => {
     const studentToEdit = students.find((student) => student.id === id);
     setNewStudentName(studentToEdit.name);
-    setNewStudentGrade(studentToEdit.grade);
+    setNewStudentImage(studentToEdit.image);
+    setNewStudentUsername(studentToEdit.username);
+    setNewStudentEmail(studentToEdit.email);
     setNewStudentBio(studentToEdit.bio);
     setEditingStudentId(id);
     setShowForm(true);
@@ -37,7 +43,14 @@ const ManageStudents = ({ students, setStudents }) => {
 
     const updatedStudents = students.map((student) =>
       student.id === editingStudentId
-        ? { ...student, name: newStudentName, grade: newStudentGrade, bio: newStudentBio }
+        ? {
+          ...student,
+          name: newStudentName,
+          username: newStudentUsername,
+          email: newStudentEmail,
+          bio: newStudentBio,
+          image: newStudentImage ? URL.createObjectURL(newStudentImage) : student.image,
+        }
         : student
     );
 
@@ -51,8 +64,10 @@ const ManageStudents = ({ students, setStudents }) => {
 
   const resetForm = () => {
     setNewStudentName("");
-    setNewStudentGrade("");
+    setNewStudentUsername("");
+    setNewStudentEmail("");
     setNewStudentBio("");
+    setNewStudentImage(null);
     setEditingStudentId(null);
     setShowForm(false);
   };
@@ -65,51 +80,74 @@ const ManageStudents = ({ students, setStudents }) => {
         Create Student Account
       </Button>
 
-      {showForm && (
-        <div className="popup-overlay" onClick={() => setShowForm(false)}>
-          <div className="popup-box" onClick={(e) => e.stopPropagation()}>
-            <h3>{editingStudentId ? "Edit Student" : "Create New Student"}</h3>
-            <TextInput
-              label="Student Name"
-              placeholder="Enter student name"
-              value={newStudentName}
-              onChange={(event) => setNewStudentName(event.target.value)}
-              required
-            />
-            <TextInput
-              label="Grade"
-              placeholder="Enter grade (optional)"
-              value={newStudentGrade}
-              onChange={(event) => setNewStudentGrade(event.target.value)}
-            />
-            <Textarea
-              label="Student Bio"
-              placeholder="Enter student bio"
-              value={newStudentBio}
-              onChange={(event) => setNewStudentBio(event.target.value)}
-            />
-            <Button fullWidth mt="md" onClick={editingStudentId ? handleSaveEdit : handleAddStudent}>
-              {editingStudentId ? "Save Changes" : "Submit"}
-            </Button>
-            <Button
-              fullWidth
-              mt="md"
-              color="gray"
-              onClick={resetForm}
-            >
-              Cancel
-            </Button>
-          </div>
-        </div>
-      )}
+      <Modal
+        opened={showForm}
+        onClose={resetForm}
+        title={editingStudentId ? "Edit Student" : "Create New Student"}
+        centered
+        overlayProps={{ style: { zIndex: 7000 } }}
+        zIndex={8000}
+      >
+        <TextInput
+          required
+          label="Student Name"
+          placeholder="Enter student name"
+          value={newStudentName}
+          onChange={(event) => setNewStudentName(event.target.value)}
+        />
+        <FileInput
+          size="md"
+          radius="xl"
+          label="Student Image"
+          placeholder="Click to upload image"
+          onChange={(file) => setNewStudentImage(file)}
+          accept="image/*"
+        />
+        <TextInput
+          required
+          label="Username"
+          placeholder="Enter Username"
+          value={newStudentUsername}
+          onChange={(event) => setNewStudentUsername(event.target.value)}
+        />
+        <TextInput
+          required
+          label="Email"
+          placeholder="Email"
+          mt="md"
+          value={newStudentEmail}
+          onChange={(event) => setNewStudentEmail(event.target.value)}
+        />
+
+        <Textarea
+          required
+          label="Student Bio"
+          placeholder="Enter student bio"
+          value={newStudentBio}
+          onChange={(event) => setNewStudentBio(event.target.value)}
+        />
+        <Button fullWidth mt="md" onClick={editingStudentId ? handleSaveEdit : handleAddStudent}>
+          {editingStudentId ? "Save Changes" : "Submit"}
+        </Button>
+        <Button
+          fullWidth
+          mt="md"
+          color="gray"
+          onClick={resetForm}
+        >
+          Cancel
+        </Button>
+      </Modal>
 
       <div className="table-container">
         <table>
           <thead>
             <tr>
               <th>Name</th>
-              <th>Grade</th>
+              <th>Username</th>
+              <th>Email</th>
               <th>Bio</th>
+              <th>Image</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -117,19 +155,33 @@ const ManageStudents = ({ students, setStudents }) => {
             {students.map((student) => (
               <tr key={student.id}>
                 <td>{student.name}</td>
-                <td>{student.grade}</td>
+                <td>{student.username}</td>
+                <td>{student.email}</td>
                 <td>{student.bio}</td>
+                <td>
+                  {student.image ? (
+                    <Image
+                      src={student.image}
+                      alt={`${student.name}'s photo`}
+                      width={100}
+                      height={100}
+                      fit="contain"
+                    />
+                  ) : (
+                    <div>No image</div>
+                  )}
+                </td>
                 <td className="actions-column">
                   <Button
-                    className="edit-btn"
-                    size="xs"
+                    color="blue"
+                    size="s"
                     onClick={() => handleEditStudent(student.id)}
                   >
                     Edit
                   </Button>
                   <Button
-                    className="delete-btn"
-                    size="xs"
+                    size="s"
+                    color="red"
                     onClick={() => handleDeleteStudent(student.id)}
                   >
                     Delete

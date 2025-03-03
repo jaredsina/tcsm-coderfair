@@ -18,7 +18,8 @@ table {
   border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ddd;
   padding: 12px;
   text-align: left;
@@ -38,16 +39,7 @@ button {
   margin-right: 10px;
 }
 
-/* Styling for the action buttons */
-.edit-btn {
-  background-color: #007bff;
-  color: white;
-}
 
-.delete-btn {
-  background-color: #dc3545;
-  color: white;
-}
 
 /* Pop-up overlay styling */
 .popup-overlay {
