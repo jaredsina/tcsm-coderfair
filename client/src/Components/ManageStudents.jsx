@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, TextInput, Textarea, FileInput, Image, Modal } from "@mantine/core";
 import "./ManageStudents.css";
+import { createStudent, fetchStudents } from "../reducers/studentSlice";
+import {useDispatch, useSelector} from "react-redux"
 
-const ManageStudents = ({ students, setStudents }) => {
+const ManageStudents = () => {
   const [newStudentName, setNewStudentName] = useState("");
   const [newStudentUsername, setNewStudentUsername] = useState("");
   const [newStudentEmail, setNewStudentEmail] = useState("");
@@ -10,8 +12,22 @@ const ManageStudents = ({ students, setStudents }) => {
   const [showForm, setShowForm] = useState(false);
   const [editingStudentId, setEditingStudentId] = useState(null);
   const [newStudentImage, setNewStudentImage] = useState(null);
+  const [students, setStudents] = useState([{}]);
 
-  const handleAddStudent = () => {
+  const dispatch = useDispatch()
+
+  // Get information from the globale state (store)
+  const studentInfo = useSelector(state => state.students.studentInfo)
+  const status = useSelector(state=> state.students.status)
+
+  useEffect(()=>{
+    // Only fetch students when the page is loaded or when new student is added
+    status === "idle" ? dispatch(fetchStudents()) : setStudents([{}]);
+    setStudents(studentInfo)
+  },[status, dispatch])
+
+  const handleAddStudent = async() => {
+    console.log('Hello')
     if (!newStudentName.trim()) return;
 
     const newStudent = {
@@ -22,8 +38,15 @@ const ManageStudents = ({ students, setStudents }) => {
       bio: newStudentBio,
       image: newStudentImage ? URL.createObjectURL(newStudentImage) : null,
     };
-
-    setStudents([...students, newStudent]);
+    try{
+      //dispatch(createStudent())
+      setStudents([...students, newStudent]);
+    }
+    catch (error){
+      console.log(error)
+    }
+      
+    
     resetForm();
   };
 
@@ -144,8 +167,6 @@ const ManageStudents = ({ students, setStudents }) => {
           <thead>
             <tr>
               <th>Name</th>
-              <th>Username</th>
-              <th>Email</th>
               <th>Bio</th>
               <th>Image</th>
               <th>Actions</th>
@@ -155,13 +176,11 @@ const ManageStudents = ({ students, setStudents }) => {
             {students.map((student) => (
               <tr key={student.id}>
                 <td>{student.name}</td>
-                <td>{student.username}</td>
-                <td>{student.email}</td>
                 <td>{student.bio}</td>
                 <td>
-                  {student.image ? (
+                  {student.avatar_image ? (
                     <Image
-                      src={student.image}
+                      src={student.avatar_image}
                       alt={`${student.name}'s photo`}
                       width={100}
                       height={100}

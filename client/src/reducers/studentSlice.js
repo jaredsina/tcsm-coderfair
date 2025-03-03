@@ -6,8 +6,10 @@ const studentBaseUrl = 'http://localhost:8000/students';
 
 const initialState = {
   loading: false,
-  students: [],
+  studentInfo: [{}],
+  searchResults: {},
   error: '',
+  status: 'idle',
 };
 
 // * Fetch all students
@@ -19,6 +21,12 @@ export const fetchStudents = createAsyncThunk(
       const response = request.data;
       return response;
     } catch (err) {
+      notifications.show({
+        title: 'Error',
+        message:
+          'An error has occured trying to get students from the database',
+        color: 'red',
+      });
       return err.response.data;
     }
   },
@@ -118,66 +126,97 @@ const studentSlice = createSlice({
   name: 'students',
   initialState,
   reducers: {},
-  extraReducers: {
-    [fetchStudents.pending]: (state) => {
-      state.loading = true;
-    },
-    [fetchStudents.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.students = action.payload;
-    },
-    [fetchStudents.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    [createStudent.pending]: (state) => {
-      state.loading = true;
-    },
-    [createStudent.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.students.push(action.payload);
-    },
-    [createStudent.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    [updateStudent.pending]: (state) => {
-      state.loading = true;
-    },
-    [updateStudent.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.students = state.students.map((student) =>
-        student._id === action.payload._id ? action.payload : student,
+  extraReducers: (builder) => {
+    builder
+      .addMatcher(
+        (action) => {
+          return action.type === fetchStudents.pending.type;
+        },
+        (state) => {
+          state.loading = true;
+          state.searchResults = null;
+          state.status = 'pending';
+        },
+      )
+      .addMatcher(
+        (action) => {
+          return action.type === fetchStudents.fulfilled.type;
+        },
+        (state, action) => {
+          state.loading = false;
+          state.studentInfo = action.payload;
+          state.status = 'fullfilled';
+        },
+      )
+      .addMatcher(
+        (action) => {
+          return action.type === fetchStudents.rejected.type;
+        },
+        (state, action) => {
+          state.loading = false;
+          state.error = action.error.message;
+          state.status = 'error';
+        },
       );
-    },
-    [updateStudent.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    [deleteStudent.pending]: (state) => {
-      state.loading = true;
-    },
-    [deleteStudent.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.students = state.students.filter(
-        (student) => student._id !== action.payload._id,
-      );
-    },
-    [deleteStudent.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    [getStudentById.pending]: (state) => {
-      state.loading = true;
-    },
-    [getStudentById.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.students = action.payload;
-    },
-    [getStudentById.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
+    // [fetchStudents.pending]: (state) => {
+    //   state.loading = true;
+    // },
+    // [fetchStudents.fulfilled]: (state, action) => {
+    //   state.loading = false;
+    //   state.students = action.payload;
+    // },
+    // [fetchStudents.rejected]: (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.payload;
+    // },
+    // [createStudent.pending]: (state) => {
+    //   state.loading = true;
+    // },
+    // [createStudent.fulfilled]: (state, action) => {
+    //   state.loading = false;
+    //   state.students.push(action.payload);
+    // },
+    // [createStudent.rejected]: (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.payload;
+    // },
+    // [updateStudent.pending]: (state) => {
+    //   state.loading = true;
+    // },
+    // [updateStudent.fulfilled]: (state, action) => {
+    //   state.loading = false;
+    //   state.students = state.students.map((student) =>
+    //     student._id === action.payload._id ? action.payload : student,
+    //   );
+    // },
+    // [updateStudent.rejected]: (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.payload;
+    // },
+    // [deleteStudent.pending]: (state) => {
+    //   state.loading = true;
+    // },
+    // [deleteStudent.fulfilled]: (state, action) => {
+    //   state.loading = false;
+    //   state.students = state.students.filter(
+    //     (student) => student._id !== action.payload._id,
+    //   );
+    // },
+    // [deleteStudent.rejected]: (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.payload;
+    // },
+    // [getStudentById.pending]: (state) => {
+    //   state.loading = true;
+    // },
+    // [getStudentById.fulfilled]: (state, action) => {
+    //   state.loading = false;
+    //   state.students = action.payload;
+    // },
+    // [getStudentById.rejected]: (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.payload;
+    // },
   },
 });
 
