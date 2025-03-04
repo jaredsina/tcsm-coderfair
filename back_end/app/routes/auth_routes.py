@@ -3,6 +3,7 @@
 from flask import Blueprint, jsonify, current_app, request
 from flask_bcrypt import Bcrypt
 from app.models.user import UserModel
+from flask_jwt_extended import create_access_token
 
 # used to convert string to ObjectId
 from bson import ObjectId
@@ -28,7 +29,10 @@ def log_in(user_id):
     is_valid = bcrypt.check_password_hash(hashed_password, password )
     if is_valid:
         user_database.pop("password", None)
-        return jsonify(user_database)
+        #Generate a token
+        token_holder = create_access_token(identity=username)
+        print(token_holder)
+        return jsonify({"user_database":user_database,"token_holder":token_holder})
     else:
         return jsonify({"message":"Error incorrect password"})
 
