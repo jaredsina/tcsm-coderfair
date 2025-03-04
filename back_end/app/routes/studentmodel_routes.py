@@ -68,54 +68,34 @@ def delete_student(student_id):
 @studentmodel_routes.route("/update/<string:student_id>", methods=["PUT"])
 def update_student(student_id):
     try:
-        data = request.get_json()
-        update_data = data["update_data"]
+        student_id = ObjectId(student_id)
 
+        name = request.form.get("name")
+        bio = request.form.get("bio")
+        avatar_image = request.form.get("avatar_image")
+
+        if not avatar_image:
+            avatar_image = ""
+            update_data = {
+                "name": name,
+                "bio": bio,
+                "avatar_image": avatar_image,
+            }
+
+        else:
+            cloudinary.uploader.upload(avatar_image, public_id = f"{name}_profile_image", overwrite = True)
+            auto_crop_url, _ = cloudinary_url(
+                f"{name}_profile_image", width=500, height=500, crop="auto", gravity="auto")
+            avatar_image = auto_crop_url
+        
+            update_data = {
+                "name": name,
+                "bio": bio,
+                "avatar_image": avatar_image,
+            }
+            
         student = StudentModel(current_app.mongo)
-        result, public_id, old_public_id, same_avatar_image = student.update_student(
-            ObjectId(student_id), update_data
-        )
-
-        if old_public_id:
-            if same_avatar_image:
-                cloudinary.uploader.destroy(old_public_id)
-                upload_result = cloudinary.uploader.upload(
-                    same_avatar_image,
-                    public_id=public_id,
-                )
-                print(upload_result["secure_url"])
-
-                # Optimize delivery by resizing and applying auto-format and auto-quality
-                optimize_url, _ = cloudinary_url(
-                    public_id, fetch_format="auto", quality="auto"
-                )
-                print(optimize_url)
-
-                # Transform the image: auto-crop to square aspect_ratio
-                auto_crop_url, _ = cloudinary_url(
-                    public_id, width=500, height=500, crop="auto", gravity="auto"
-                )
-                print(auto_crop_url)
-
-            else:
-                cloudinary.uploader.destroy(old_public_id)
-                upload_result = cloudinary.uploader.upload(
-                    update_data["avatar_image"],
-                    public_id=public_id,
-                )
-                print(upload_result["secure_url"])
-
-                # Optimize delivery by resizing and applying auto-format and auto-quality
-                optimize_url, _ = cloudinary_url(
-                    public_id, fetch_format="auto", quality="auto"
-                )
-                print(optimize_url)
-
-                # Transform the image: auto-crop to square aspect_ratio
-                auto_crop_url, _ = cloudinary_url(
-                    public_id, width=500, height=500, crop="auto", gravity="auto"
-                )
-                print(auto_crop_url)
+        result = student.update_student(student_id, update_data)
 
     except Exception as e:
         return jsonify({"message": "Error updating student", "error": str(e)}), 400
