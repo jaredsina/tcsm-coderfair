@@ -23,7 +23,7 @@ const ManageProjects = () => {
 
   const projectsInfo = useSelector((state) => state.projects.projects);
   const status = useSelector((state) => state.projects.status);
-  console.log(projects)
+  
   useEffect(() => {
     status === "idle" ? dispatch(fetchProjects()) : setProjects([{}]);
     setProjects(projectsInfo);
