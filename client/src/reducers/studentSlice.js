@@ -27,7 +27,9 @@ export const fetchStudents = createAsyncThunk(
           'An error has occured trying to get students from the database',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(
+        err.response?.data || { message: 'Unknown error' },
+      );
     }
   },
 );
@@ -53,7 +55,9 @@ export const createStudent = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(
+        err.response?.data || { message: 'Unknown error' },
+      );
     }
   },
 );
@@ -81,7 +85,9 @@ export const updateStudent = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(
+        err.response?.data || { message: 'Unknown error' },
+      );
     }
   },
 );
@@ -105,7 +111,9 @@ export const deleteStudent = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(
+        err.response?.data || { message: 'Unknown error' },
+      );
     }
   },
 );
@@ -119,7 +127,9 @@ export const getStudentById = createAsyncThunk(
       const response = request.data;
       return response;
     } catch (err) {
-      return err.response.data;
+      return rejectWithValue(
+        err.response?.data || { message: 'Unknown error' },
+      );
     }
   },
 );

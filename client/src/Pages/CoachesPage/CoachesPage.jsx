@@ -27,7 +27,7 @@ const CoachesPage = () => {
       <Grid>
         {/* Manage Projects Component */}
         <Grid.Col span={12} md={5} lg={5}>
-          <ManageProjects projects={projects} setProjects={setProjects} />
+          <ManageProjects />
         </Grid.Col>
 
         {/* Manage Students Component */}
