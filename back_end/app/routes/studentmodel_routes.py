@@ -57,7 +57,7 @@ def delete_student(student_id):
     except Exception as e:
         return jsonify({"message": "Error deleting student", "error": str(e)}), 400
 
-    return jsonify({"message": f"deleted student with ID {student_id}"}), 200
+    return jsonify({"student_id": str(student_id)}), 200
 
 
 @studentmodel_routes.route("/update/<string:student_id>", methods=["PUT"])
