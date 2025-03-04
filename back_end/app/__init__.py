@@ -3,7 +3,7 @@ from .routes import init_routes
 from .config import init_config
 from .routes.error_handlers import init_error_handlers
 from flask_cors import CORS
-from flask_jwt_extended import JWTManager
+
 
 
 def create_app():
@@ -12,9 +12,7 @@ def create_app():
     # Enable cross-origin resource sharing
     CORS(app)
 
-    #making the maanger of the tokens
-    app.config["JWT_SECRET_KEY"] = "your-secret-key" 
-    jwt = JWTManager(app)
+    
 
     # config
     init_config(app)
