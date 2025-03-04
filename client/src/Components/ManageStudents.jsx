@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, TextInput, Textarea, FileInput, Image, Modal } from "@mantine/core";
 import "./ManageStudents.css";
-import { createStudent, fetchStudents } from "../reducers/studentSlice";
+import { createStudent, deleteStudent, fetchStudents } from "../reducers/studentSlice";
 import {useDispatch, useSelector} from "react-redux"
 
 const ManageStudents = () => {
@@ -78,7 +78,7 @@ const ManageStudents = () => {
   };
 
   const handleDeleteStudent = (id) => {
-    setStudents(students.filter((student) => student.id !== id));
+    dispatch(deleteStudent(id))
   };
 
   const resetForm = () => {
@@ -154,7 +154,7 @@ const ManageStudents = () => {
           </thead>
           <tbody>
             {students.map((student) => (
-              <tr key={student.id}>
+              <tr key={student._id}>
                 <td>{student.name}</td>
                 <td>{student.bio}</td>
                 <td>
@@ -174,14 +174,14 @@ const ManageStudents = () => {
                   <Button
                     color="blue"
                     size="s"
-                    onClick={() => handleEditStudent(student.id)}
+                    onClick={() => handleEditStudent(student._id)}
                   >
                     Edit
                   </Button>
                   <Button
                     size="s"
                     color="red"
-                    onClick={() => handleDeleteStudent(student.id)}
+                    onClick={() => handleDeleteStudent(student._id)}
                   >
                     Delete
                   </Button>

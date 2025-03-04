@@ -166,13 +166,13 @@ const studentSlice = createSlice({
       )
       .addMatcher(
         (action) => {
-          return action.type === createStudent.fulfilled.type;
+          return action.type === deleteStudent.fulfilled.type;
         },
         (state, action) => {
           state.loading = false;
           state.status = 'fullfilled';
           state.studentInfo = state.studentInfo.filter(
-            (student) => student.id !== action.payload,
+            (student) => student._id !== action.payload.student_id,
           );
         },
       )
@@ -180,7 +180,8 @@ const studentSlice = createSlice({
         (action) => {
           return (
             action.type === fetchStudents.rejected.type ||
-            action.type === createStudent.rejected.type
+            action.type === createStudent.rejected.type ||
+            action.type === deleteStudent.rejected.type
           );
         },
         (state, action) => {
