@@ -64,17 +64,21 @@ def delete_student(student_id):
 def update_student(student_id):
     try:
         data = request.get_json()
-        update_data = data["update_data"]
+
+        update_data = {
+            "name": data["name"],
+            "bio": data["bio"],
+            "avatar_image": data["avatar_image"],
+        }
 
         student = StudentModel(current_app.mongo)
-        response = student.update_student(ObjectId(student_id), update_data)
+        student.update_student(ObjectId(student_id), update_data)
 
     except Exception as e:
         return jsonify({"message": "Error updating student", "error": str(e)}), 400
 
-    return jsonify(
-        {"message": "Student updated sucessfully", "student_id": str(response)}
-    ), 201
+    # Return a copy of update_data with the student_id added
+    return jsonify({**update_data, "_id": student_id}), 201
 
 
 @studentmodel_routes.route("/create", methods=["POST"])
