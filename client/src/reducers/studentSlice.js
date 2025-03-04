@@ -63,10 +63,10 @@ export const updateStudent = createAsyncThunk(
   'students/updateStudent',
   async (info) => {
     try {
-      const { _id, updated_student: student } = info; // Destructure the info object
+      const { _id, updatedStudentData } = info; // Destructure the info object
       const request = await axios.put(
         `${studentBaseUrl}/update/${_id}`,
-        student,
+        updatedStudentData,
       );
       const response = request.data;
       notifications.show({
@@ -135,7 +135,8 @@ const studentSlice = createSlice({
           return (
             action.type === fetchStudents.pending.type ||
             action.type === createStudent.pending.type ||
-            action.type === deleteStudent.pending.type
+            action.type === deleteStudent.pending.type ||
+            action.type === updateStudent.pending.type
           );
         },
         (state) => {
@@ -178,10 +179,23 @@ const studentSlice = createSlice({
       )
       .addMatcher(
         (action) => {
+          return action.type === updateStudent.fulfilled.type;
+        },
+        (state, action) => {
+          state.loading = false;
+          state.status = 'fullfilled';
+          state.studentInfo = state.studentInfo.map((student) =>
+            student._id === action.payload._id ? action.payload : student,
+          );
+        },
+      )
+      .addMatcher(
+        (action) => {
           return (
             action.type === fetchStudents.rejected.type ||
             action.type === createStudent.rejected.type ||
-            action.type === deleteStudent.rejected.type
+            action.type === deleteStudent.rejected.type ||
+            action.type === updateStudent.rejected.type
           );
         },
         (state, action) => {

@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Button, TextInput, Textarea, FileInput, Image, Modal } from "@mantine/core";
 import "./ManageStudents.css";
-import { createStudent, deleteStudent, fetchStudents } from "../reducers/studentSlice";
+import { createStudent, deleteStudent, fetchStudents, updateStudent } from "../reducers/studentSlice";
 import {useDispatch, useSelector} from "react-redux"
 
 const ManageStudents = () => {
   const [newStudentName, setNewStudentName] = useState("");
-  const [newStudentUsername, setNewStudentUsername] = useState("");
-  const [newStudentEmail, setNewStudentEmail] = useState("");
   const [newStudentBio, setNewStudentBio] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingStudentId, setEditingStudentId] = useState(null);
@@ -32,7 +30,7 @@ const ManageStudents = () => {
     const newStudent = {
       name: newStudentName,
       bio: newStudentBio,
-      avatar_image: "" //newStudentImage ? URL.createObjectURL(newStudentImage) : null,
+      avatar_image: "" // !! NEEDS to send form data
     };
     try{
       dispatch(createStudent(newStudent))
@@ -47,11 +45,9 @@ const ManageStudents = () => {
   };
 
   const handleEditStudent = (id) => {
-    const studentToEdit = students.find((student) => student.id === id);
+    const studentToEdit = students.find((student) => student._id === id);
     setNewStudentName(studentToEdit.name);
     setNewStudentImage(studentToEdit.image);
-    setNewStudentUsername(studentToEdit.username);
-    setNewStudentEmail(studentToEdit.email);
     setNewStudentBio(studentToEdit.bio);
     setEditingStudentId(id);
     setShowForm(true);
@@ -59,21 +55,13 @@ const ManageStudents = () => {
 
   const handleSaveEdit = () => {
     if (!newStudentName.trim()) return;
-
-    const updatedStudents = students.map((student) =>
-      student.id === editingStudentId
-        ? {
-          ...student,
+    const updatedStudentData = {
           name: newStudentName,
-          username: newStudentUsername,
-          email: newStudentEmail,
           bio: newStudentBio,
-          avatar_image: newStudentImage ? URL.createObjectURL(newStudentImage) : student.avatar_image,
-        }
-        : student
-    );
-
-    setStudents(updatedStudents);
+          avatar_image: "" // !! NEEDS to send form data
+    };  
+    dispatch(updateStudent({"_id": editingStudentId, "updatedStudentData": updatedStudentData}))
+    //setStudents(updatedStudents);
     resetForm();
   };
 
@@ -83,8 +71,6 @@ const ManageStudents = () => {
 
   const resetForm = () => {
     setNewStudentName("");
-    setNewStudentUsername("");
-    setNewStudentEmail("");
     setNewStudentBio("");
     setNewStudentImage(null);
     setEditingStudentId(null);
