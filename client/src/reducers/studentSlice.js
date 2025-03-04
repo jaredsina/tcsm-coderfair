@@ -204,65 +204,6 @@ const studentSlice = createSlice({
           state.status = 'error';
         },
       );
-    // [fetchStudents.pending]: (state) => {
-    //   state.loading = true;
-    // },
-    // [fetchStudents.fulfilled]: (state, action) => {
-    //   state.loading = false;
-    //   state.students = action.payload;
-    // },
-    // [fetchStudents.rejected]: (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.payload;
-    // },
-    // [createStudent.pending]: (state) => {
-    //   state.loading = true;
-    // },
-    // [createStudent.fulfilled]: (state, action) => {
-    //   state.loading = false;
-    //   state.students.push(action.payload);
-    // },
-    // [createStudent.rejected]: (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.payload;
-    // },
-    // [updateStudent.pending]: (state) => {
-    //   state.loading = true;
-    // },
-    // [updateStudent.fulfilled]: (state, action) => {
-    //   state.loading = false;
-    //   state.students = state.students.map((student) =>
-    //     student._id === action.payload._id ? action.payload : student,
-    //   );
-    // },
-    // [updateStudent.rejected]: (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.payload;
-    // },
-    // [deleteStudent.pending]: (state) => {
-    //   state.loading = true;
-    // },
-    // [deleteStudent.fulfilled]: (state, action) => {
-    //   state.loading = false;
-    //   state.students = state.students.filter(
-    //     (student) => student._id !== action.payload._id,
-    //   );
-    // },
-    // [deleteStudent.rejected]: (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.payload;
-    // },
-    // [getStudentById.pending]: (state) => {
-    //   state.loading = true;
-    // },
-    // [getStudentById.fulfilled]: (state, action) => {
-    //   state.loading = false;
-    //   state.students = action.payload;
-    // },
-    // [getStudentById.rejected]: (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.payload;
-    // },
   },
 });
 
