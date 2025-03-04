@@ -134,7 +134,8 @@ const studentSlice = createSlice({
         (action) => {
           return (
             action.type === fetchStudents.pending.type ||
-            action.type === createStudent.pending.type
+            action.type === createStudent.pending.type ||
+            action.type === deleteStudent.pending.type
           );
         },
         (state) => {
@@ -161,6 +162,18 @@ const studentSlice = createSlice({
           state.loading = false;
           state.status = 'fullfilled';
           state.studentInfo.push(action.payload);
+        },
+      )
+      .addMatcher(
+        (action) => {
+          return action.type === createStudent.fulfilled.type;
+        },
+        (state, action) => {
+          state.loading = false;
+          state.status = 'fullfilled';
+          state.studentInfo = state.studentInfo.filter(
+            (student) => student.id !== action.payload,
+          );
         },
       )
       .addMatcher(
