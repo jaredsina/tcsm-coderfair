@@ -38,21 +38,15 @@ def create_users():
         avatar_image = request.files.get("avatar_image")
 
         if avatar_image:
-            upload_result = cloudinary.uploader.upload(
+            cloudinary.uploader.upload(
                 avatar_image,
                 public_id=f"{username}_profile_image",
             )
-            print(upload_result["secure_url"])
-
-            optimize_url, _ = cloudinary_url(
-                username, fetch_format="auto", quality="auto"
-            )
-            print(optimize_url)
 
             auto_crop_url, _ = cloudinary_url(
                 username, width=500, height=500, crop="auto", gravity="auto"
             )
-            print(auto_crop_url)
+
             avatar_image = auto_crop_url
         else:
             avatar_image = ""
@@ -86,6 +80,8 @@ def delete_user(user_id):
 @user_routes.route("/update/<string:user_id>", methods=["PUT"])
 def update_user(user_id):
     try:
+        user_id = ObjectId(user_id)
+
         first_name = request.form.get("first_name")
         last_name = request.form.get("last_name")
         email = request.form.get("email")
@@ -93,48 +89,68 @@ def update_user(user_id):
         is_admin = request.form.get("is_admin")
         is_staff = request.form.get("is_staff")
         avatar_image = request.files.get("avatar_image")
+
         if not avatar_image:
             avatar_image = ""
-        update_data = {
-            first_name: first_name,
-            last_name: last_name,
-            email: email,
-            username: username,
-            is_admin: is_admin,
-            is_staff: is_staff,
-            avatar_image: avatar_image,
-        }
-        print(update_data)
+            update_data = {
+                "first_name": first_name,
+                "last_name": last_name,
+                "email": email,
+                "username": username,
+                "is_admin": is_admin,
+                "is_staff": is_staff,
+            }
+
+        else:
+            cloudinary.uploader.upload(avatar_image, public_id = f"{username}_profile_image", overwrite = True)
+            auto_crop_url, _ = cloudinary_url(
+                f"{username}_profile_image", width=500, height=500, crop="auto", gravity="auto")
+            avatar_image = auto_crop_url
+        
+            update_data = {
+                "first_name": first_name,
+                "last_name": last_name,
+                "email": email,
+                "username": username,
+                "is_admin": is_admin,
+                "is_staff": is_staff,
+                "avatar_image": avatar_image,
+            }
+            
         user = UserModel(current_app.mongo)
-        result, public_id, old_public_id, same_avatar_image = user.update_user(
-            ObjectId(user_id), update_data
-        )
-        if old_public_id:
-            if same_avatar_image:
-                cloudinary.uploader.destroy(old_public_id)
-                cloudinary.uploader.upload(
-                    same_avatar_image,
-                    public_id=public_id,
-                )
+        result = user.update_user(user_id, update_data)
 
-                # Transform the image: auto-crop to square aspect_ratio
-                auto_crop_url, _ = cloudinary_url(
-                    public_id, width=500, height=500, crop="auto", gravity="auto"
-                )
-                print(auto_crop_url)
 
-            else:
-                cloudinary.uploader.destroy(old_public_id)
-                cloudinary.uploader.upload(
-                    update_data["avatar_image"],
-                    public_id=public_id,
-                )
+        #result, public_id, old_public_id, same_avatar_image = user.update_user(
+            #ObjectId(user_id), update_data
+        #)
 
-                # Transform the image: auto-crop to square aspect_ratio
-                auto_crop_url, _ = cloudinary_url(
-                    public_id, width=500, height=500, crop="auto", gravity="auto"
-                )
-                print(auto_crop_url)
+        # if old_public_id:
+        #     if same_avatar_image:
+        #         cloudinary.uploader.destroy(old_public_id)
+        #         cloudinary.uploader.upload(
+        #             same_avatar_image,
+        #             public_id=public_id,
+        #         )
+
+        #         # Transform the image: auto-crop to square aspect_ratio
+        #         auto_crop_url, _ = cloudinary_url(
+        #             public_id, width=500, height=500, crop="auto", gravity="auto"
+        #         )
+        #         print(auto_crop_url)
+
+        #     else:
+        #         cloudinary.uploader.destroy(old_public_id)
+        #         cloudinary.uploader.upload(
+        #             update_data["avatar_image"],
+        #             public_id=public_id,
+        #         )
+
+        #         # Transform the image: auto-crop to square aspect_ratio
+        #         auto_crop_url, _ = cloudinary_url(
+        #             public_id, width=500, height=500, crop="auto", gravity="auto"
+        #         )
+        #         print(auto_crop_url)
 
     except Exception as e:
         return jsonify({"message": "Error updating user", "error": str(e)}), 400
