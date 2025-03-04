@@ -1,38 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, TextInput, Textarea, FileInput, Image, Modal } from "@mantine/core";
 import "./ManageStudents.css";
+import { createStudent, deleteStudent, fetchStudents, updateStudent } from "../reducers/studentSlice";
+import {useDispatch, useSelector} from "react-redux"
 
-const ManageStudents = ({ students, setStudents }) => {
+const ManageStudents = () => {
   const [newStudentName, setNewStudentName] = useState("");
-  const [newStudentUsername, setNewStudentUsername] = useState("");
-  const [newStudentEmail, setNewStudentEmail] = useState("");
   const [newStudentBio, setNewStudentBio] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingStudentId, setEditingStudentId] = useState(null);
   const [newStudentImage, setNewStudentImage] = useState(null);
+  const [students, setStudents] = useState([{}]);
 
-  const handleAddStudent = () => {
+  const dispatch = useDispatch()
+
+  // Get information from the globale state (store)
+  const studentInfo = useSelector(state => state.students.studentInfo)
+  const status = useSelector(state=> state.students.status)
+
+  useEffect(()=>{
+    // Only fetch students when the page is loaded or when new student is added
+    status === "idle" ? dispatch(fetchStudents()) : setStudents([{}]);
+    setStudents(studentInfo)
+  },[status, dispatch])
+
+  const handleAddStudent = async() => {
     if (!newStudentName.trim()) return;
 
     const newStudent = {
-      id: students.length + 1,
       name: newStudentName,
-      username: newStudentUsername,
-      email: newStudentEmail,
       bio: newStudentBio,
-      image: newStudentImage ? URL.createObjectURL(newStudentImage) : null,
+      avatar_image: "" // !! NEEDS to send form data
     };
-
-    setStudents([...students, newStudent]);
+    try{
+      dispatch(createStudent(newStudent))
+      //setStudents([...students, newStudent]);
+    }
+    catch (error){
+      console.log(error)
+    }
+      
+    
     resetForm();
   };
 
   const handleEditStudent = (id) => {
-    const studentToEdit = students.find((student) => student.id === id);
+    const studentToEdit = students.find((student) => student._id === id);
     setNewStudentName(studentToEdit.name);
     setNewStudentImage(studentToEdit.image);
-    setNewStudentUsername(studentToEdit.username);
-    setNewStudentEmail(studentToEdit.email);
     setNewStudentBio(studentToEdit.bio);
     setEditingStudentId(id);
     setShowForm(true);
@@ -40,32 +55,22 @@ const ManageStudents = ({ students, setStudents }) => {
 
   const handleSaveEdit = () => {
     if (!newStudentName.trim()) return;
-
-    const updatedStudents = students.map((student) =>
-      student.id === editingStudentId
-        ? {
-          ...student,
+    const updatedStudentData = {
           name: newStudentName,
-          username: newStudentUsername,
-          email: newStudentEmail,
           bio: newStudentBio,
-          image: newStudentImage ? URL.createObjectURL(newStudentImage) : student.image,
-        }
-        : student
-    );
-
-    setStudents(updatedStudents);
+          avatar_image: "" // !! NEEDS to send form data
+    };  
+    dispatch(updateStudent({"_id": editingStudentId, "updatedStudentData": updatedStudentData}))
+    //setStudents(updatedStudents);
     resetForm();
   };
 
   const handleDeleteStudent = (id) => {
-    setStudents(students.filter((student) => student.id !== id));
+    dispatch(deleteStudent(id))
   };
 
   const resetForm = () => {
     setNewStudentName("");
-    setNewStudentUsername("");
-    setNewStudentEmail("");
     setNewStudentBio("");
     setNewStudentImage(null);
     setEditingStudentId(null);
@@ -103,22 +108,6 @@ const ManageStudents = ({ students, setStudents }) => {
           onChange={(file) => setNewStudentImage(file)}
           accept="image/*"
         />
-        <TextInput
-          required
-          label="Username"
-          placeholder="Enter Username"
-          value={newStudentUsername}
-          onChange={(event) => setNewStudentUsername(event.target.value)}
-        />
-        <TextInput
-          required
-          label="Email"
-          placeholder="Email"
-          mt="md"
-          value={newStudentEmail}
-          onChange={(event) => setNewStudentEmail(event.target.value)}
-        />
-
         <Textarea
           required
           label="Student Bio"
@@ -144,8 +133,6 @@ const ManageStudents = ({ students, setStudents }) => {
           <thead>
             <tr>
               <th>Name</th>
-              <th>Username</th>
-              <th>Email</th>
               <th>Bio</th>
               <th>Image</th>
               <th>Actions</th>
@@ -153,15 +140,13 @@ const ManageStudents = ({ students, setStudents }) => {
           </thead>
           <tbody>
             {students.map((student) => (
-              <tr key={student.id}>
+              <tr key={student._id}>
                 <td>{student.name}</td>
-                <td>{student.username}</td>
-                <td>{student.email}</td>
                 <td>{student.bio}</td>
                 <td>
-                  {student.image ? (
+                  {student.avatar_image ? (
                     <Image
-                      src={student.image}
+                      src={student.avatar_image}
                       alt={`${student.name}'s photo`}
                       width={100}
                       height={100}
@@ -175,14 +160,14 @@ const ManageStudents = ({ students, setStudents }) => {
                   <Button
                     color="blue"
                     size="s"
-                    onClick={() => handleEditStudent(student.id)}
+                    onClick={() => handleEditStudent(student._id)}
                   >
                     Edit
                   </Button>
                   <Button
                     size="s"
                     color="red"
-                    onClick={() => handleDeleteStudent(student.id)}
+                    onClick={() => handleDeleteStudent(student._id)}
                   >
                     Delete
                   </Button>

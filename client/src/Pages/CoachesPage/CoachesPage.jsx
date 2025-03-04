@@ -12,10 +12,7 @@ const CoachesPage = () => {
     { id: 2, name: "Project Beta", student: "Jane Smith" },
   ]);
 
-  const [students, setStudents] = useState([
-    { id: 1, name: "John Doe", grade: "A", bio: "Great student!" },
-    { id: 2, name: "Jane Smith", grade: "B", bio: "Needs improvement." },
-  ]);
+  
 
   const [grades, setGrades] = useState([
     { id: 1, project: "Project Alpha", grade: "A" },
@@ -35,7 +32,7 @@ const CoachesPage = () => {
 
         {/* Manage Students Component */}
         <Grid.Col span={12} md={5} lg={5}>
-          <ManageStudents students={students} setStudents={setStudents} />
+          <ManageStudents />
         </Grid.Col>
       </Grid>
 

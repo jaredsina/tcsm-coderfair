@@ -6,10 +6,11 @@ from app.models.project import ProjectModel
 
 from bson import ObjectId
 
-studentmodel_routes = Blueprint('studentmodel_routes', __name__)
+studentmodel_routes = Blueprint("studentmodel_routes", __name__)
+
 
 # Define a simple route inside this blueprint
-@studentmodel_routes.route('/', methods=["GET"])
+@studentmodel_routes.route("/", methods=["GET"])
 def get_students():
     try:
         student = StudentModel(current_app.mongo)
@@ -17,21 +18,23 @@ def get_students():
 
     except Exception as e:
         return jsonify({"message": "Error getting students", "error": str(e)}), 400
-    
+
     return jsonify(students), 200
 
-@studentmodel_routes.route('/top/<string:coderfair_id>', methods=["GET"])
+
+@studentmodel_routes.route("/top/<string:coderfair_id>", methods=["GET"])
 def get_top_students(coderfair_id):
     try:
         project = ProjectModel(current_app.mongo)
         top_students = project.list_coderfair_projects(ObjectId(coderfair_id))
-    
+
     except Exception as e:
         return jsonify({"message": "Error getting students", "error": str(e)}), 400
-    
+
     return jsonify(top_students), 200
 
-@studentmodel_routes.route('/<string:student_id>', methods=["GET"])
+
+@studentmodel_routes.route("/<string:student_id>", methods=["GET"])
 def get_student(student_id):
     try:
         student_id = ObjectId(student_id)
@@ -40,10 +43,11 @@ def get_student(student_id):
 
     except Exception as e:
         return jsonify({"message": "Error getting student", "error": str(e)}), 400
-    
+
     return jsonify(student), 200
 
-@studentmodel_routes.route('/delete/<string:student_id>', methods=["DELETE"])
+
+@studentmodel_routes.route("/delete/<string:student_id>", methods=["DELETE"])
 def delete_student(student_id):
     try:
         student_id = ObjectId(student_id)
@@ -52,24 +56,32 @@ def delete_student(student_id):
 
     except Exception as e:
         return jsonify({"message": "Error deleting student", "error": str(e)}), 400
-    
-    return jsonify({"message": f"deleted student with ID {student_id}"}), 200
 
-@studentmodel_routes.route('/update/<string:student_id>', methods=["PUT"])
+    return jsonify({"student_id": str(student_id)}), 200
+
+
+@studentmodel_routes.route("/update/<string:student_id>", methods=["PUT"])
 def update_student(student_id):
     try:
         data = request.get_json()
-        update_data = data["update_data"]
+
+        update_data = {
+            "name": data["name"],
+            "bio": data["bio"],
+            "avatar_image": data["avatar_image"],
+        }
 
         student = StudentModel(current_app.mongo)
-        response = student.update_student(ObjectId(student_id), update_data)
+        student.update_student(ObjectId(student_id), update_data)
 
     except Exception as e:
         return jsonify({"message": "Error updating student", "error": str(e)}), 400
-    
-    return jsonify({"message": "Student updated sucessfully", "student_id": str(response)}), 201
 
-@studentmodel_routes.route('/create', methods=["POST"])
+    # Return a copy of update_data with the student_id added
+    return jsonify({**update_data, "_id": student_id}), 201
+
+
+@studentmodel_routes.route("/create", methods=["POST"])
 def create_student():
     try:
         data = request.get_json()
@@ -77,11 +89,17 @@ def create_student():
         bio = data["bio"]
         avatar_image = data["avatar_image"]
 
-        #print(name, bio, avatar_image) test
+        # print(name, bio, avatar_image) test
         new_student = StudentModel(current_app.mongo)
         response = new_student.create_student(name, bio, avatar_image)
-
     except Exception as e:
         return jsonify({"message": "Error creating student", "error": str(e)}), 400
 
-    return jsonify({'message': "Student created sucessfully", "student_id": str(response)}), 201
+    return jsonify(
+        {
+            "name": name,
+            "bio": bio,
+            "avatar_image": avatar_image,
+            "student_id": response,
+        }
+    ), 201
