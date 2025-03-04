@@ -20,13 +20,17 @@ def log_in(user_id):
     # retrive hasshed password from the database
     user = UserModel(current_app.mongo)
     user_id = ObjectId(user_id)
-    response = user.find_user_by_id(user_id)
-    print(response.password)
-    print(response["password"])
+    user_database = user.find_user_by_id(user_id)
+    print(user_database["password"])
 
-    hashed_password = data["hashed_password"]
-    is_valid = bcrypt.check_password_hash(hashed_password, "password")
-    return jsonify({"username": "here", "password": "List"})
+    hashed_password = (user_database["password"])
+    
+    is_valid = bcrypt.check_password_hash(hashed_password, password )
+    if is_valid:
+        user_database.pop("password", None)
+        return jsonify(user_database)
+    else:
+        return jsonify({"message":"Error incorrect password"})
 
 
 @auth_routes.route("/log_out")
