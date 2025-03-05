@@ -83,17 +83,24 @@ def update_student(student_id):
             }
 
         else:
-            cloudinary.uploader.upload(avatar_image, public_id = f"{name}_profile_image", overwrite = True)
+            cloudinary.uploader.upload(
+                avatar_image, public_id=f"{name}_profile_image", overwrite=True
+            )
             auto_crop_url, _ = cloudinary_url(
-                f"{name}_profile_image", width=500, height=500, crop="auto", gravity="auto")
+                f"{name}_profile_image",
+                width=500,
+                height=500,
+                crop="auto",
+                gravity="auto",
+            )
             avatar_image = auto_crop_url
-        
+
             update_data = {
                 "name": name,
                 "bio": bio,
                 "avatar_image": avatar_image,
             }
-            
+
         student = StudentModel(current_app.mongo)
         result = student.update_student(student_id, update_data)
 
@@ -108,30 +115,27 @@ def update_student(student_id):
 @studentmodel_routes.route("/create", methods=["POST"])
 def create_student():
     try:
-        data = request.get_json()
-        name = data["name"]
-        bio = data["bio"]
-        avatar_image = data["avatar_image"]
+        name = request.form.get("name")
+        bio = request.form.get("bio")
+        avatar_image = request.files.get("avatar_image")
 
-        # Upload an image
-        upload_result = cloudinary.uploader.upload(
-            avatar_image,
-            public_id=name,
-        )
-        print(upload_result["secure_url"])
+        if avatar_image:
+            cloudinary.uploader.upload(
+                avatar_image, public_id=f"{name}_profile_image", overwrite=True
+            )
+            auto_crop_url, _ = cloudinary_url(
+                f"{name}_profile_image",
+                width=500,
+                height=500,
+                crop="auto",
+                gravity="auto",
+            )
+            avatar_image = auto_crop_url
+        else:
+            avatar_image = ""
 
-        # Optimize delivery by resizing and applying auto-format and auto-quality
-        optimize_url, _ = cloudinary_url(name, fetch_format="auto", quality="auto")
-        print(optimize_url)
-
-        # Transform the image: auto-crop to square aspect_ratio
-        auto_crop_url, _ = cloudinary_url(
-            name, width=500, height=500, crop="auto", gravity="auto"
-        )
-        print(auto_crop_url)
-        # print(name, bio, avatar_image) test
-        new_student = StudentModel(current_app.mongo)
-        response = new_student.create_student(name, bio, avatar_image)
+        student = StudentModel(current_app.mongo)
+        response = student.create_student(name, bio, avatar_image)
 
     except Exception as e:
         return jsonify({"message": "Error creating student", "error": str(e)}), 400
