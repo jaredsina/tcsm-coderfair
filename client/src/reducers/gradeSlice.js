@@ -58,7 +58,7 @@ export const updateGrade = createAsyncThunk(
     try {
       const { _id, updatedGradeData } = info;
       const request = await axios.put(
-        `${gradeBaseUrl}/update`,
+        `${gradeBaseUrl}/update/${_id}`,
         updatedGradeData,
       );
       const response = request.data;

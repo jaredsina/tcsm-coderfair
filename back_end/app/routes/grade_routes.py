@@ -50,16 +50,23 @@ def delete_grade(grade_id):
 def update_grade(grade_id):
     try:
         data = request.get_json()
-        update_data = data["update_data"]
+
+        update_data = {
+            "concept_tier": data["concept_tier"],
+            "concept_mastery": data["concept_mastery"],
+            "presentation": data["presentation"],
+            "creativity": data["creativity"],
+            "overall_grade": data["overall_grade"],
+            "overall_comments": data["overall_comments"],
+        }
+
         grade = GradeModel(current_app.mongo)
         response = grade.update_grade(ObjectId(grade_id), update_data)
 
     except Exception as e:
         return jsonify({"message": "Error updating grade", "error": str(e)}), 400
 
-    return jsonify(
-        {"message": "Grade updated successfully", "grade_id": str(response)}
-    ), 201
+    return jsonify({**update_data, "_id": str(grade_id)}), 201
 
 
 @grade_routes.route("/create", methods=["POST"])

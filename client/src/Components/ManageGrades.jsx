@@ -18,25 +18,21 @@ const ManageGrades = () => {
     setGrades(gradeInfo);
   }, [status, dispatch]);
 
-  const updateGrade = (id, field, value) => {
-    setGrades(grades.map((grade) =>
-      grade.id === id ? { ...grade, [field]: value } : grade
-    ));
-  };
-
   const deleteGrade = (id) => {
-    setGrades(grades.filter((grade) => grade.id !== id));
+    dispatch(deleteGrade(id));
+    //setGrades(grades.filter((grade) => grade.id !== id));
   };
 
-  const handleEditClick = (grade) => {
+  const handleEditClick = (id) => {
+    const grade = grades.find((grade) => grade._id === id);
     setEditingGrade(grade);
     setShowEditModal(true);
   };
 
   const handleSaveEdit = () => {
-    setGrades(grades.map((grade) =>
-      grade.id === editingGrade.id ? editingGrade : grade
-    ));
+    if (!editingGrade.concept_tier || !editingGrade.concept_mastery || !editingGrade.presentation || !editingGrade.creativity) return;
+    
+    dispatch(updateGrade({"_id":editingGrade._id, "updatedGradeData": editingGrade}));
     setShowEditModal(false);
     setEditingGrade(null);
   };
@@ -65,8 +61,8 @@ const ManageGrades = () => {
                 <td>{grade.presentation}</td>
                 <td>{grade.creativity}</td>
                 <td>
-                  <Button color="blue" onClick={() => handleEditClick(grade)}>Edit</Button>
-                  <Button color="red" onClick={() => deleteGrade(grade.id)}>Delete</Button>
+                  <Button color="blue" onClick={() => handleEditClick(grade._id)}>Edit</Button>
+                  <Button color="red" onClick={() => deleteGrade(grade._id)}>Delete</Button>
                 </td>
               </tr>
             ))}
