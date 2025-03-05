@@ -32,7 +32,7 @@ def log_in(user_id):
         token_holder = create_access_token(identity=username)
         return jsonify({"user_database": user_database, "token_holder": token_holder})
     else:
-        return jsonify({"message": "Error incorrect password"})
+        return jsonify({"message": "Error incorrect password or username"})
 
 
 @auth_routes.route("/log_out")
