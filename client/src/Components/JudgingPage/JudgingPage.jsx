@@ -20,8 +20,6 @@ import { fetchStudents } from "../../reducers/studentSlice";
 import { fetchProjects } from "../../reducers/projectSlice";
 
 const data = ["Sina", "Francis", "David", "Terisa"];
-const projectsList = ["Project 1", "Project 2", "Project 3", "Project 4"];
-const studentData = ["Student 1", "Student 2", "Student 3", "Student 4"];
 const concept_tiers = ["Beginner", "Intermediate", "Advanced"];
 
 export function Judging() {
@@ -42,21 +40,25 @@ export function Form() {
 
 function JudgingPage() {
   const [newGrade, setNewGrade] = useState({})
+  const [selectedStudent, setSelectedStudent] = useState(null)
 
   const dispatch = useDispatch()
 
   const handleAddGrade = () => {
-    if (!newGrade.student || !newGrade.concept_mastery || !newGrade.creativity || !newGrade.presentation) return;
+    if (!selectedStudent || !newGrade.concept_mastery || !newGrade.creativity || !newGrade.presentation) return;
 
     newGrade.judge_id = "67a6204ac5e2b4a4e0bf6df6"
-    const studentId = studentInfo.find((student)=> student.name === newGrade.student)
-    const project = projectInfo.find((project)=> project.student_id === studentId._id)
+    // const studentId = studentInfo.find((student)=> student.name === selectedStudent)
+    const project = projectInfo.find((project)=> project.student_id === selectedStudent._id)
     newGrade.project_id = project?._id
-    newGrade.student_id = studentId?._id
+    newGrade.student_id = selectedStudent?._id
     newGrade.overall_grade = (newGrade.concept_mastery + newGrade.creativity + newGrade.presentation)
-    console.log(newGrade)
-    console.log(projectInfo)
     dispatch(createGrade(newGrade))
+  }
+
+  const handleEditStudent = (value) =>{
+    const studentId = studentInfo.find((student)=> student.name === value)
+    setSelectedStudent(studentId)
   }
 
   const gradeStatus = useSelector((state) => state.grades.status);
@@ -75,7 +77,6 @@ function JudgingPage() {
     //coachStatus === "idle" ? dispatch(fetchCoaches()) : null;
     
   }, [gradeStatus, studentStatus, projectStatus, dispatch])
-
 
   return (
     <main>
@@ -110,25 +111,14 @@ function JudgingPage() {
                     />
                   </List.Item>
                   <List.Item>
-                    <div>Project Name</div>
-                    <Select
-                      placeholder="Enter Your Response"
-                      data={projectInfo?.length > 1 ? projectInfo?.map((project) => project.name): null}
-                      searchable
-                      clearable
-                      value={newGrade.project}
-                      onChange={(value)=> setNewGrade({...newGrade, project: value})}
-                    />
-                  </List.Item>
-                  <List.Item>
                     <div>Name of Coder</div>
                     <Select
                       placeholder="Enter Your Response"
                       data={studentInfo?.length > 1 ? studentInfo?.map((student) => student.name): null}
                       searchable
                       clearable
-                      value={newGrade.student}
-                      onChange={(value)=> setNewGrade({...newGrade, student: value})}
+                      value={selectedStudent?.name}
+                      onChange={(value)=> handleEditStudent(value)}
                     />
                   </List.Item>
                   <List.Item>
@@ -141,6 +131,10 @@ function JudgingPage() {
                       value={newGrade.concept_tier}
                       onChange={(value)=> setNewGrade({...newGrade, concept_tier: value})}
                     />
+                  </List.Item>
+                  <List.Item>
+                    <div>Project Name</div>
+                    <Text>{projectInfo.find((project)=> project.student_id === selectedStudent?._id)?.name || "ERROR: COULDNT FIND PROJECT, SELECT ANOTHER STUDENT"}</Text>
                   </List.Item>
                 </Flex>
                 <Flex direction={"column"} gap={"md"} flex>
