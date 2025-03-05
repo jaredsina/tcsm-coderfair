@@ -67,7 +67,7 @@ def update_project(project_id):
         name = request.form.get("name")
         description = request.form.get("description")
         category = request.form.get("category")
-        project_image = request.form.get("project_image")
+        project_image = request.files.get("project_image")
         presentation_video_url = request.form.get("presentation_video_url")
         code_access_link = request.form.get("code_access_link")
         coding_language = request.form.get("coding_language")
