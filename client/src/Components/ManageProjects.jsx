@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Table, Title, TextInput, Textarea, MultiSelect, Modal, TagsInput, Autocomplete, FileInput } from "@mantine/core";
+import { Button, Table, Title, TextInput, Textarea, MultiSelect, Modal, TagsInput, Autocomplete, FileInput, Select } from "@mantine/core";
 import Delete from "./Delete";
 import { fetchProjects, createProject, deleteProject, updateProject } from "../reducers/projectSlice";
 
@@ -11,7 +11,7 @@ const ManageProjects = () => {
   const [newUsername, setNewUsername] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newCodeLink, setNewCodeLink] = useState("");
-  const [newLanguages, setNewLanguages] = useState([]);
+  const [newLanguages, setNewLanguages] = useState("");
   const [newNotes, setNewNotes] = useState("");
   const [newProjectImage, setNewProjectImage] = useState(null);
   const [newStudentName, setNewStudentName] = useState(""); // New field for student name
@@ -24,6 +24,7 @@ const ManageProjects = () => {
   const projectsInfo = useSelector((state) => state.projects.projects);
   const status = useSelector((state) => state.projects.status);
   
+  console.log(newLanguages)
   useEffect(() => {
     status === "idle" ? dispatch(fetchProjects()) : setProjects([{}]);
     setProjects(projectsInfo);
@@ -40,23 +41,27 @@ const ManageProjects = () => {
   const handleAddProject = () => {
     if (!newProjectName.trim() || !newStudentName.trim()) return;
   
-    const newProject = {
-      name: newProjectName,
-      student_id: "67afabf22a48fbe8a0448ca8", // !! Needs to be dynamic
-      coderfair_id: "67b4f809f02dfc6eecbeed34", // !! NEEDS to be dynamic
-      description: newDescription,
-      presentation_video_url: newVideoURL,
-      code_access_link: newCodeLink,
-      coding_language: newLanguages,
-      category:"",
-      project_username: newUsername,
-      project_password: newPassword,
-      notes: newNotes,
-      project_image: newProjectImage
-    };
+    const formData = new FormData();
+
+    // Append text fields
+    formData.append("name", newProjectName);
+    formData.append("student_id", "67afabf22a48fbe8a0448ca8"); // Dynamically change this value
+    formData.append("coderfair_id", "67b4f809f02dfc6eecbeed34"); // Dynamically change this value
+    formData.append("description", newDescription);
+    formData.append("presentation_video_url", newVideoURL);
+    formData.append("code_access_link", newCodeLink);
+    formData.append("coding_language", newLanguages);
+    formData.append("category", "");
+    formData.append("project_username", newUsername);
+    formData.append("project_password", newPassword);
+    formData.append("notes", newNotes);
+    
+    // Append the image file (assuming `newProjectImage` is a file input)
+    formData.append("project_image", newProjectImage);
+    
 
     try {
-      dispatch(createProject(newProject));
+      dispatch(createProject(formData));
     }
     catch (error) {
       console.log(error);
@@ -70,6 +75,8 @@ const ManageProjects = () => {
     setNewDescription(projectToEdit.description);
     setNewVideoURL(projectToEdit.presentation_video_url);
     setNewCodeLink(projectToEdit.code_access_link);
+    console.log(projectToEdit.coding_language);
+    // Fix project trying to split an empty array
     setNewLanguages(projectToEdit.coding_language);
     setNewUsername(projectToEdit.project_username);
     setNewPassword(projectToEdit.project_password);
@@ -82,21 +89,25 @@ const ManageProjects = () => {
     if (!newProjectName.trim()) return;
     //if (!projects.student_id.trim() || !projects.coderfair_id.trim()) return;
     // !! activate these when dynaminc student and coderfair ids are available
-    const updatedProjectData = {
-      name: newProjectName,
-      student_id: "67afabf22a48fbe8a0448ca8", // !! Needs to be dynamic
-      coderfair_id: "67b4f809f02dfc6eecbeed34", // !! NEEDS to be dynamic
-      description: newDescription,
-      presentation_video_url: newVideoURL,
-      code_access_link: newCodeLink,
-      coding_language: newLanguages,
-      category:"",
-      project_username: newUsername,
-      project_password: newPassword,
-      notes: newNotes,
-      project_image: "" // !! NEEDS to send form data
-    };
-    dispatch(updateProject({"_id": editingProjectId, "updatedProjectData": updatedProjectData}));
+    const formData = new FormData();
+
+    // Append text fields
+    formData.append("name", newProjectName);
+    formData.append("student_id", "67afabf22a48fbe8a0448ca8"); // Dynamically change this value
+    formData.append("coderfair_id", "67b4f809f02dfc6eecbeed34"); // Dynamically change this value
+    formData.append("description", newDescription);
+    formData.append("presentation_video_url", newVideoURL);
+    formData.append("code_access_link", newCodeLink);
+    formData.append("coding_language", newLanguages);
+    formData.append("category", "");
+    formData.append("project_username", newUsername);
+    formData.append("project_password", newPassword);
+    formData.append("notes", newNotes);
+    
+    // Append the image file (assuming `newProjectImage` is a file input)
+    formData.append("project_image", newProjectImage);
+
+    dispatch(updateProject({"_id": editingProjectId, "updatedProjectData": formData}));
     resetForm();
   };
 
@@ -106,8 +117,10 @@ const ManageProjects = () => {
     setNewDescription("");
     setNewVideoURL("");
     setNewCodeLink("");
-    setNewLanguages([]);
+    setNewLanguages("");
     setNewNotes("");
+    setNewUsername("");
+    setNewPassword("");
     setNewProjectImage(null);
     setEditingProjectId(null);
     setShowForm(false);
@@ -166,13 +179,17 @@ const ManageProjects = () => {
               value={newCodeLink}
               onChange={(event) => setNewCodeLink(event.target.value)}
             />
-            <MultiSelect
+            <Select
               label="Coding Languages Used"
-              data={['HTML', 'CSS', 'JavaScript', 'Python', 'Java', 'C++', 'C#', 'C', 'Ruby', 'PHP', 'Swift', 'TypeScript', 'Rust', 'Kotlin', 'R', 'Scratch/Block Based', 'SQL',]}
-              value={newLanguages}
+              data={['HTML/CSS/Javascript','React', 'Python', 'Java', 'C++', 'C#', 'C', 'Ruby', 'PHP', 'Swift', 'TypeScript', 'Rust', 'Kotlin', 'R', 'Scratch/Block Based', 'SQL',]}
+              value={newLanguages ? newLanguages : null}
               onChange={setNewLanguages}
+              styles={{dropdown: { zIndex: 10000 }}}
+              clearable
+              searchable
               required
             />
+            
             <TextInput
             label="Project Username"
             placeholder="Enter username"
@@ -236,6 +253,7 @@ const ManageProjects = () => {
                   >
                     Delete
                   </Button>
+                  
                 </td>
               </tr>
             )):null}

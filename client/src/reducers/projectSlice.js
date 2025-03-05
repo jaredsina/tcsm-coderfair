@@ -41,7 +41,7 @@ export const createProject = createAsyncThunk(
   async (project, { rejectWithValue }) => {
     try {
       const request = await axios.post(`${projectBaseUrl}/create`, project, {
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
       const response = request.data;
       notifications.show({
