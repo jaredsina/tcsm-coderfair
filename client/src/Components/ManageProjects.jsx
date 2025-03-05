@@ -1,118 +1,127 @@
-import React, { useState } from "react";
-import { Button, Table, Title, TextInput, Textarea, MultiSelect, Modal, TagsInput, Autocomplete } from "@mantine/core";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Table, Title, TextInput, Textarea, MultiSelect, Modal, TagsInput, Autocomplete, FileInput, Select } from "@mantine/core";
 import Delete from "./Delete";
-const ManageProjects = ({ projects, setProjects }) => {
+import { fetchProjects, createProject, deleteProject, updateProject } from "../reducers/projectSlice";
+
+const ManageProjects = () => {
   const [newProjectName, setNewProjectName] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [newVideoURL, setNewVideoURL] = useState("");
+  const [newUsername, setNewUsername] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [newCodeLink, setNewCodeLink] = useState("");
-  const [newLanguages, setNewLanguages] = useState([]);
+  const [newLanguages, setNewLanguages] = useState("");
   const [newNotes, setNewNotes] = useState("");
+  const [newProjectImage, setNewProjectImage] = useState(null);
   const [newStudentName, setNewStudentName] = useState(""); // New field for student name
   const [showForm, setShowForm] = useState(false);
   const [editingProjectId, setEditingProjectId] = useState(null);
-  const [formData, setFormData] = useState({
-    student_names: [], // Changed to array for multiple students
-    coderfair_id: "",
-    name: "",
-    description: "",
-    presentation_video_url: "",
-    code_access_link: "",
-    coding_language: [],
-    project_username: "",
-    project_password: "",
-    notes: "",
-  });
+  const [projects, setProjects] = useState([{}]);
 
-  const studentNames = [
-    'Joshua Sambol',
-    'Joshua Sambol1',
-    'Joshua Sambol2',
-    'Joshua Sambol3',
-    'Joshua Sambol4',
-    'Joshua Sambol5',
-    'Joshua Sambol6',
-    'Joshua Sambol7',
-  ];
+  const dispatch = useDispatch();
+
+  const projectsInfo = useSelector((state) => state.projects.projects);
+  const status = useSelector((state) => state.projects.status);
+  
+  console.log(newLanguages)
+  useEffect(() => {
+    status === "idle" ? dispatch(fetchProjects()) : setProjects([{}]);
+    setProjects(projectsInfo);
+  }, [status, dispatch]);
 
   const handleChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setProjects((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleDeleteProject = (id) => {
-    const updatedProjects = projects.filter(project => project.id !== id);
-    setProjects(updatedProjects);
+    dispatch(deleteProject(id));
   };
 
   const handleAddProject = () => {
-    if (!formData.name.trim() || !formData.description.trim()) return;
+    if (!newProjectName.trim() || !newStudentName.trim()) return;
+  
+    const formData = new FormData();
 
-    const newProject = {
-      id: Date.now(),
-      studentNames: formData.student_names, // Now an array of student names
-      name: formData.name,
-      description: formData.description,
-      videoURL: formData.presentation_video_url,
-      codeLink: formData.code_access_link,
-      languages: formData.coding_language,
-      notes: formData.notes,
-    };
+    // Append text fields
+    formData.append("name", newProjectName);
+    formData.append("student_id", "67afabf22a48fbe8a0448ca8"); // Dynamically change this value
+    formData.append("coderfair_id", "67b4f809f02dfc6eecbeed34"); // Dynamically change this value
+    formData.append("description", newDescription);
+    formData.append("presentation_video_url", newVideoURL);
+    formData.append("code_access_link", newCodeLink);
+    formData.append("coding_language", newLanguages);
+    formData.append("category", "");
+    formData.append("project_username", newUsername);
+    formData.append("project_password", newPassword);
+    formData.append("notes", newNotes);
+    
+    // Append the image file (assuming `newProjectImage` is a file input)
+    formData.append("project_image", newProjectImage);
+    
 
-    setProjects([...projects, newProject]);
+    try {
+      dispatch(createProject(formData));
+    }
+    catch (error) {
+      console.log(error);
+    }
     resetForm();
   };
 
   const handleEditProject = (id) => {
-    const projectToEdit = projects.find((project) => project.id === id);
-    setFormData({
-      ...formData,
-      student_names: projectToEdit.studentNames, // Now handling array of names
-      name: projectToEdit.name,
-      description: projectToEdit.description,
-      presentation_video_url: projectToEdit.videoURL,
-      code_access_link: projectToEdit.codeLink,
-      coding_language: projectToEdit.languages,
-      notes: projectToEdit.notes,
-    });
+    const projectToEdit = projects.find((project) => project._id === id);
+    setNewProjectName(projectToEdit.name);
+    setNewDescription(projectToEdit.description);
+    setNewVideoURL(projectToEdit.presentation_video_url);
+    setNewCodeLink(projectToEdit.code_access_link);
+    console.log(projectToEdit.coding_language);
+    // Fix project trying to split an empty array
+    setNewLanguages(projectToEdit.coding_language);
+    setNewUsername(projectToEdit.project_username);
+    setNewPassword(projectToEdit.project_password);
+    setNewNotes(projectToEdit.notes);
     setEditingProjectId(id);
     setShowForm(true);
   };
 
   const handleSaveEdit = () => {
-    if (!formData.name.trim() || !formData.description.trim()) return;
+    if (!newProjectName.trim()) return;
+    //if (!projects.student_id.trim() || !projects.coderfair_id.trim()) return;
+    // !! activate these when dynaminc student and coderfair ids are available
+    const formData = new FormData();
 
-    const updatedProjects = projects.map((project) =>
-      project.id === editingProjectId
-        ? {
-          ...project,
-          studentNames: formData.student_names, // Now handling array of names
-          name: formData.name,
-          description: formData.description,
-          videoURL: formData.presentation_video_url,
-          codeLink: formData.code_access_link,
-          languages: formData.coding_language,
-          notes: formData.notes,
-        }
-        : project
-    );
+    // Append text fields
+    formData.append("name", newProjectName);
+    formData.append("student_id", "67afabf22a48fbe8a0448ca8"); // Dynamically change this value
+    formData.append("coderfair_id", "67b4f809f02dfc6eecbeed34"); // Dynamically change this value
+    formData.append("description", newDescription);
+    formData.append("presentation_video_url", newVideoURL);
+    formData.append("code_access_link", newCodeLink);
+    formData.append("coding_language", newLanguages);
+    formData.append("category", "");
+    formData.append("project_username", newUsername);
+    formData.append("project_password", newPassword);
+    formData.append("notes", newNotes);
+    
+    // Append the image file (assuming `newProjectImage` is a file input)
+    formData.append("project_image", newProjectImage);
 
-    setProjects(updatedProjects);
+    dispatch(updateProject({"_id": editingProjectId, "updatedProjectData": formData}));
     resetForm();
   };
 
   const resetForm = () => {
-    setFormData({
-      student_names: [],
-      coderfair_id: "",
-      name: "",
-      description: "",
-      presentation_video_url: "",
-      code_access_link: "",
-      coding_language: [],
-      project_username: "",
-      project_password: "",
-      notes: "",
-    });
+    setNewProjectName("");
+    setNewStudentName("");
+    setNewDescription("");
+    setNewVideoURL("");
+    setNewCodeLink("");
+    setNewLanguages("");
+    setNewNotes("");
+    setNewUsername("");
+    setNewPassword("");
+    setNewProjectImage(null);
     setEditingProjectId(null);
     setShowForm(false);
   };
@@ -150,6 +159,14 @@ const ManageProjects = ({ projects, setProjects }) => {
               onChange={(event) => setNewDescription(event.target.value)}
               required
             />
+            <FileInput 
+            size="md"
+            radius="xl"
+            label="Project Image"
+            placeholder="Click to upload image"
+            onChange={(file) => setNewProjectImage(file)}
+            accept="image/*"
+            />
             <TextInput
               label="Presentation Video URL"
               placeholder="Enter URL"
@@ -162,12 +179,28 @@ const ManageProjects = ({ projects, setProjects }) => {
               value={newCodeLink}
               onChange={(event) => setNewCodeLink(event.target.value)}
             />
-            <MultiSelect
+            <Select
               label="Coding Languages Used"
-              data={['HTML', 'CSS', 'JavaScript', 'Python', 'Java', 'C++', 'C#', 'C', 'Ruby', 'PHP', 'Swift', 'TypeScript', 'Rust', 'Kotlin', 'R', 'Scratch/Block Based', 'SQL',]}
-              value={newLanguages}
+              data={['HTML/CSS/Javascript','React', 'Python', 'Java', 'C++', 'C#', 'C', 'Ruby', 'PHP', 'Swift', 'TypeScript', 'Rust', 'Kotlin', 'R', 'Scratch/Block Based', 'SQL',]}
+              value={newLanguages ? newLanguages : null}
               onChange={setNewLanguages}
+              styles={{dropdown: { zIndex: 10000 }}}
+              clearable
+              searchable
               required
+            />
+            
+            <TextInput
+            label="Project Username"
+            placeholder="Enter username"
+            value={newUsername}
+            onChange={(event) => setNewUsername(event.target.value)}
+            />
+            <TextInput
+            label="Project Password"
+            placeholder="Enter password"
+            value={newPassword}
+            onChange={(event) => setNewPassword(event.target.value)}
             />
             <Textarea
               label="Notes"
@@ -201,28 +234,29 @@ const ManageProjects = ({ projects, setProjects }) => {
             </tr>
           </thead>
           <tbody>
-            {projects.map((project) => (
-              <tr key={project.id}>
+            {projects ? projects.map((project) => (
+              <tr key={project._id}>
                 <td>{project.name}</td>
-                <td>{project.studentNames?.join(", ")}</td>
+                <td>{project.student?.[0]?.name || "Can't Find Student Name"}</td>
                 <td className="actions-column">
                   <Button
                     color="blue"
                     size="s"
-                    onClick={() => handleEditProject(project.id)}
+                    onClick={() => handleEditProject(project._id)}
                   >
                     Edit
                   </Button>
                   <Button
                     size="s"
                     color="red"
-                    onClick={() => handleDeleteProject(project.id)}
+                    onClick={() => handleDeleteProject(project._id)}
                   >
                     Delete
                   </Button>
+                  
                 </td>
               </tr>
-            ))}
+            )):null}
           </tbody>
         </table>
       </div>

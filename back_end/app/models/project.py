@@ -86,9 +86,9 @@ class ProjectModel:
                     {"$limit": 7},
                     {
                         "$project": {
-                            "_id": 0,
-                            "student_id": 0,
-                            "coderfair_id": 0,
+                            "_id": {"$toString": "$_id"},
+                            "student_id": {"$toString": "$student_id"},
+                            "coderfair_id": {"$toString": "$coderfair_id"},
                             "name": 0,
                             "description": 0,
                             "category": 0,
@@ -116,9 +116,38 @@ class ProjectModel:
         )
 
     # list all projects
-    def list___all_projects(self):
+    def list_all_projects(self):
         return list(
-            self.collection.find({}, {"_id": 0, "student_id": 0, "coderfair_id": 0})
+            self.collection.aggregate(
+                [
+                    {
+                        "$lookup": {
+                            "from": "students",
+                            "localField": "student_id",
+                            "foreignField": "_id",
+                            "as": "student",
+                        }
+                    },
+                    {
+                        "$project": {
+                            "_id": {"$toString": "$_id"},  # Convert ObjectId to string
+                            "student_id": {"$toString": "$student_id"},
+                            "coderfair_id": {"$toString": "$coderfair_id"},
+                            "name": 1,
+                            "description": 1,
+                            "category": 1,
+                            "project_image": 1,
+                            "presentation_video_url": 1,
+                            "code_access_link": 1,
+                            "coding_language": 1,
+                            "project_username": 1,
+                            "project_password": 1,
+                            "notes": 1,
+                            "student.name": 1,
+                        }
+                    },
+                ]
+            )
         )
 
     def update_project(self, id, update_data):

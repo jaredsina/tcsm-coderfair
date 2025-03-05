@@ -2,11 +2,13 @@ import { configureStore } from '@reduxjs/toolkit';
 import userReducer from '../reducers/userSlice';
 import judgeReducer from '../reducers/judgeSlice';
 import studentReducer from '../reducers/studentSlice';
+import projectReducer from '../reducers/projectSlice';
 
 export const store = configureStore({
   reducer: {
     session: userReducer, // session information (user, accessToken, refreshToken)
     judges: judgeReducer, // judges information
     students: studentReducer,
+    projects: projectReducer,
   },
 });
