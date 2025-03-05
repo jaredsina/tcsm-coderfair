@@ -1,6 +1,7 @@
 # app/routes/judge_route.py
 from flask import Blueprint, jsonify, current_app, request
 from app.models.judge import JudgeModel
+from flask_jwt_extended import jwt_required
 
 # used to convert string to ObjectId
 from bson import ObjectId
@@ -41,6 +42,7 @@ def get_judge(judge_id):
 
 
 @judge_routes.route("/delete/<string:judge_id>", methods=["DELETE"])
+@jwt_required()
 def delete_judge(judge_id):
     try:
         # Need to convert the string to an ObjectId to match the data type in the database
@@ -57,6 +59,7 @@ def delete_judge(judge_id):
 
 
 @judge_routes.route("/update/<string:judge_id>", methods=["PUT"])
+@jwt_required()
 def update_judge(judge_id):
     try:
         # we will get the judge_id from the request json
@@ -80,6 +83,7 @@ def update_judge(judge_id):
 
 
 @judge_routes.route("/create", methods=["POST"])
+@jwt_required()
 def create_judge():
     try:
         # we will get the judge data from the request json

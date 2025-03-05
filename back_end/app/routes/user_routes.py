@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify, request, current_app
 from flask_bcrypt import Bcrypt
 import cloudinary
 from cloudinary.utils import cloudinary_url
-
+from flask_jwt_extended import jwt_required
 
 from bson import ObjectId
 
@@ -13,6 +13,7 @@ user_routes = Blueprint("user_routes", __name__)
 
 # Define a simple route inside this blueprint
 @user_routes.route("/<string:user_id>")
+@jwt_required()
 def get_users(user_id):
     try:
         user_id = ObjectId(user_id)
@@ -27,6 +28,7 @@ def get_users(user_id):
 
 # route for creating users
 @user_routes.route("/create", methods=["POST"])
+@jwt_required()
 def create_users():
     try:
         # Use form data instead of JSON
@@ -77,6 +79,7 @@ def create_users():
 
 
 @user_routes.route("/delete/<string:user_id>", methods=["DELETE"])
+@jwt_required()
 def delete_user(user_id):
     try:
         user_id = ObjectId(user_id)
@@ -90,6 +93,7 @@ def delete_user(user_id):
 
 
 @user_routes.route("/update/<string:user_id>", methods=["PUT"])
+@jwt_required()
 def update_user(user_id):
     try:
         user_id = ObjectId(user_id)
