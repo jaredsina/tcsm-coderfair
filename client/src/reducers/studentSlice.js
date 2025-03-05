@@ -27,9 +27,7 @@ export const fetchStudents = createAsyncThunk(
           'An error has occured trying to get students from the database',
         color: 'red',
       });
-      return rejectWithValue(
-        err.response?.data || { message: 'Unknown error' },
-      );
+      return err.response.data;
     }
   },
 );
@@ -40,7 +38,7 @@ export const createStudent = createAsyncThunk(
   async (student) => {
     try {
       const request = await axios.post(`${studentBaseUrl}/create`, student, {
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
       const response = request.data;
       notifications.show({
@@ -55,9 +53,7 @@ export const createStudent = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return rejectWithValue(
-        err.response?.data || { message: 'Unknown error' },
-      );
+      return err.response.data;
     }
   },
 );
@@ -85,9 +81,7 @@ export const updateStudent = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return rejectWithValue(
-        err.response?.data || { message: 'Unknown error' },
-      );
+      return err.response.data;
     }
   },
 );
@@ -111,9 +105,7 @@ export const deleteStudent = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return rejectWithValue(
-        err.response?.data || { message: 'Unknown error' },
-      );
+      return err.response.data;
     }
   },
 );
@@ -127,9 +119,7 @@ export const getStudentById = createAsyncThunk(
       const response = request.data;
       return response;
     } catch (err) {
-      return rejectWithValue(
-        err.response?.data || { message: 'Unknown error' },
-      );
+      return err.response.data;
     }
   },
 );

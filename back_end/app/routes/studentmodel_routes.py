@@ -146,6 +146,6 @@ def create_student():
             "name": name,
             "bio": bio,
             "avatar_image": avatar_image,
-            "student_id": response,
+            "_id": response,
         }
     ), 201

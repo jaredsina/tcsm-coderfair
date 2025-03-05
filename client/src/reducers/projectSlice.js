@@ -27,9 +27,7 @@ export const fetchProjects = createAsyncThunk(
           'An error has occured trying to get projects from the database',
         color: 'red',
       });
-      return rejectWithValue(
-        err.response?.data || { message: 'Unknown error' },
-      );
+      return err.response.data;
     }
   },
 );
@@ -56,9 +54,7 @@ export const createProject = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return rejectWithValue(
-        err.response?.data || { message: 'Unknown error' },
-      );
+      return err.response.data;
     }
   },
 );
@@ -112,9 +108,7 @@ export const deleteProject = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return rejectWithValue(
-        err.response?.data || { message: 'Unknown error' },
-      );
+      return err.response.data;
     }
   },
 );
@@ -129,9 +123,7 @@ export const getProjectById = createAsyncThunk(
       const response = request.data;
       return response;
     } catch (err) {
-      return rejectWithValue(
-        err.response?.data || { message: 'Unknown error' },
-      );
+      return err.response.data;
     }
   },
 );
