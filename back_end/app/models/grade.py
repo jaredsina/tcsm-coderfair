@@ -27,7 +27,34 @@ class GradeModel:
             "overall_comments": overall_comments,
         }
         result = self.collection.insert_one(grade_data)
-        return str(result.inserted_id)
+        info = self.collection.aggregate(
+            [
+                {"$match": {"_id": result.inserted_id}},
+                {
+                    "$lookup": {
+                        "from": "projects",
+                        "localField": "project_id",
+                        "foreignField": "_id",
+                        "as": "project",
+                    }
+                },
+                {
+                    "$project": {
+                        "_id": {"$toString": "$_id"},
+                        "concept_tier": 1,
+                        "concept_mastery": 1,
+                        "presentation": 1,
+                        "creativity": 1,
+                        "overall_grade": 1,
+                        "judge_id": {"$toString": "$judge_id"},
+                        "project_id": {"$toString": "$project_id"},
+                        "overall_comments": 1,
+                        "project.name": 1,
+                    }
+                },
+            ]
+        )
+        return list(info)
 
     def find_grade_by_id(self, id):
         return list(

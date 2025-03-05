@@ -10,12 +10,20 @@ import {
   Title,
   Autocomplete,
   MultiSelect,
+  Select,
 } from "@mantine/core";
 import { Podium } from "../../Pages/HomePage/HomePage";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { createGrade, fetchGrades } from "../../reducers/gradeSlice";
+import { fetchStudents } from "../../reducers/studentSlice";
+import { fetchProjects } from "../../reducers/projectSlice";
+
 const data = ["Sina", "Francis", "David", "Terisa"];
 const projectsList = ["Project 1", "Project 2", "Project 3", "Project 4"];
 const studentData = ["Student 1", "Student 2", "Student 3", "Student 4"];
-const languageList = ['HTML', 'CSS', 'JavaScript', 'Python', 'Java', 'C++', 'C#', 'C', 'Ruby', 'PHP', 'Swift', 'TypeScript', 'Rust', 'Kotlin', 'R', 'Scratch/Block Based', 'SQL',]
+const concept_tiers = ["Beginner", "Intermediate", "Advanced"];
+
 export function Judging() {
   return (
     <Title className="PageTitle" ta="center" order={1}>
@@ -33,6 +41,42 @@ export function Form() {
 
 
 function JudgingPage() {
+  const [newGrade, setNewGrade] = useState({})
+
+  const dispatch = useDispatch()
+
+  const handleAddGrade = () => {
+    if (!newGrade.student || !newGrade.concept_mastery || !newGrade.creativity || !newGrade.presentation) return;
+
+    newGrade.judge_id = "67a6204ac5e2b4a4e0bf6df6"
+    const studentId = studentInfo.find((student)=> student.name === newGrade.student)
+    const project = projectInfo.find((project)=> project.student_id === studentId._id)
+    newGrade.project_id = project?._id
+    newGrade.student_id = studentId?._id
+    newGrade.overall_grade = (newGrade.concept_mastery + newGrade.creativity + newGrade.presentation)
+    console.log(newGrade)
+    console.log(projectInfo)
+    dispatch(createGrade(newGrade))
+  }
+
+  const gradeStatus = useSelector((state) => state.grades.status);
+  const studentStatus = useSelector((state) => state.students.status);
+  const projectStatus = useSelector((state) => state.projects.status);
+
+  const gradeInfo = useSelector((state) => state.grades.grades);
+  const studentInfo = useSelector((state) => state.students.studentInfo);
+  const projectInfo = useSelector((state) => state.projects.projects);
+  //const coachInfo = useSelector((state) => state.coaches.coachInfo);
+
+  useEffect(() => {
+    gradeStatus === "idle" ? dispatch(fetchGrades()) : null;
+    studentStatus === "idle" ? dispatch(fetchStudents()) : null;
+    projectStatus === "idle" ? dispatch(fetchProjects()) : null;
+    //coachStatus === "idle" ? dispatch(fetchCoaches()) : null;
+    
+  }, [gradeStatus, studentStatus, projectStatus, dispatch])
+
+
   return (
     <main>
       <Judging />
@@ -58,7 +102,7 @@ function JudgingPage() {
                 <Flex direction={"column"} gap={"md"}>
                   <List.Item>
                     <div>Your Name</div>
-                    <Autocomplete
+                    <Select
                       placeholder="Enter Your Response"
                       data={data}
                       searchable
@@ -67,51 +111,53 @@ function JudgingPage() {
                   </List.Item>
                   <List.Item>
                     <div>Project Name</div>
-                    <Autocomplete
+                    <Select
                       placeholder="Enter Your Response"
-                      data={projectsList}
+                      data={projectInfo?.length > 1 ? projectInfo?.map((project) => project.name): null}
                       searchable
                       clearable
+                      value={newGrade.project}
+                      onChange={(value)=> setNewGrade({...newGrade, project: value})}
                     />
                   </List.Item>
                   <List.Item>
                     <div>Name of Coder</div>
-                    <Autocomplete
+                    <Select
                       placeholder="Enter Your Response"
-                      data={studentData}
+                      data={studentInfo?.length > 1 ? studentInfo?.map((student) => student.name): null}
                       searchable
                       clearable
+                      value={newGrade.student}
+                      onChange={(value)=> setNewGrade({...newGrade, student: value})}
                     />
                   </List.Item>
                   <List.Item>
-                    <div>Programing Language</div>
-                    <MultiSelect
+                    <div>Concept Tier</div>
+                    <Select
                       placeholder="Enter Your Response"
-                      data={languageList}
+                      data={concept_tiers}
                       searchable
                       clearable
+                      value={newGrade.concept_tier}
+                      onChange={(value)=> setNewGrade({...newGrade, concept_tier: value})}
                     />
                   </List.Item>
                 </Flex>
                 <Flex direction={"column"} gap={"md"} flex>
                   <List.Item>
-                    <div>Quality</div>
-                    <Rating defaultValue={0} color="green" />
+                    <div>Concept Mastery</div>
+                    <Rating defaultValue={0} color="green" value={newGrade.concept_mastery} onChange={(value)=>setNewGrade({...newGrade, concept_mastery: value})} />
                   </List.Item>
                   <List.Item>
                     <div>Creativity</div>
-                    <Rating defaultValue={0} color="green" />
-                  </List.Item>
-                  <List.Item>
-                    <div>Complexity</div>
-                    <Rating defaultValue={0} color="green" />
+                    <Rating defaultValue={0} color="green" value={newGrade.creativity} onChange={(value)=> setNewGrade({...newGrade, creativity: value})}/>
                   </List.Item>
                   <List.Item>
                     <div>Presentation</div>
-                    <Rating defaultValue={0} color="green" />
+                    <Rating defaultValue={0} color="green" value={newGrade.presentation} onChange={(value)=> setNewGrade({...newGrade, presentation: value})}/>
                   </List.Item>
                   <List.Item>
-                    <Textarea size="md" radius="lg" label="Overall Review" />
+                    <Textarea size="md" radius="lg" label="Overall Review" value={newGrade.overall_comments} onChange={(e)=> setNewGrade({...newGrade, overall_comments: e.target.value})} />
                   </List.Item>
                   <Button
                     variant="filled"
@@ -119,6 +165,8 @@ function JudgingPage() {
                     size="md"
                     className="Submit"
                     w="fit-content"
+                    onClick={handleAddGrade
+                    }
                   >
                     Submit
                   </Button>

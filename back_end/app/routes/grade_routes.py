@@ -97,6 +97,4 @@ def create_grade():
     except Exception as e:
         return jsonify({"message": "Error creating grade", "error": str(e)}), 400
 
-    return jsonify(
-        {"message": "Grade created sucessfully", "grade_id": str(response)}
-    ), 201
+    return jsonify(response[0]), 201
