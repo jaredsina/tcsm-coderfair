@@ -39,7 +39,7 @@ const ManageProjects = () => {
 
   const handleAddProject = () => {
     if (!newProjectName.trim() || !newStudentName.trim()) return;
-
+  
     const newProject = {
       name: newProjectName,
       student_id: "67afabf22a48fbe8a0448ca8", // !! Needs to be dynamic
@@ -65,40 +65,38 @@ const ManageProjects = () => {
   };
 
   const handleEditProject = (id) => {
-    const projectToEdit = projects.find((project) => project.id === id);
-    setProjects({
-      ...projects,
-      student_names: projectToEdit.studentNames, // Now handling array of names
-      name: projectToEdit.name,
-      description: projectToEdit.description,
-      presentation_video_url: projectToEdit.videoURL,
-      code_access_link: projectToEdit.codeLink,
-      coding_language: projectToEdit.languages,
-      notes: projectToEdit.notes,
-    });
+    const projectToEdit = projects.find((project) => project._id === id);
+    setNewProjectName(projectToEdit.name);
+    setNewDescription(projectToEdit.description);
+    setNewVideoURL(projectToEdit.presentation_video_url);
+    setNewCodeLink(projectToEdit.code_access_link);
+    setNewLanguages(projectToEdit.coding_language);
+    setNewUsername(projectToEdit.project_username);
+    setNewPassword(projectToEdit.project_password);
+    setNewNotes(projectToEdit.notes);
     setEditingProjectId(id);
     setShowForm(true);
   };
 
   const handleSaveEdit = () => {
-    if (!projects.name.trim() || !projects.description.trim()) return;
-
-    const updatedProjects = projects.map((project) =>
-      project.id === editingProjectId
-        ? {
-          ...project,
-          studentNames: projects.student_names, // Now handling array of names
-          name: projects.name,
-          description: projects.description,
-          videoURL: projects.presentation_video_url,
-          codeLink: projects.code_access_link,
-          languages: projects.coding_language,
-          notes: projects.notes,
-        }
-        : project
-    );
-
-    setProjects(updatedProjects);
+    if (!newProjectName.trim()) return;
+    //if (!projects.student_id.trim() || !projects.coderfair_id.trim()) return;
+    // !! activate these when dynaminc student and coderfair ids are available
+    const updatedProjectData = {
+      name: newProjectName,
+      student_id: "67afabf22a48fbe8a0448ca8", // !! Needs to be dynamic
+      coderfair_id: "67b4f809f02dfc6eecbeed34", // !! NEEDS to be dynamic
+      description: newDescription,
+      presentation_video_url: newVideoURL,
+      code_access_link: newCodeLink,
+      coding_language: newLanguages,
+      category:"",
+      project_username: newUsername,
+      project_password: newPassword,
+      notes: newNotes,
+      project_image: "" // !! NEEDS to send form data
+    };
+    dispatch(updateProject({"_id": editingProjectId, "updatedProjectData": updatedProjectData}));
     resetForm();
   };
 

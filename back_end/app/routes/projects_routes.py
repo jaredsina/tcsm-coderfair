@@ -61,11 +61,11 @@ def update_project(project_id):
     try:
         # we will get the project_id from the request json
         data = request.get_json()
-
+        print(data)
         # updated_project = data["updated_judge"]
         update_project = {
-            "student_id": ObjectId(data["student_id"]),
-            "coderfair_id": ObjectId(data["coderfair_id"]),
+            "student_id": data["student_id"],
+            "coderfair_id": data["coderfair_id"],
             "name": data["name"],
             "description": data["description"],
             "category": data["category"],
