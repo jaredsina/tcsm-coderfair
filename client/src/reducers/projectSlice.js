@@ -195,7 +195,7 @@ const projectSlice = createSlice({
         (state, action) => {
           state.loading = false;
           state.projects = state.projects.filter(
-            (project) => project._id !== action.payload._id,
+            (project) => project._id !== action.payload.project_id,
           );
           state.status = 'fullfilled';
         },

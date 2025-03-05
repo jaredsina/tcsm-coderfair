@@ -34,8 +34,7 @@ const ManageProjects = () => {
   };
 
   const handleDeleteProject = (id) => {
-    const updatedProjects = projects.filter(project => project.id !== id);
-    setProjects(updatedProjects);
+    dispatch(deleteProject(id));
   };
 
   const handleAddProject = () => {
@@ -221,21 +220,21 @@ const ManageProjects = () => {
           </thead>
           <tbody>
             {projects ? projects.map((project) => (
-              <tr key={project.id}>
+              <tr key={project._id}>
                 <td>{project.name}</td>
                 <td>{project.student ? project.student[0].name : "Cant Find Student Name" }</td>
                 <td className="actions-column">
                   <Button
                     color="blue"
                     size="s"
-                    onClick={() => handleEditProject(project.id)}
+                    onClick={() => handleEditProject(project._id)}
                   >
                     Edit
                   </Button>
                   <Button
                     size="s"
                     color="red"
-                    onClick={() => handleDeleteProject(project.id)}
+                    onClick={() => handleDeleteProject(project._id)}
                   >
                     Delete
                   </Button>
