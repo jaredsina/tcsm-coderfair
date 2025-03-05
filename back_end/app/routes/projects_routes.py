@@ -78,8 +78,8 @@ def update_project(project_id):
         if not project_image:
             project_image = ""
             update_data = {
-                "student_id": student_id,
-                "coderfair_id": coderfair_id,
+                "student_id": ObjectId(student_id),
+                "coderfair_id": ObjectId(coderfair_id),
                 "name": name,
                 "description": description,
                 "category": category,
@@ -106,8 +106,8 @@ def update_project(project_id):
             project_image = auto_crop_url
 
             update_data = {
-                "student_id": student_id,
-                "coderfair_id": coderfair_id,
+                "student_id": ObjectId(student_id),
+                "coderfair_id": ObjectId(coderfair_id),
                 "name": name,
                 "description": description,
                 "category": category,
@@ -119,9 +119,8 @@ def update_project(project_id):
                 "project_password": project_password,
                 "notes": notes,
             }
-
         project = ProjectModel(current_app.mongo)
-        project.update_project(project_id, update_data)
+        project.update_project(ObjectId(project_id), update_data)
 
     except Exception as e:
         print(e)
@@ -129,7 +128,14 @@ def update_project(project_id):
         return jsonify({"message": "Error updating project", "error": str(e)}), 400
 
     # If no exceptions are raised, return a success message and status code 200
-    return jsonify({**update_data, "_id": project_id}), 200
+    return jsonify(
+        {
+            **update_data,
+            "_id": project_id,
+            "student_id": student_id,
+            "coderfair_id": coderfair_id,
+        }
+    ), 200
 
 
 @projects_routes.route("/create", methods=["POST"])
@@ -164,8 +170,8 @@ def create_project():
 
         project = ProjectModel(current_app.mongo)
         response = project.create_project(
-            student_id,
-            coderfair_id,
+            ObjectId(student_id),
+            ObjectId(coderfair_id),
             name,
             description,
             category,
