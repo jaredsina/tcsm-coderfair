@@ -1,9 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Table, Title, Select, Pill, Modal, Textarea } from "@mantine/core";
+import { useDispatch, useSelector } from "react-redux";
+import {fetchGrades, updateGrade, deleteGrade} from "../reducers/gradeSlice";
 
-const ManageGrades = ({ grades, setGrades }) => {
+const ManageGrades = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingGrade, setEditingGrade] = useState(null);
+  const [grades, setGrades] = useState([{}]);
+
+  const dispatch = useDispatch();
+
+  const status = useSelector((state) => state.grades.status);
+  const gradeInfo = useSelector((state) => state.grades.grades);
+
+  useEffect(() => {
+    status === "idle" ? dispatch(fetchGrades()) : setGrades([{}]);
+    setGrades(gradeInfo);
+  }, [status, dispatch]);
 
   const updateGrade = (id, field, value) => {
     setGrades(grades.map((grade) =>
@@ -44,9 +57,9 @@ const ManageGrades = ({ grades, setGrades }) => {
             </tr>
           </thead>
           <tbody>
-            {grades.map((grade) => (
-              <tr key={grade.id}>
-                <td>{grade.project}</td>
+            {grades?.map((grade) => (
+              <tr key={grade._id}>
+                <td>{grade.project?.[0]?.name}</td>
                 <td>{grade.concept_tier}</td>
                 <td>{grade.concept_mastery}</td>
                 <td>{grade.presentation}</td>
