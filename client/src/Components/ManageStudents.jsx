@@ -27,13 +27,13 @@ const ManageStudents = () => {
   const handleAddStudent = async() => {
     if (!newStudentName.trim()) return;
 
-    const newStudent = {
-      name: newStudentName,
-      bio: newStudentBio,
-      avatar_image: "" // !! NEEDS to send form data
-    };
+    const formData = new FormData();
+    formData.append("name", newStudentName);
+    formData.append("bio", newStudentBio);
+    formData.append("avatar_image", newStudentImage);
+
     try{
-      dispatch(createStudent(newStudent))
+      dispatch(createStudent(formData))
       //setStudents([...students, newStudent]);
     }
     catch (error){
