@@ -220,7 +220,7 @@ const ManageProjects = () => {
             {projects ? projects.map((project) => (
               <tr key={project._id}>
                 <td>{project.name}</td>
-                <td>{project.student ? project.student[0].name : "Cant Find Student Name" }</td>
+                <td>{project.student?.[0]?.name || "Can't Find Student Name"}</td>
                 <td className="actions-column">
                   <Button
                     color="blue"
