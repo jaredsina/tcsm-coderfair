@@ -72,7 +72,7 @@ def update_student(student_id):
 
         name = request.form.get("name")
         bio = request.form.get("bio")
-        avatar_image = request.form.get("avatar_image")
+        avatar_image = request.files.get("avatar_image")
 
         if not avatar_image:
             avatar_image = ""
@@ -84,7 +84,9 @@ def update_student(student_id):
 
         else:
             cloudinary.uploader.upload(
-                avatar_image, public_id=f"{name}_profile_image", overwrite=True
+                avatar_image,
+                public_id=f"{name.replace(' ', '')}_profile_image",
+                overwrite=True,
             )
             auto_crop_url, _ = cloudinary_url(
                 f"{name}_profile_image",
@@ -121,7 +123,9 @@ def create_student():
 
         if avatar_image:
             cloudinary.uploader.upload(
-                avatar_image, public_id=f"{name}_profile_image", overwrite=True
+                avatar_image,
+                public_id=f"{name.replace(' ','')}_profile_image",
+                overwrite=True,
             )
             auto_crop_url, _ = cloudinary_url(
                 f"{name}_profile_image",
