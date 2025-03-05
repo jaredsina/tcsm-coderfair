@@ -18,7 +18,7 @@ const ManageGrades = () => {
     setGrades(gradeInfo);
   }, [status, dispatch]);
 
-  const deleteGrade = (id) => {
+  const handleDeleteGrade = (id) => {
     dispatch(deleteGrade(id));
     //setGrades(grades.filter((grade) => grade.id !== id));
   };
@@ -62,7 +62,7 @@ const ManageGrades = () => {
                 <td>{grade.creativity}</td>
                 <td>
                   <Button color="blue" onClick={() => handleEditClick(grade._id)}>Edit</Button>
-                  <Button color="red" onClick={() => deleteGrade(grade._id)}>Delete</Button>
+                  <Button color="red" onClick={() => handleDeleteGrade(grade._id)}>Delete</Button>
                 </td>
               </tr>
             ))}

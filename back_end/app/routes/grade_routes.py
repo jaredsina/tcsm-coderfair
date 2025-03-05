@@ -43,7 +43,7 @@ def delete_grade(grade_id):
     except Exception as e:
         return jsonify({"message": "Error deleting grade", "error": str(e)}), 400
 
-    return jsonify({"message": f"deleted grade with ID {grade_id}"}), 200
+    return jsonify({"_id": str(grade_id)}), 200
 
 
 @grade_routes.route("/update/<string:grade_id>", methods=["PUT"])
