@@ -55,12 +55,14 @@ const ManageStudents = () => {
 
   const handleSaveEdit = () => {
     if (!newStudentName.trim()) return;
-    const updatedStudentData = {
-          name: newStudentName,
-          bio: newStudentBio,
-          avatar_image: "" // !! NEEDS to send form data
-    };  
-    dispatch(updateStudent({"_id": editingStudentId, "updatedStudentData": updatedStudentData}))
+    
+    const formData = new FormData();
+
+    formData.append("name", newStudentName);
+    formData.append("bio", newStudentBio);
+    formData.append("avatar_image", newStudentImage);
+
+    dispatch(updateStudent({"_id": editingStudentId, "updatedStudentData": formData}))
     //setStudents(updatedStudents);
     resetForm();
   };
