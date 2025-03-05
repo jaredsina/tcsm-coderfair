@@ -1,5 +1,8 @@
 import configparser
 from flask_pymongo import PyMongo
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 
 def init_config(app):
@@ -25,3 +28,15 @@ def init_config(app):
         print("MongoDB connection successful")
     except Exception as e:
         print(f"MongoDB connection failed: {e}")
+
+
+def init_cloudinary():
+    print("Initializing cloudinary")
+    config = configparser.ConfigParser()
+    config.read("config.ini")
+    cloudinary.config(
+        cloud_name=config["CLOUDINARY"]["CLOUD_NAME"],
+        api_key=config["CLOUDINARY"]["API_KEY"],
+        api_secret=config["CLOUDINARY"]["API_SECRET"],
+    )
+    print("Cloudinary connection successful")

@@ -2,18 +2,19 @@ from flask_pymongo import PyMongo
 
 
 class UserModel:
-    
     def __init__(self, mongo: PyMongo):
         self.collection = mongo.cx["test"]["users"]
 
-                                      
-    def create_user(self, first_name, last_name, email, is_admin, is_staff, username,):
+    def create_user(
+        self, first_name, last_name, email, username, avatar_image, is_admin, is_staff
+    ):
         user_data = {
             "first_name": first_name,
             "last_name": last_name,
             "email": email,
             "username": username,
-            #is_admin and is_staff are booleans
+            "avatar_image": avatar_image,
+            # is_admin and is_staff are booleans
             "is_admin": is_admin,
             "is_staff": is_staff,
         }
@@ -24,18 +25,20 @@ class UserModel:
         return self.collection.find_one({"username": username})
 
     def find_user_by_id(self, id):
-        return self.collection.find_one({"_id": id}, {"_id":0})
-    
+        return self.collection.find_one({"_id": id}, {"_id": 0})
+
     def list_staff(self, is_staff):
         return self.collection.find({"is_staff": is_staff})
 
     def list_users(self):
-        return list(self.collection.find({},{"_id":0}))
-    
+        return list(self.collection.find({}, {"_id": 0}))
+
     def update_user(self, id, update_data):
         result = self.collection.update_one({"_id": id}, {"$set": update_data})
         return result
-    
+
     def delete_user(self, id):
-        result = self.collection.delete_one({"_id": id})
-        return result 
+        student_info = self.collection.find_one({"_id": id}, {"username": 1, "_id": 0})
+        public_id = student_info["username"]
+        self.collection.delete_one({"_id": id})
+        return public_id
