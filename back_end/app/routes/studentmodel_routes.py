@@ -57,7 +57,7 @@ def delete_student(student_id):
 
         # deleting image from cloudinary media database
         public_id = student.delete_student(student_id)
-        cloudinary.uploader.destroy(public_id)
+        cloudinary.uploader.destroy(f"{public_id.replace(' ', '')}_profile_image")
 
     except Exception as e:
         return jsonify({"message": "Error deleting student", "error": str(e)}), 400
@@ -89,7 +89,7 @@ def update_student(student_id):
                 overwrite=True,
             )
             auto_crop_url, _ = cloudinary_url(
-                f"{name}_profile_image",
+                f"{name.replace(' ','')}_profile_image",
                 width=500,
                 height=500,
                 crop="auto",
@@ -128,7 +128,7 @@ def create_student():
                 overwrite=True,
             )
             auto_crop_url, _ = cloudinary_url(
-                f"{name}_profile_image",
+                f"{name.replace(' ','')}_profile_image",
                 width=500,
                 height=500,
                 crop="auto",
