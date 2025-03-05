@@ -35,7 +35,7 @@ export const fetchStudents = createAsyncThunk(
 // * Create a student
 export const createStudent = createAsyncThunk(
   'students/createStudent',
-  async (student) => {
+  async (student, { rejectWithValue }) => {
     try {
       const request = await axios.post(`${studentBaseUrl}/create`, student, {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -53,7 +53,7 @@ export const createStudent = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(err.response.data);
     }
   },
 );
@@ -61,7 +61,7 @@ export const createStudent = createAsyncThunk(
 // * Update a student
 export const updateStudent = createAsyncThunk(
   'students/updateStudent',
-  async (info) => {
+  async (info, { rejectWithValue }) => {
     try {
       const { _id, updatedStudentData } = info; // Destructure the info object
       const request = await axios.put(
@@ -81,7 +81,7 @@ export const updateStudent = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(err.response.data);
     }
   },
 );
@@ -89,7 +89,7 @@ export const updateStudent = createAsyncThunk(
 // * Delete a student
 export const deleteStudent = createAsyncThunk(
   'students/deleteStudent',
-  async (id) => {
+  async (id, { rejectWithValue }) => {
     try {
       const request = await axios.delete(`${studentBaseUrl}/delete/${id}`);
       const response = request.data;
@@ -105,7 +105,7 @@ export const deleteStudent = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(err.response.data);
     }
   },
 );

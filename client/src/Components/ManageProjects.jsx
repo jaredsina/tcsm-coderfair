@@ -75,7 +75,6 @@ const ManageProjects = () => {
     setNewDescription(projectToEdit.description);
     setNewVideoURL(projectToEdit.presentation_video_url);
     setNewCodeLink(projectToEdit.code_access_link);
-    console.log(projectToEdit.coding_language);
     // Fix project trying to split an empty array
     setNewLanguages(projectToEdit.coding_language);
     setNewUsername(projectToEdit.project_username);

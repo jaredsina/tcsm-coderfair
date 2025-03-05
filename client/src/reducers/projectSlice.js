@@ -54,7 +54,7 @@ export const createProject = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(err.response.data);
     }
   },
 );
@@ -63,7 +63,7 @@ export const createProject = createAsyncThunk(
 
 export const updateProject = createAsyncThunk(
   'projects/updateProject',
-  async (info) => {
+  async (info, { rejectWithValue }) => {
     try {
       const { _id, updatedProjectData } = info; // Destructure the info object
       const request = await axios.put(
@@ -83,7 +83,7 @@ export const updateProject = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(err.response.data);
     }
   },
 );
@@ -92,7 +92,7 @@ export const updateProject = createAsyncThunk(
 
 export const deleteProject = createAsyncThunk(
   'projects/deleteProject',
-  async (_id) => {
+  async (_id, { rejectWithValue }) => {
     try {
       const request = await axios.delete(`${projectBaseUrl}/delete/${_id}`);
       const response = request.data;
@@ -108,7 +108,7 @@ export const deleteProject = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(err.response.data);
     }
   },
 );
