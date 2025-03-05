@@ -1,9 +1,8 @@
 import { Flex, Button, Title } from '@mantine/core';
-import ProjectData from '../data/projects.json';
-import ProjectCard from '../Components/ProjectCard/ProjectCard';
-import SearchBar from '../Components/SearchBar/SearchBar';
+import ProjectData from '../../data/projects.json';
+import ProjectCard from '../../Components/ProjectCard/ProjectCard';
+import SearchBar from '../../Components/SearchBar/SearchBar';
 const ProjectPage = () => {
-  console.log(ProjectData);
 
   return (
     <main className="ProjectPageMain">

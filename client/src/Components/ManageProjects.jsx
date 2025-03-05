@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Button, TextInput, Textarea, MultiSelect } from "@mantine/core";
-import "./ManageStudents.css";
-
+import { Button, Table, Title, TextInput, Textarea, MultiSelect, Modal, TagsInput, Autocomplete } from "@mantine/core";
+import Delete from "./Delete";
 const ManageProjects = ({ projects, setProjects }) => {
   const [newProjectName, setNewProjectName] = useState("");
   const [newDescription, setNewDescription] = useState("");
@@ -12,19 +11,51 @@ const ManageProjects = ({ projects, setProjects }) => {
   const [newStudentName, setNewStudentName] = useState(""); // New field for student name
   const [showForm, setShowForm] = useState(false);
   const [editingProjectId, setEditingProjectId] = useState(null);
+  const [formData, setFormData] = useState({
+    student_names: [], // Changed to array for multiple students
+    coderfair_id: "",
+    name: "",
+    description: "",
+    presentation_video_url: "",
+    code_access_link: "",
+    coding_language: [],
+    project_username: "",
+    project_password: "",
+    notes: "",
+  });
+
+  const studentNames = [
+    'Joshua Sambol',
+    'Joshua Sambol1',
+    'Joshua Sambol2',
+    'Joshua Sambol3',
+    'Joshua Sambol4',
+    'Joshua Sambol5',
+    'Joshua Sambol6',
+    'Joshua Sambol7',
+  ];
+
+  const handleChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleDeleteProject = (id) => {
+    const updatedProjects = projects.filter(project => project.id !== id);
+    setProjects(updatedProjects);
+  };
 
   const handleAddProject = () => {
-    if (!newProjectName.trim() || !newStudentName.trim() || !newDescription.trim()) return;
+    if (!formData.name.trim() || !formData.description.trim()) return;
 
     const newProject = {
-      id: projects.length + 1,
-      name: newProjectName,
-      description: newDescription,
-      videoURL: newVideoURL,
-      codeLink: newCodeLink,
-      languages: newLanguages,
-      notes: newNotes,
-      studentName: newStudentName, // Storing student name
+      id: Date.now(),
+      studentNames: formData.student_names, // Now an array of student names
+      name: formData.name,
+      description: formData.description,
+      videoURL: formData.presentation_video_url,
+      codeLink: formData.code_access_link,
+      languages: formData.coding_language,
+      notes: formData.notes,
     };
 
     setProjects([...projects, newProject]);
@@ -33,23 +64,35 @@ const ManageProjects = ({ projects, setProjects }) => {
 
   const handleEditProject = (id) => {
     const projectToEdit = projects.find((project) => project.id === id);
-    setNewProjectName(projectToEdit.name);
-    setNewDescription(projectToEdit.description);
-    setNewVideoURL(projectToEdit.videoURL);
-    setNewCodeLink(projectToEdit.codeLink);
-    setNewLanguages(projectToEdit.languages);
-    setNewNotes(projectToEdit.notes);
-    setNewStudentName(projectToEdit.studentName); // Pre-fill student name
+    setFormData({
+      ...formData,
+      student_names: projectToEdit.studentNames, // Now handling array of names
+      name: projectToEdit.name,
+      description: projectToEdit.description,
+      presentation_video_url: projectToEdit.videoURL,
+      code_access_link: projectToEdit.codeLink,
+      coding_language: projectToEdit.languages,
+      notes: projectToEdit.notes,
+    });
     setEditingProjectId(id);
     setShowForm(true);
   };
 
   const handleSaveEdit = () => {
-    if (!newProjectName.trim() || !newStudentName.trim() || !newDescription.trim()) return;
+    if (!formData.name.trim() || !formData.description.trim()) return;
 
     const updatedProjects = projects.map((project) =>
       project.id === editingProjectId
-        ? { ...project, name: newProjectName, description: newDescription, videoURL: newVideoURL, codeLink: newCodeLink, languages: newLanguages, notes: newNotes, studentName: newStudentName }
+        ? {
+          ...project,
+          studentNames: formData.student_names, // Now handling array of names
+          name: formData.name,
+          description: formData.description,
+          videoURL: formData.presentation_video_url,
+          codeLink: formData.code_access_link,
+          languages: formData.coding_language,
+          notes: formData.notes,
+        }
         : project
     );
 
@@ -57,18 +100,19 @@ const ManageProjects = ({ projects, setProjects }) => {
     resetForm();
   };
 
-  const handleDeleteProject = (id) => {
-    setProjects(projects.filter((project) => project.id !== id));
-  };
-
   const resetForm = () => {
-    setNewProjectName("");
-    setNewDescription("");
-    setNewVideoURL("");
-    setNewCodeLink("");
-    setNewLanguages([]);
-    setNewNotes("");
-    setNewStudentName(""); // Reset student name field
+    setFormData({
+      student_names: [],
+      coderfair_id: "",
+      name: "",
+      description: "",
+      presentation_video_url: "",
+      code_access_link: "",
+      coding_language: [],
+      project_username: "",
+      project_password: "",
+      notes: "",
+    });
     setEditingProjectId(null);
     setShowForm(false);
   };
@@ -120,7 +164,7 @@ const ManageProjects = ({ projects, setProjects }) => {
             />
             <MultiSelect
               label="Coding Languages Used"
-              data={['HTML', 'CSS', 'JavaScript', 'Python', 'Java', 'C++']}
+              data={['HTML', 'CSS', 'JavaScript', 'Python', 'Java', 'C++', 'C#', 'C', 'Ruby', 'PHP', 'Swift', 'TypeScript', 'Rust', 'Kotlin', 'R', 'Scratch/Block Based', 'SQL',]}
               value={newLanguages}
               onChange={setNewLanguages}
               required
@@ -146,13 +190,13 @@ const ManageProjects = ({ projects, setProjects }) => {
         </div>
       )}
 
+      {/* Project Table */}
       <div className="table-container">
         <table>
           <thead>
             <tr>
               <th>Project Name</th>
-              <th>Student Name</th>
-              <th>Description</th>
+              <th>Student Name(s)</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -160,19 +204,18 @@ const ManageProjects = ({ projects, setProjects }) => {
             {projects.map((project) => (
               <tr key={project.id}>
                 <td>{project.name}</td>
-                <td>{project.studentName}</td> {/* Displaying student name */}
-                <td>{project.description}</td>
+                <td>{project.studentNames?.join(", ")}</td>
                 <td className="actions-column">
                   <Button
-                    className="edit-btn"
-                    size="xs"
+                    color="blue"
+                    size="s"
                     onClick={() => handleEditProject(project.id)}
                   >
                     Edit
                   </Button>
                   <Button
-                    className="delete-btn"
-                    size="xs"
+                    size="s"
+                    color="red"
                     onClick={() => handleDeleteProject(project.id)}
                   >
                     Delete

@@ -1,25 +1,186 @@
 # app/routes/user_routes.py
-from flask import Blueprint, jsonify
+import cloudinary
+from cloudinary.utils import cloudinary_url
 
-projects_routes = Blueprint('projects_routes', __name__)
+from flask import Blueprint, jsonify, current_app, request
+from app.models.project import ProjectModel
+
+# used to convert string to ObjectId
+from bson import ObjectId
+
+projects_routes = Blueprint("projects_routes", __name__)
+
 
 # Define a simple route inside this blueprint
-@projects_routes.route('/')
+@projects_routes.route("/")
 def get_projects():
-    return jsonify({'message': 'List of projects will be here'})
+    try:
+        new_project = ProjectModel(current_app.mongo)
+        project = new_project.list___all_projects()
 
-@projects_routes.route('/<string:project_id>')
+    except Exception as e:
+        # If an exception is raised, return an error message and status code 400
+        return jsonify({"message": "Error getting projects", "error": str(e)}), 400
+
+        # If no exceptions are raised, return a success message and status code 200
+    return jsonify(project), 200
+
+
+@projects_routes.route("/<string:project_id>", methods=["GET"])
 def get_project(project_id):
-    return jsonify({'message': f'Project with ID {project_id}'})
+    try:
+        # we will get the project_id from the request json
+        # Need to convert the string to an ObjectId to match the data type in the database
+        project_id = ObjectId(project_id)
+        new_project = ProjectModel(current_app.mongo)
+        project = new_project.find_project_by_id(project_id)
 
-@projects_routes.route('/delete/<string:project_id>')
+    except Exception as e:
+        # If an exception is raised, return an error message and status code 400
+        return jsonify({"message": "Error getting project", "error": str(e)}), 400
+
+    # If no exceptions are raised, return a success message and status code 200
+    return jsonify(project), 200
+
+
+@projects_routes.route("/delete/<string:project_id>", methods=["DELETE"])
 def delete_project(project_id):
-    return jsonify({'message': f'Project with ID {project_id}'})
+    try:
+        # Need to convert the string to an ObjectId to match the data type in the database
+        project_id = ObjectId(project_id)
+        new_project = ProjectModel(current_app.mongo)
+        public_id = new_project.delete_project(project_id)
+        cloudinary.uploader.destroy(f"{public_id.replace(' ', '')}_image")
+    except Exception as e:
+        # If an exception is raised, return an error message and status code 400
+        return jsonify({"message": "Error deleting project", "error": str(e)}), 400
 
-@projects_routes.route('/update/<string:project_id>')
+    # If no exceptions are raised, return a success message and status code 200
+    return jsonify({"message": f"project with ID {project_id}"}), 200
+
+
+@projects_routes.route("/update/<string:project_id>", methods=["PUT"])
 def update_project(project_id):
-    return jsonify({'message': f'Project with ID {project_id}'})
+    try:
+        student_id = request.form.get("student_id")
+        coderfair_id = request.form.get("coderfair_id")
+        name = request.form.get("name")
+        description = request.form.get("description")
+        category = request.form.get("category")
+        project_image = request.files.get("project_image")
+        presentation_video_url = request.form.get("presentation_video_url")
+        code_access_link = request.form.get("code_access_link")
+        coding_language = request.form.get("coding_language")
+        project_username = request.form.get("project_username")
+        project_password = request.form.get("project_password")
+        notes = request.form.get("notes")
 
-@projects_routes.route('/create/<string:project_id>')
-def create_project(project_id):
-    return jsonify({'message': f'Project with ID {project_id}'})
+        if not project_image:
+            project_image = ""
+            update_data = {
+                "student_id": student_id,
+                "coderfair_id": coderfair_id,
+                "name": name,
+                "description": description,
+                "category": category,
+                "project_image": project_image,
+                "presentation_video_url": presentation_video_url,
+                "code_access_link": code_access_link,
+                "coding_language": coding_language,
+                "project_username": project_username,
+                "project_password": project_password,
+                "notes": notes,
+            }
+
+        else:
+            cloudinary.uploader.upload(
+                project_image, public_id=f"{name.replace(' ','')}_image", overwrite=True
+            )
+            auto_crop_url, _ = cloudinary_url(
+                f"{name.replace(' ','')}_image",
+                width=500,
+                height=500,
+                crop="auto",
+                gravity="auto",
+            )
+            project_image = auto_crop_url
+
+            update_data = {
+                "student_id": student_id,
+                "coderfair_id": coderfair_id,
+                "name": name,
+                "description": description,
+                "category": category,
+                "project_image": project_image,
+                "presentation_video_url": presentation_video_url,
+                "code_access_link": code_access_link,
+                "coding_language": coding_language,
+                "project_username": project_username,
+                "project_password": project_password,
+                "notes": notes,
+            }
+
+        project = ProjectModel(current_app.mongo)
+        project.update_project(project_id, update_data)
+
+    except Exception as e:
+        print(e)
+        # If an exception is raised, return an error message and status code 400
+        return jsonify({"message": "Error updating project", "error": str(e)}), 400
+
+    # If no exceptions are raised, return a success message and status code 200
+    return jsonify({**update_data, "_id": project_id}), 200
+
+
+@projects_routes.route("/create/", methods=["POST"])
+def create_project():
+    try:
+        # we will get the project data from the request json
+        student_id = request.form.get("student_id")
+        coderfair_id = request.form.get("coderfair_id")
+        name = request.form.get("name")
+        description = request.form.get("description")
+        category = request.form.get("category")
+        project_image = request.files.get("project_image")
+        presentation_video_url = request.form.get("presentation_video_url")
+        code_access_link = request.form.get("code_access_link")
+        coding_language = request.form.get("coding_language")
+        project_username = request.form.get("project_username")
+        project_password = request.form.get("project_password")
+        notes = request.form.get("notes")
+
+        if project_image:
+            cloudinary.uploader.upload(
+                project_image,
+                public_id=f"{name.replace(' ','')}_image",
+            )
+
+            auto_crop_url, _ = cloudinary_url(
+                project_username, width=500, height=500, crop="auto", gravity="auto"
+            )
+            project_image = auto_crop_url
+        else:
+            project_image = ""
+
+        project = ProjectModel(current_app.mongo)
+        response = project.create_project(
+            student_id,
+            coderfair_id,
+            name,
+            description,
+            category,
+            project_image,
+            presentation_video_url,
+            code_access_link,
+            coding_language,
+            project_username,
+            project_password,
+            notes,
+        )
+
+    except Exception as e:
+        return jsonify({"message": "Error creating project", "error": str(e)}), 400
+
+    return jsonify(
+        {"message": "Project created successfully", "project_id": str(response)}
+    ), 201

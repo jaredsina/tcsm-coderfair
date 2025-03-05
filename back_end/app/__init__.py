@@ -1,7 +1,8 @@
 from flask import Flask
 from .routes import init_routes
-from .config import init_config
+from .config import init_config, init_cloudinary
 from .routes.error_handlers import init_error_handlers
+
 from flask_cors import CORS
 
 
@@ -16,7 +17,7 @@ def create_app():
 
     # config
     init_config(app)
-
+    init_cloudinary()
     # security key, test mode, debugging window
 
     # Register the routes by calling init_routes
