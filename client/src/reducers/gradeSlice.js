@@ -30,7 +30,7 @@ export const fetchGrades = createAsyncThunk('grades/fetchGrades', async () => {
 // * Create a grade
 export const createGrade = createAsyncThunk(
   'grades/createGrade',
-  async (grade) => {
+  async (grade, { rejectWithValue }) => {
     try {
       const request = await axios.post(`${gradeBaseUrl}/create`, grade);
       const response = request.data;
@@ -46,7 +46,7 @@ export const createGrade = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(err.response.data);
     }
   },
 );
@@ -54,7 +54,7 @@ export const createGrade = createAsyncThunk(
 // * Update a grade
 export const updateGrade = createAsyncThunk(
   'grades/updateGrade',
-  async (info) => {
+  async (info, { rejectWithValue }) => {
     try {
       const { _id, updatedGradeData } = info;
       const request = await axios.put(
@@ -74,7 +74,7 @@ export const updateGrade = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(err.response.data);
     }
   },
 );
@@ -82,7 +82,7 @@ export const updateGrade = createAsyncThunk(
 // * Delete a grade
 export const deleteGrade = createAsyncThunk(
   'grades/deleteGrade',
-  async (id) => {
+  async (id, { rejectWithValue }) => {
     try {
       const request = await axios.delete(`${gradeBaseUrl}/delete/${id}`);
       const response = request.data;
@@ -98,7 +98,7 @@ export const deleteGrade = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(err.response.data);
     }
   },
 );
