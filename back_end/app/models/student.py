@@ -14,6 +14,16 @@ class StudentModel:
         result = self.collection.insert_one(student_data)
         return str(result.inserted_id)
 
+    def update_student(self, id, update_data):
+        result = self.collection.update_one({"_id": id}, {"$set": update_data})
+        return result
+
+    def delete_student(self, id):
+        student_info = self.collection.find_one({"_id": id}, {"name": 1, "_id": 0})
+        public_id = student_info["name"]
+        self.collection.delete_one({"_id": id})
+        return public_id
+
     def find_student_by_id(self, id):
         # essentially, the aggregate thing lets you get properties from a model, remove certain ones, and add related properties form a different model
         return list(
@@ -54,11 +64,3 @@ class StudentModel:
             ]
         )
         return list(students)
-
-    def update_student(self, id, update_data):
-        result = self.collection.update_one({"_id": id}, {"$set": update_data})
-        return result
-
-    def delete_student(self, id):
-        result = self.collection.delete_one({"_id": id})
-        return result

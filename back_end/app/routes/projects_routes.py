@@ -1,4 +1,7 @@
 # app/routes/user_routes.py
+import cloudinary
+from cloudinary.utils import cloudinary_url
+
 from flask import Blueprint, jsonify, current_app, request
 from app.models.project import ProjectModel
 
@@ -46,8 +49,8 @@ def delete_project(project_id):
         # Need to convert the string to an ObjectId to match the data type in the database
         project_id = ObjectId(project_id)
         new_project = ProjectModel(current_app.mongo)
-        new_project.delete_project(project_id)
-
+        public_id = new_project.delete_project(project_id)
+        cloudinary.uploader.destroy(f"{public_id.replace(' ', '')}_image")
     except Exception as e:
         # If an exception is raised, return an error message and status code 400
         return jsonify({"message": "Error deleting project", "error": str(e)}), 400
@@ -59,26 +62,66 @@ def delete_project(project_id):
 @projects_routes.route("/update/<string:project_id>", methods=["PUT"])
 def update_project(project_id):
     try:
-        # we will get the project_id from the request json
-        data = request.get_json()
-        print(data)
-        # updated_project = data["updated_judge"]
-        update_project = {
-            "student_id": data["student_id"],
-            "coderfair_id": data["coderfair_id"],
-            "name": data["name"],
-            "description": data["description"],
-            "category": data["category"],
-            "project_image": data["project_image"],
-            "presentation_video_url": data["presentation_video_url"],
-            "code_access_link": data["code_access_link"],
-            "coding_language": data["coding_language"],
-            "project_username": data["project_username"],
-            "project_password": data["project_password"],
-            "notes": data["notes"],
-        }
-        new_project = ProjectModel(current_app.mongo)
-        new_project.update_project(ObjectId(project_id), update_project)
+        student_id = request.form.get("student_id")
+        coderfair_id = request.form.get("coderfair_id")
+        name = request.form.get("name")
+        description = request.form.get("description")
+        category = request.form.get("category")
+        project_image = request.files.get("project_image")
+        presentation_video_url = request.form.get("presentation_video_url")
+        code_access_link = request.form.get("code_access_link")
+        coding_language = request.form.get("coding_language")
+        project_username = request.form.get("project_username")
+        project_password = request.form.get("project_password")
+        notes = request.form.get("notes")
+
+        if not project_image:
+            project_image = ""
+            update_data = {
+                "student_id": student_id,
+                "coderfair_id": coderfair_id,
+                "name": name,
+                "description": description,
+                "category": category,
+                "project_image": project_image,
+                "presentation_video_url": presentation_video_url,
+                "code_access_link": code_access_link,
+                "coding_language": coding_language,
+                "project_username": project_username,
+                "project_password": project_password,
+                "notes": notes,
+            }
+
+        else:
+            cloudinary.uploader.upload(
+                project_image, public_id=f"{name.replace(' ','')}_image", overwrite=True
+            )
+            auto_crop_url, _ = cloudinary_url(
+                f"{name.replace(' ','')}_image",
+                width=500,
+                height=500,
+                crop="auto",
+                gravity="auto",
+            )
+            project_image = auto_crop_url
+
+            update_data = {
+                "student_id": student_id,
+                "coderfair_id": coderfair_id,
+                "name": name,
+                "description": description,
+                "category": category,
+                "project_image": project_image,
+                "presentation_video_url": presentation_video_url,
+                "code_access_link": code_access_link,
+                "coding_language": coding_language,
+                "project_username": project_username,
+                "project_password": project_password,
+                "notes": notes,
+            }
+
+        project = ProjectModel(current_app.mongo)
+        project.update_project(project_id, update_data)
 
     except Exception as e:
         print(e)
@@ -86,32 +129,43 @@ def update_project(project_id):
         return jsonify({"message": "Error updating project", "error": str(e)}), 400
 
     # If no exceptions are raised, return a success message and status code 200
-    # Reutn a copy of the updated project with the project_id added
-    return jsonify({**update_project, "_id": project_id}), 200
+    return jsonify({**update_data, "_id": project_id}), 200
 
 
 @projects_routes.route("/create", methods=["POST"])
 def create_project():
     try:
         # we will get the project data from the request json
-        data = request.get_json()
-        student_id = data["student_id"]
-        coderfair_id = data["coderfair_id"]
-        name = data["name"]
-        description = data["description"]
-        category = data["category"]
-        project_image = data["project_image"]
-        presentation_video_url = data["presentation_video_url"]
-        code_access_link = data["code_access_link"]
-        coding_language = data["coding_language"]
-        project_username = data["project_username"]
-        project_password = data["project_password"]
-        notes = data["notes"]
+        student_id = request.form.get("student_id")
+        coderfair_id = request.form.get("coderfair_id")
+        name = request.form.get("name")
+        description = request.form.get("description")
+        category = request.form.get("category")
+        project_image = request.files.get("project_image")
+        presentation_video_url = request.form.get("presentation_video_url")
+        code_access_link = request.form.get("code_access_link")
+        coding_language = request.form.get("coding_language")
+        project_username = request.form.get("project_username")
+        project_password = request.form.get("project_password")
+        notes = request.form.get("notes")
 
-        new_project = ProjectModel(current_app.mongo)
-        response = new_project.create_project(
-            ObjectId(student_id),
-            ObjectId(coderfair_id),
+        if project_image:
+            cloudinary.uploader.upload(
+                project_image,
+                public_id=f"{name.replace(' ','')}_image",
+            )
+
+            auto_crop_url, _ = cloudinary_url(
+                project_username, width=500, height=500, crop="auto", gravity="auto"
+            )
+            project_image = auto_crop_url
+        else:
+            project_image = ""
+
+        project = ProjectModel(current_app.mongo)
+        response = project.create_project(
+            student_id,
+            coderfair_id,
             name,
             description,
             category,

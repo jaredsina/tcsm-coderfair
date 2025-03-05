@@ -24,7 +24,7 @@ Edit names here:
   <li>Nicolas Braem</li>
   <li>Tom Martin</li>
   <li>Ayaan Kalsekar</li>
-  <li>Team Member #7</li>
+  <li>Nikita Mathur</li>
   <li>Shriya Patel</li>
   <li>Ishita Mathur</li>
 </ul>
