@@ -22,19 +22,17 @@ def log_in(user_id):
     user = UserModel(current_app.mongo)
     user_id = ObjectId(user_id)
     user_database = user.find_user_by_id(user_id)
-    print(user_database["password"])
 
-    hashed_password = (user_database["password"])
-    
-    is_valid = bcrypt.check_password_hash(hashed_password, password )
-    if is_valid:
+    hashed_password = user_database["password"]
+
+    is_valid = bcrypt.check_password_hash(hashed_password, password)
+    if is_valid and user_database["username"] == username:
         user_database.pop("password", None)
-        #Generate a token
+        # Generate a token
         token_holder = create_access_token(identity=username)
-        print(token_holder)
-        return jsonify({"user_database":user_database,"token_holder":token_holder})
+        return jsonify({"user_database": user_database, "token_holder": token_holder})
     else:
-        return jsonify({"message":"Error incorrect password"})
+        return jsonify({"message": "Error incorrect password"})
 
 
 @auth_routes.route("/log_out")
