@@ -3,6 +3,7 @@ import userReducer from '../reducers/userSlice';
 import judgeReducer from '../reducers/judgeSlice';
 import studentReducer from '../reducers/studentSlice';
 import projectReducer from '../reducers/projectSlice';
+import gradeReducer from '../reducers/gradeSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export const store = configureStore({
     judges: judgeReducer, // judges information
     students: studentReducer,
     projects: projectReducer,
+    grades: gradeReducer,
   },
 });
