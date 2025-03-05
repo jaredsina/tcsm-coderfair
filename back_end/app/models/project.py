@@ -126,5 +126,7 @@ class ProjectModel:
         return result
 
     def delete_project(self, id):
-        result = self.collection.delete_one({"_id": id})
-        return result
+        project_info = self.collection.find_one({"_id": id}, {"name": 1, "_id": 0})
+        public_id = project_info["name"]
+        self.collection.delete_one({"_id": id})
+        return public_id
