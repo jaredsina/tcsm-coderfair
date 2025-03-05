@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SignIn.css';
 import { Link } from 'react-router-dom';
-const SignIn = () => {
+
+const SignIn = ({ setIsAuthenticated }) => {
   const [accountName, setAccountName] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -11,7 +12,8 @@ const SignIn = () => {
     e.preventDefault();
     // Simulated login (Replace with actual authentication logic)
     if (accountName && password) {
-      navigate('/home'); // Redirect to homepage or dashboard
+      setIsAuthenticated(true); // Update state to indicate user is authenticated
+      navigate("/"); // Redirect to homepage or dashboard
     } else {
       alert('Please enter account name and password.');
     }

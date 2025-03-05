@@ -62,14 +62,12 @@ def delete_student(student_id):
     except Exception as e:
         return jsonify({"message": "Error deleting student", "error": str(e)}), 400
 
-    return jsonify({"message": f"deleted student with ID {student_id}"}), 200
+    return jsonify({"student_id": str(student_id)}), 200
 
 
 @studentmodel_routes.route("/update/<string:student_id>", methods=["PUT"])
 def update_student(student_id):
     try:
-        student_id = ObjectId(student_id)
-
         name = request.form.get("name")
         bio = request.form.get("bio")
         avatar_image = request.files.get("avatar_image")
@@ -104,14 +102,13 @@ def update_student(student_id):
             }
 
         student = StudentModel(current_app.mongo)
-        result = student.update_student(student_id, update_data)
+        result = student.update_student(ObjectId(student_id), update_data)
 
     except Exception as e:
         return jsonify({"message": "Error updating student", "error": str(e)}), 400
 
-    return jsonify(
-        {"message": "Student updated sucessfully", "student_id": str(result)}
-    ), 201
+    # Return a copy of update_data with the student_id added
+    return jsonify({**update_data, "_id": student_id}), 201
 
 
 @studentmodel_routes.route("/create", methods=["POST"])
@@ -145,5 +142,10 @@ def create_student():
         return jsonify({"message": "Error creating student", "error": str(e)}), 400
 
     return jsonify(
-        {"message": "Student created sucessfully", "student_id": str(response)}
+        {
+            "name": name,
+            "bio": bio,
+            "avatar_image": avatar_image,
+            "student_id": response,
+        }
     ), 201

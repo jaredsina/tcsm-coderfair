@@ -1,20 +1,26 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Menu, Burger, Button, Avatar } from "@mantine/core";
+import { Link, useNavigate } from "react-router-dom";
+import { Menu, Burger, Avatar } from "@mantine/core";
 import "./navbar.css";
 
-const NavBar = () => {
+const NavBar = ({ isAuthenticated, setIsAuthenticated }) => {
   const [opened, setOpened] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSignOut = () => {
-    window.location.href = "/"; // Redirect to the sign-in page
+  const handleAuthAction = () => {
+    if (isAuthenticated) {
+      setIsAuthenticated(false); // Log out user
+      navigate("/signin");
+    } else {
+      navigate("/signin"); // Navigate to sign-in page
+    }
   };
 
   return (
     <nav className="navbar">
       {/* Logo and Burger Icon */}
       <div className="nav-header">
-        <Link to="/home" className="logo">
+        <Link to="/" className="logo" onClick={() => setOpened(false)}>
           CoderFair
         </Link>
         <Burger
@@ -28,7 +34,7 @@ const NavBar = () => {
       {/* Navigation Links */}
       <ul className={`nav-links ${opened ? "open" : ""}`}>
         <li>
-          <Link to="/home" onClick={() => setOpened(false)}>Home</Link>
+          <Link to="/" onClick={() => setOpened(false)}>Home</Link>
         </li>
         <li>
           <Link to="/results" onClick={() => setOpened(false)}>Results</Link>
@@ -40,9 +46,8 @@ const NavBar = () => {
           <Link to="/judging" onClick={() => setOpened(false)}>Judging</Link>
         </li>
         <li>
-           <Link to="/coach" onClick={() => setOpened(false)}>Coach Dashboard</Link>
+          <Link to="/coach" onClick={() => setOpened(false)}>Coach Dashboard</Link>
         </li>
-
       </ul>
 
       {/* User Profile Dropdown */}
@@ -51,8 +56,20 @@ const NavBar = () => {
           <Avatar className="user-avatar" radius="xl" />
         </Menu.Target>
         <Menu.Dropdown>
-          <Menu.Item component={Link} to="/account">Account</Menu.Item>
-          <Menu.Item onClick={handleSignOut} className="sign-out">Sign Out</Menu.Item>
+          {isAuthenticated ? (
+            <>
+              <Menu.Item component={Link} to="/account">
+                Account
+              </Menu.Item>
+              <Menu.Item onClick={handleAuthAction} className="sign-out">
+                Sign Out
+              </Menu.Item>
+            </>
+          ) : (
+            <Menu.Item component={Link} to="/signin" className="sign-in">
+              Sign In
+            </Menu.Item>
+          )}
         </Menu.Dropdown>
       </Menu>
     </nav>

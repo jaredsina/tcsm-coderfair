@@ -1,32 +1,53 @@
-import React, { useState } from "react";
-import { Button, TextInput, Textarea } from "@mantine/core";
+import React, { useState, useEffect } from "react";
+import { Button, TextInput, Textarea, FileInput, Image, Modal } from "@mantine/core";
 import "./ManageStudents.css";
+import { createStudent, deleteStudent, fetchStudents, updateStudent } from "../reducers/studentSlice";
+import {useDispatch, useSelector} from "react-redux"
 
-const ManageStudents = ({ students, setStudents }) => {
+const ManageStudents = () => {
   const [newStudentName, setNewStudentName] = useState("");
-  const [newStudentGrade, setNewStudentGrade] = useState("");
   const [newStudentBio, setNewStudentBio] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingStudentId, setEditingStudentId] = useState(null);
+  const [newStudentImage, setNewStudentImage] = useState(null);
+  const [students, setStudents] = useState([{}]);
 
-  const handleAddStudent = () => {
+  const dispatch = useDispatch()
+
+  // Get information from the globale state (store)
+  const studentInfo = useSelector(state => state.students.studentInfo)
+  const status = useSelector(state=> state.students.status)
+
+  useEffect(()=>{
+    // Only fetch students when the page is loaded or when new student is added
+    status === "idle" ? dispatch(fetchStudents()) : setStudents([{}]);
+    setStudents(studentInfo)
+  },[status, dispatch])
+
+  const handleAddStudent = async() => {
     if (!newStudentName.trim()) return;
 
     const newStudent = {
-      id: students.length + 1,
       name: newStudentName,
-      grade: newStudentGrade || "N/A",
       bio: newStudentBio,
+      avatar_image: "" // !! NEEDS to send form data
     };
-
-    setStudents([...students, newStudent]);
+    try{
+      dispatch(createStudent(newStudent))
+      //setStudents([...students, newStudent]);
+    }
+    catch (error){
+      console.log(error)
+    }
+      
+    
     resetForm();
   };
 
   const handleEditStudent = (id) => {
-    const studentToEdit = students.find((student) => student.id === id);
+    const studentToEdit = students.find((student) => student._id === id);
     setNewStudentName(studentToEdit.name);
-    setNewStudentGrade(studentToEdit.grade);
+    setNewStudentImage(studentToEdit.image);
     setNewStudentBio(studentToEdit.bio);
     setEditingStudentId(id);
     setShowForm(true);
@@ -34,25 +55,24 @@ const ManageStudents = ({ students, setStudents }) => {
 
   const handleSaveEdit = () => {
     if (!newStudentName.trim()) return;
-
-    const updatedStudents = students.map((student) =>
-      student.id === editingStudentId
-        ? { ...student, name: newStudentName, grade: newStudentGrade, bio: newStudentBio }
-        : student
-    );
-
-    setStudents(updatedStudents);
+    const updatedStudentData = {
+          name: newStudentName,
+          bio: newStudentBio,
+          avatar_image: "" // !! NEEDS to send form data
+    };  
+    dispatch(updateStudent({"_id": editingStudentId, "updatedStudentData": updatedStudentData}))
+    //setStudents(updatedStudents);
     resetForm();
   };
 
   const handleDeleteStudent = (id) => {
-    setStudents(students.filter((student) => student.id !== id));
+    dispatch(deleteStudent(id))
   };
 
   const resetForm = () => {
     setNewStudentName("");
-    setNewStudentGrade("");
     setNewStudentBio("");
+    setNewStudentImage(null);
     setEditingStudentId(null);
     setShowForm(false);
   };
@@ -65,72 +85,89 @@ const ManageStudents = ({ students, setStudents }) => {
         Create Student Account
       </Button>
 
-      {showForm && (
-        <div className="popup-overlay" onClick={() => setShowForm(false)}>
-          <div className="popup-box" onClick={(e) => e.stopPropagation()}>
-            <h3>{editingStudentId ? "Edit Student" : "Create New Student"}</h3>
-            <TextInput
-              label="Student Name"
-              placeholder="Enter student name"
-              value={newStudentName}
-              onChange={(event) => setNewStudentName(event.target.value)}
-              required
-            />
-            <TextInput
-              label="Grade"
-              placeholder="Enter grade (optional)"
-              value={newStudentGrade}
-              onChange={(event) => setNewStudentGrade(event.target.value)}
-            />
-            <Textarea
-              label="Student Bio"
-              placeholder="Enter student bio"
-              value={newStudentBio}
-              onChange={(event) => setNewStudentBio(event.target.value)}
-            />
-            <Button fullWidth mt="md" onClick={editingStudentId ? handleSaveEdit : handleAddStudent}>
-              {editingStudentId ? "Save Changes" : "Submit"}
-            </Button>
-            <Button
-              fullWidth
-              mt="md"
-              color="gray"
-              onClick={resetForm}
-            >
-              Cancel
-            </Button>
-          </div>
-        </div>
-      )}
+      <Modal
+        opened={showForm}
+        onClose={resetForm}
+        title={editingStudentId ? "Edit Student" : "Create New Student"}
+        centered
+        overlayProps={{ style: { zIndex: 7000 } }}
+        zIndex={8000}
+      >
+        <TextInput
+          required
+          label="Student Name"
+          placeholder="Enter student name"
+          value={newStudentName}
+          onChange={(event) => setNewStudentName(event.target.value)}
+        />
+        <FileInput
+          size="md"
+          radius="xl"
+          label="Student Image"
+          placeholder="Click to upload image"
+          onChange={(file) => setNewStudentImage(file)}
+          accept="image/*"
+        />
+        <Textarea
+          required
+          label="Student Bio"
+          placeholder="Enter student bio"
+          value={newStudentBio}
+          onChange={(event) => setNewStudentBio(event.target.value)}
+        />
+        <Button fullWidth mt="md" onClick={editingStudentId ? handleSaveEdit : handleAddStudent}>
+          {editingStudentId ? "Save Changes" : "Submit"}
+        </Button>
+        <Button
+          fullWidth
+          mt="md"
+          color="gray"
+          onClick={resetForm}
+        >
+          Cancel
+        </Button>
+      </Modal>
 
       <div className="table-container">
         <table>
           <thead>
             <tr>
               <th>Name</th>
-              <th>Grade</th>
               <th>Bio</th>
+              <th>Image</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {students.map((student) => (
-              <tr key={student.id}>
+              <tr key={student._id}>
                 <td>{student.name}</td>
-                <td>{student.grade}</td>
                 <td>{student.bio}</td>
+                <td>
+                  {student.avatar_image ? (
+                    <Image
+                      src={student.avatar_image}
+                      alt={`${student.name}'s photo`}
+                      width={100}
+                      height={100}
+                      fit="contain"
+                    />
+                  ) : (
+                    <div>No image</div>
+                  )}
+                </td>
                 <td className="actions-column">
                   <Button
-                    className="edit-btn"
-                    size="xs"
-                    onClick={() => handleEditStudent(student.id)}
+                    color="blue"
+                    size="s"
+                    onClick={() => handleEditStudent(student._id)}
                   >
                     Edit
                   </Button>
                   <Button
-                    className="delete-btn"
-                    size="xs"
-                    onClick={() => handleDeleteStudent(student.id)}
+                    size="s"
+                    color="red"
+                    onClick={() => handleDeleteStudent(student._id)}
                   >
                     Delete
                   </Button>
