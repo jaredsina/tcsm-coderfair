@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, Table, Title, TextInput, Textarea, MultiSelect, Modal, TagsInput, Autocomplete, FileInput, Select } from "@mantine/core";
 import Delete from "./Delete";
 import { fetchProjects, createProject, deleteProject, updateProject } from "../reducers/projectSlice";
+import { fetchStudents } from "../reducers/studentSlice";
 
 const ManageProjects = () => {
   const [newProjectName, setNewProjectName] = useState("");
@@ -18,15 +19,20 @@ const ManageProjects = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingProjectId, setEditingProjectId] = useState(null);
   const [projects, setProjects] = useState([{}]);
+  const [students, setStudents] = useState([{}]);
+  const [selectedStudent, setSelectedStudent] = useState(null);
 
   const dispatch = useDispatch();
 
   const projectsInfo = useSelector((state) => state.projects.projects);
   const status = useSelector((state) => state.projects.status);
+  const studentStatus = useSelector((state) => state.students.status);
+  const studentsInfo = useSelector((state) => state.students.studentInfo);
   
-  console.log(newLanguages)
   useEffect(() => {
     status === "idle" ? dispatch(fetchProjects()) : setProjects([{}]);
+    studentStatus === "idle" ? dispatch(fetchStudents()) : setStudents([{}]);
+    setStudents(studentsInfo);
     setProjects(projectsInfo);
   }, [status, dispatch]);
 
@@ -39,13 +45,14 @@ const ManageProjects = () => {
   };
 
   const handleAddProject = () => {
-    if (!newProjectName.trim() || !newStudentName.trim()) return;
-  
+    if (!newProjectName.trim() || !selectedStudent) return;
+    // !! Neeed dynaminc coderfair_id 
+    const studentId = students.find((student) => student.name === selectedStudent)._id;
     const formData = new FormData();
 
     // Append text fields
     formData.append("name", newProjectName);
-    formData.append("student_id", "67afabf22a48fbe8a0448ca8"); // Dynamically change this value
+    formData.append("student_id", studentId);
     formData.append("coderfair_id", "67b4f809f02dfc6eecbeed34"); // Dynamically change this value
     formData.append("description", newDescription);
     formData.append("presentation_video_url", newVideoURL);
@@ -85,14 +92,15 @@ const ManageProjects = () => {
   };
 
   const handleSaveEdit = () => {
-    if (!newProjectName.trim()) return;
-    //if (!projects.student_id.trim() || !projects.coderfair_id.trim()) return;
-    // !! activate these when dynaminc student and coderfair ids are available
+    if (!newProjectName.trim() || !selectedStudent) return;
+
+    const studentId = students.find((student) => student.name === selectedStudent)._id;
+    // !! Need dynamic coderfair_id
     const formData = new FormData();
 
     // Append text fields
     formData.append("name", newProjectName);
-    formData.append("student_id", "67afabf22a48fbe8a0448ca8"); // Dynamically change this value
+    formData.append("student_id", studentId); // Dynamically change this value
     formData.append("coderfair_id", "67b4f809f02dfc6eecbeed34"); // Dynamically change this value
     formData.append("description", newDescription);
     formData.append("presentation_video_url", newVideoURL);
@@ -113,6 +121,7 @@ const ManageProjects = () => {
   const resetForm = () => {
     setNewProjectName("");
     setNewStudentName("");
+    setSelectedStudent(null);
     setNewDescription("");
     setNewVideoURL("");
     setNewCodeLink("");
@@ -134,7 +143,7 @@ const ManageProjects = () => {
       </Button>
 
       {showForm && (
-        <div className="popup-overlay" onClick={() => setShowForm(false)}>
+        <div className="popup-overlay" onClick={() => resetForm()}>
           <div className="popup-box" onClick={(e) => e.stopPropagation()}>
             <h3>{editingProjectId ? "Edit Project" : "Create New Project"}</h3>
             <TextInput
@@ -144,13 +153,15 @@ const ManageProjects = () => {
               onChange={(event) => setNewProjectName(event.target.value)}
               required
             />
-            <TextInput
+            {editingProjectId ? null : <Select
               label="Student Name "
               placeholder="Enter student name"
-              value={newStudentName}
-              onChange={(event) => setNewStudentName(event.target.value)}
+              data={students.map((student) => student.name)}
+              value={selectedStudent}
+              onChange={(value) => setSelectedStudent(value)}
+              styles={{dropdown: { zIndex: 10000 }}}
               required
-            />
+            />}
             <Textarea
               label="Description "
               placeholder="Enter project description"
