@@ -196,6 +196,14 @@ class ProjectModel:
                         }
                     },
                     {
+                        "$lookup": {
+                            "from": "grades",
+                            "localField": "_id",
+                            "foreignField": "project_id",
+                            "as": "grade",
+                        }
+                    },
+                    {
                         "$project": {
                             "_id": {"$toString": "$_id"},  # Convert ObjectId to string
                             "student_id": {"$toString": "$student_id"},
@@ -212,6 +220,7 @@ class ProjectModel:
                             "notes": 1,
                             "student.name": 1,
                             "is_featured": 1,
+                            "grade.overall_grade": 1,
                         }
                     },
                 ]

@@ -4,9 +4,11 @@ import ProjectCard from '../../Components/ProjectCard/ProjectCard';
 import SearchBar from '../../Components/SearchBar/SearchBar';
 import { fetchProjects } from '../../reducers/projectSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const ProjectPage = () => {
+
+  const [shownProjects,setShownProjects] = useState([])
 
   const projects = useSelector((state)=>state.projects.projects)
   const projectStatus = useSelector((state)=>state.projects.status)
@@ -14,6 +16,7 @@ const ProjectPage = () => {
 
   useEffect(()=>{
     projectStatus === "idle" ? dispatch(fetchProjects()) : null;
+    setShownProjects(projects)
   }, [projectStatus, dispatch])
 
   return (
@@ -22,10 +25,10 @@ const ProjectPage = () => {
         <Title order={1}>Project Gallery</Title>
       </div>
 
-      <SearchBar />
+      <SearchBar setShownProjects={setShownProjects}/>
 
       <Flex mih={50} gap="md" direction="row" justify="center" wrap="wrap">
-        {projects.map((project, index) => (
+        {shownProjects?.map((project, index) => (
           <div className="ProjectCard" key={index}>
             <ProjectCard title={project.name} language={project.coding_language ? project.coding_language : "Other"} description={project.description} image={project.project_image ? project.project_image : "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png"}/>
           </div>
