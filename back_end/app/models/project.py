@@ -19,6 +19,7 @@ class ProjectModel:
         project_username,
         project_password,
         notes,
+        is_featured,
     ):
         project_data = {
             "student_id": student_id,
@@ -33,6 +34,7 @@ class ProjectModel:
             "project_username": project_username,
             "project_password": project_password,
             "notes": notes,
+            "is_featured": is_featured,
         }
 
         # insert_one --> add data (document) into collection
@@ -68,7 +70,7 @@ class ProjectModel:
         )
 
     # list projects by coderfair
-    def list_coderfair_projects(self, coderfair_id):
+    def list_top_coderfair_projects(self, coderfair_id):
         return list(
             self.collection.aggregate(
                 [
@@ -106,6 +108,7 @@ class ProjectModel:
                             "project_username": 0,
                             "project_password": 0,
                             "notes": 0,
+                            "is_featured": 1,
                             "grade._id": 0,
                             "grade.concept_tier": 0,
                             "grade.concept_mastery": 0,
@@ -114,8 +117,65 @@ class ProjectModel:
                             "grade.judge_id": 0,
                             "grade.project_id": 0,
                             "grade.overall_comments": 0,
-                            "student._id": 0,
+                            "student._id": {"$toString": "$student._id"},
                             "student.bio": 0,
+                        }
+                    },
+                ]
+            )
+        )
+
+    # list projects by coderfair
+    def list_coderfair_projects(self, coderfair_id):
+        return list(
+            self.collection.aggregate(
+                [
+                    {"$match": {"coderfair_id": coderfair_id}},
+                    {
+                        "$lookup": {
+                            "from": "grades",
+                            "localField": "_id",
+                            "foreignField": "project_id",
+                            "as": "grade",
+                        }
+                    },
+                    {
+                        "$lookup": {
+                            "from": "students",
+                            "localField": "student_id",
+                            "foreignField": "_id",
+                            "as": "student",
+                        }
+                    },
+                    {"$sort": {"grade.overall_grade": -1}},
+                    {
+                        "$project": {
+                            "_id": {"$toString": "$_id"},
+                            "student_id": {"$toString": "$student_id"},
+                            "coderfair_id": {"$toString": "$coderfair_id"},
+                            "name": 1,
+                            "description": 1,
+                            "category": 1,
+                            "project_image": 1,
+                            "presentation_video_url": 1,
+                            "code_access_link": 1,
+                            "coding_language": 1,
+                            "project_username": 1,
+                            "project_password": 1,
+                            "notes": 1,
+                            "is_featured": 1,
+                            # "grade._id": {"$toString": "$grade._id"},
+                            # "grade.concept_tier": 1,
+                            # "grade.concept_mastery": 1,
+                            # "grade.presentation": 1,
+                            # "grade.creativity": 1,
+                            # "grade.judge_id": 1,
+                            # "grade.project_id": 1,
+                            # "grade.overall_comments": 1,
+                            "grade.overall_grade": 1,
+                            "student.name": 1,
+                            "student.avatar_image": 1,
+                            # "student.bio": 1,
                         }
                     },
                 ]
@@ -151,6 +211,7 @@ class ProjectModel:
                             "project_password": 1,
                             "notes": 1,
                             "student.name": 1,
+                            "is_featured": 1,
                         }
                     },
                 ]
@@ -158,8 +219,13 @@ class ProjectModel:
         )
 
     def update_project(self, id, update_data):
+        if "project_image" not in update_data:
+            project_image = self.collection.find_one({"_id": id})["project_image"]
+        else:
+            project_image = update_data["project_image"]
         result = self.collection.update_one({"_id": id}, {"$set": update_data})
-        return result
+
+        return project_image
 
     def delete_project(self, id):
         project_info = self.collection.find_one({"_id": id}, {"name": 1, "_id": 0})

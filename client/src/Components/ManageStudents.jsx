@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, TextInput, Textarea, FileInput, Image, Modal } from "@mantine/core";
+import { Button, TextInput, Textarea, FileInput, Image, Modal, Alert } from "@mantine/core";
 import "./ManageStudents.css";
 import { createStudent, deleteStudent, fetchStudents, updateStudent } from "../reducers/studentSlice";
 import {useDispatch, useSelector} from "react-redux"
@@ -102,14 +102,15 @@ const ManageStudents = () => {
           value={newStudentName}
           onChange={(event) => setNewStudentName(event.target.value)}
         />}
-        {editingStudentId ? null : <FileInput
+        <Alert variant="light" color="red" title="Warning">Do not update student images often!</Alert>
+         <FileInput
           size="md"
           radius="xl"
           label="Student Image"
           placeholder="Click to upload image"
           onChange={(file) => setNewStudentImage(file)}
           accept="image/*"
-        />}
+        />
         <Textarea
           required
           label="Student Bio"

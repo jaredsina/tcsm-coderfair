@@ -32,6 +32,29 @@ export const fetchProjects = createAsyncThunk(
   },
 );
 
+// * Fetch coderfair projects
+
+export const fetchCoderFairProjects = createAsyncThunk(
+  'projects/fetchCoderFairProjects',
+  async (coderfair_id, { rejectWithValue }) => {
+    try {
+      const request = await axios.get(
+        `${projectBaseUrl}/coderfair/${coderfair_id}`,
+      );
+      const response = request.data;
+      return response;
+    } catch (err) {
+      notifications.show({
+        title: 'Error',
+        message:
+          'An error has occured trying to get coderfair projects from the database',
+        color: 'red',
+      });
+      return rejectWithValue(err.response.data);
+    }
+  },
+);
+
 // * Create a project
 
 export const createProject = createAsyncThunk(
@@ -131,7 +154,11 @@ export const getProjectById = createAsyncThunk(
 const projectSlice = createSlice({
   name: 'projects',
   initialState,
-  reducers: {},
+  reducers: {
+    resetProjectStatus: (state) => {
+      state.status = 'idle';
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addMatcher(
@@ -140,7 +167,8 @@ const projectSlice = createSlice({
             action.type === fetchProjects.pending.type ||
             action.type === createProject.pending.type ||
             action.type === updateProject.pending.type ||
-            action.type === deleteProject.pending.type
+            action.type === deleteProject.pending.type ||
+            action.type === fetchCoderFairProjects.pending.type
           );
         },
         (state) => {
@@ -150,7 +178,10 @@ const projectSlice = createSlice({
       )
       .addMatcher(
         (action) => {
-          return action.type === fetchProjects.fulfilled.type;
+          return (
+            action.type === fetchProjects.fulfilled.type ||
+            action.type === fetchCoderFairProjects.fulfilled.type
+          );
         },
         (state, action) => {
           state.loading = false;
@@ -198,7 +229,8 @@ const projectSlice = createSlice({
             action.type === fetchProjects.rejected.type ||
             action.type === createProject.rejected.type ||
             action.type === updateProject.rejected.type ||
-            action.type === deleteProject.rejected.type
+            action.type === deleteProject.rejected.type ||
+            action.type === fetchCoderFairProjects.rejected.type
           );
         },
         (state, action) => {
@@ -210,4 +242,5 @@ const projectSlice = createSlice({
   },
 });
 
+export const { resetProjectStatus } = projectSlice.actions;
 export default projectSlice.reducer;

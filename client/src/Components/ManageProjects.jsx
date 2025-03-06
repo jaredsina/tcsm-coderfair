@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Table, Title, TextInput, Textarea, MultiSelect, Modal, TagsInput, Autocomplete, FileInput, Select } from "@mantine/core";
+import { Button, Table, Title, TextInput, Textarea, MultiSelect, Modal, TagsInput, Autocomplete, FileInput, Select, Checkbox, Alert } from "@mantine/core";
 import Delete from "./Delete";
 import { fetchProjects, createProject, deleteProject, updateProject } from "../reducers/projectSlice";
 import { fetchStudents } from "../reducers/studentSlice";
@@ -14,6 +14,7 @@ const ManageProjects = () => {
   const [newCodeLink, setNewCodeLink] = useState("");
   const [newLanguages, setNewLanguages] = useState("");
   const [newNotes, setNewNotes] = useState("");
+  const [newFeatured, setNewFeatured] = useState(false)
   const [newProjectImage, setNewProjectImage] = useState(null);
   const [newStudentName, setNewStudentName] = useState(""); // New field for student name
   const [showForm, setShowForm] = useState(false);
@@ -62,6 +63,7 @@ const ManageProjects = () => {
     formData.append("project_username", newUsername);
     formData.append("project_password", newPassword);
     formData.append("notes", newNotes);
+    formData.append("is_featured", false);
     
     // Append the image file (assuming `newProjectImage` is a file input)
     formData.append("project_image", newProjectImage);
@@ -78,6 +80,7 @@ const ManageProjects = () => {
 
   const handleEditProject = (id) => {
     const projectToEdit = projects.find((project) => project._id === id);
+    setSelectedStudent(projectToEdit.student_id)
     setNewProjectName(projectToEdit.name);
     setNewDescription(projectToEdit.description);
     setNewVideoURL(projectToEdit.presentation_video_url);
@@ -87,20 +90,19 @@ const ManageProjects = () => {
     setNewUsername(projectToEdit.project_username);
     setNewPassword(projectToEdit.project_password);
     setNewNotes(projectToEdit.notes);
+    setNewFeatured(projectToEdit.is_featured === "true");
     setEditingProjectId(id);
     setShowForm(true);
   };
 
   const handleSaveEdit = () => {
-    if (!newProjectName.trim() || !selectedStudent) return;
-
-    const studentId = students.find((student) => student.name === selectedStudent)._id;
+    if (!newProjectName.trim() ) return;
     // !! Need dynamic coderfair_id
     const formData = new FormData();
 
     // Append text fields
     formData.append("name", newProjectName);
-    formData.append("student_id", studentId); // Dynamically change this value
+    formData.append("student_id", selectedStudent); // Dynamically change this value
     formData.append("coderfair_id", "67b4f809f02dfc6eecbeed34"); // Dynamically change this value
     formData.append("description", newDescription);
     formData.append("presentation_video_url", newVideoURL);
@@ -110,6 +112,7 @@ const ManageProjects = () => {
     formData.append("project_username", newUsername);
     formData.append("project_password", newPassword);
     formData.append("notes", newNotes);
+    formData.append("is_featured",newFeatured);
     
     // Append the image file (assuming `newProjectImage` is a file input)
     formData.append("project_image", newProjectImage);
@@ -129,6 +132,7 @@ const ManageProjects = () => {
     setNewNotes("");
     setNewUsername("");
     setNewPassword("");
+    setNewFeatured(false);
     setNewProjectImage(null);
     setEditingProjectId(null);
     setShowForm(false);
@@ -169,6 +173,7 @@ const ManageProjects = () => {
               onChange={(event) => setNewDescription(event.target.value)}
               required
             />
+            <Alert variant="light" color="red" title="Warning">Do not update project images often!</Alert>
             <FileInput 
             size="md"
             radius="xl"
@@ -218,6 +223,11 @@ const ManageProjects = () => {
               value={newNotes}
               onChange={(event) => setNewNotes(event.target.value)}
             />
+            {editingProjectId ? <Checkbox
+              label= "Feature this project on the home page?"
+              checked={newFeatured}
+              onChange={(event)=> setNewFeatured(event.target.checked)}
+              /> : null}
             <Button fullWidth mt="md" onClick={editingProjectId ? handleSaveEdit : handleAddProject}>
               {editingProjectId ? "Save Changes" : "Submit"}
             </Button>

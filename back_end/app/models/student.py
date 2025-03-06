@@ -16,8 +16,9 @@ class StudentModel:
 
     def update_student(self, id, update_data):
         if "avatar_image" not in update_data:
-            print("hello")
             avatar_image = self.collection.find_one({"_id": id})["avatar_image"]
+        else:
+            avatar_image = update_data["avatar_image"]
         result = self.collection.update_one({"_id": id}, {"$set": update_data})
         return avatar_image
 

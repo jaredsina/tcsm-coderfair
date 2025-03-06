@@ -28,7 +28,7 @@ def get_students():
 def get_top_students(coderfair_id):
     try:
         project = ProjectModel(current_app.mongo)
-        top_students = project.list_coderfair_projects(ObjectId(coderfair_id))
+        top_students = project.list_top_coderfair_projects(ObjectId(coderfair_id))
 
     except Exception as e:
         return jsonify({"message": "Error getting students", "error": str(e)}), 400
