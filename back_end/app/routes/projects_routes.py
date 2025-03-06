@@ -26,6 +26,21 @@ def get_projects():
     return jsonify(projects), 200
 
 
+# Define a simple route inside this blueprint
+@projects_routes.route("/coderfair/<string:coderfair_id>", methods=["GET"])
+def get_coderfair_projects(coderfair_id):
+    try:
+        new_project = ProjectModel(current_app.mongo)
+        projects = new_project.list_coderfair_projects(ObjectId(coderfair_id))
+
+    except Exception as e:
+        # If an exception is raised, return an error message and status code 400
+        return jsonify({"message": "Error getting projects", "error": str(e)}), 400
+
+        # If no exceptions are raised, return a success message and status code 200
+    return jsonify(projects), 200
+
+
 @projects_routes.route("/<string:project_id>", methods=["GET"])
 def get_project(project_id):
     try:
