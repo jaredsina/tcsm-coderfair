@@ -10,7 +10,7 @@ const ProjectCard = ({
 }) => {
   return (
     <Card
-      style={{ ...style, width: style?.width || 300 }}
+      style={{ ...style, width: style?.width || 310 }}
       shadow="sm"
       padding="lg"
       radius="md"
@@ -25,7 +25,7 @@ const ProjectCard = ({
       </Card.Section>
 
       <Flex justify="space-between" align="center" mt="md" mb="xs">
-        <Text fw={500}>{title}</Text>
+        <Text fw={500}style={{ whiteSpace:'nowrap', overflow:'scroll', maxWidth:140}}>{title}</Text>
         {/* {language && <Badge color="blue">{language}</Badge>} */}
           <Badge color="blue">{language}</Badge>
       </Flex>

@@ -196,7 +196,7 @@ const ManageProjects = () => {
             />
             <Select
               label="Coding Languages Used"
-              data={['HTML/CSS/Javascript','React', 'Python', 'Java', 'C++', 'C#', 'C', 'Ruby', 'PHP', 'Swift', 'TypeScript', 'Rust', 'Kotlin', 'R', 'Scratch/Block Based', 'SQL',]}
+              data={['HTML/CSS','Javascript','React', 'Python', 'Java', 'C++', 'C#', 'C', 'Ruby', 'PHP', 'Swift', 'TypeScript', 'Rust', 'Kotlin', 'R', 'Scratch/Block Based', 'SQL',]}
               value={newLanguages ? newLanguages : null}
               onChange={setNewLanguages}
               styles={{dropdown: { zIndex: 10000 }}}
