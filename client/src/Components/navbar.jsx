@@ -66,9 +66,6 @@ const NavBar = () => {
         <Menu.Dropdown>
           {isAuthenticated ? (
             <>
-              <Menu.Item component={Link} to="/account">
-                Account
-              </Menu.Item>
               <Menu.Item onClick={handleAuthAction} className="sign-out">
                 Sign Out
               </Menu.Item>
