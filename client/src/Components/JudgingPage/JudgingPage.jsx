@@ -17,7 +17,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createGrade, fetchGrades } from "../../reducers/gradeSlice";
 import { fetchStudents } from "../../reducers/studentSlice";
-import { fetchProjects } from "../../reducers/projectSlice";
+import { fetchCoderFairProjects, fetchProjects, resetProjectStatus } from "../../reducers/projectSlice";
+import { notifications } from "@mantine/notifications";
 
 const data = ["Sina", "Francis", "David", "Terisa"];
 const concept_tiers = ["Beginner", "Intermediate", "Advanced"];
@@ -31,7 +32,7 @@ export function Judging() {
 }
 export function Form() {
   return (
-    <Text size="xl" fw={500} Semibold>
+    <Text size="xl" fw={500}>
       Judge Form
     </Text>
   );
@@ -45,7 +46,14 @@ function JudgingPage() {
   const dispatch = useDispatch()
 
   const handleAddGrade = () => {
-    if (!selectedStudent || !newGrade.concept_mastery || !newGrade.creativity || !newGrade.presentation) return;
+    if (!selectedStudent || !newGrade.concept_mastery || !newGrade.creativity || !newGrade.presentation || !newGrade.overall_comments || !newGrade.concept_tier){
+      return notifications.show({
+        title: 'Error',
+        message:
+          'Missing form information',
+        color: 'red',
+      });
+    } 
 
     newGrade.judge_id = "67a6204ac5e2b4a4e0bf6df6"
     // const studentId = studentInfo.find((student)=> student.name === selectedStudent)
@@ -54,6 +62,9 @@ function JudgingPage() {
     newGrade.student_id = selectedStudent?._id
     newGrade.overall_grade = (newGrade.concept_mastery + newGrade.creativity + newGrade.presentation)
     dispatch(createGrade(newGrade))
+    setNewGrade({name:null, concept_tier:null, concept_mastery:0, creativity: 0, presentation:0, overall_comments:""})
+    setSelectedStudent(null)
+    dispatch(resetProjectStatus())
   }
 
   const handleEditStudent = (value) =>{
@@ -63,20 +74,26 @@ function JudgingPage() {
 
   const gradeStatus = useSelector((state) => state.grades.status);
   const studentStatus = useSelector((state) => state.students.status);
-  const projectStatus = useSelector((state) => state.projects.status);
+
+  // * If ever removing Podium make sure the HomePage component fetchesCoderFairProjects
+  //const projectStatus = useSelector((state) => state.projects.status);
 
   const gradeInfo = useSelector((state) => state.grades.grades);
   const studentInfo = useSelector((state) => state.students.studentInfo);
+  
+  // * If ever removing Podium make sure the HomePage component fetchesCoderFairProjects
   const projectInfo = useSelector((state) => state.projects.projects);
   //const coachInfo = useSelector((state) => state.coaches.coachInfo);
 
   useEffect(() => {
     gradeStatus === "idle" ? dispatch(fetchGrades()) : null;
     studentStatus === "idle" ? dispatch(fetchStudents()) : null;
-    projectStatus === "idle" ? dispatch(fetchProjects()) : null;
+
+    // * If ever removing Podium make sure the HomePage component fetchesCoderFairProjects
+    //projectStatus === "idle" ? dispatch(fetchProjects()) : null;
     //coachStatus === "idle" ? dispatch(fetchCoaches()) : null;
     
-  }, [gradeStatus, studentStatus, projectStatus, dispatch])
+  }, [gradeStatus, studentStatus, dispatch])
 
   return (
     <main>
@@ -117,7 +134,7 @@ function JudgingPage() {
                       data={studentInfo?.length > 1 ? studentInfo?.map((student) => student.name): null}
                       searchable
                       clearable
-                      value={selectedStudent?.name}
+                      value={selectedStudent?.name || null}
                       onChange={(value)=> handleEditStudent(value)}
                     />
                   </List.Item>
