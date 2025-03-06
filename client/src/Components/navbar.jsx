@@ -48,6 +48,11 @@ const NavBar = ({ isAuthenticated, setIsAuthenticated }) => {
         <li>
           <Link to="/coach" onClick={() => setOpened(false)}>Coach Dashboard</Link>
         </li>
+        <li>
+          <Link to="/admin" onClick={() => setOpened(false)}>
+            Admin Dashboard
+          </Link>
+        </li>
       </ul>
 
       {/* User Profile Dropdown */}

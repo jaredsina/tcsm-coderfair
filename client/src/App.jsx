@@ -13,6 +13,7 @@ import Account from './Pages/AccountPage/AccountPage';
 import JudgingPage from './Components/JudgingPage/JudgingPage';
 import CoachesPage from './Pages/CoachesPage/CoachesPage';
 import Reset from './Pages/ResetPass/Reset';
+import AdminPage from "./Pages/AdminPage/AdminPage";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -47,6 +48,7 @@ const App = () => {
             <Route path="/judging" element={<JudgingPage />} />
             <Route path="/coach" element={<CoachesPage />} />
             <Route path="/reset" element={<Reset />} />
+            <Route path="/admin" element = {<AdminPage/>}/>
             <Route path="single-project" element = {<SingleProject></SingleProject>}/>
           </Routes>
         </div>
