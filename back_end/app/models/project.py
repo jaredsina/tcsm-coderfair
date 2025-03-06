@@ -162,8 +162,13 @@ class ProjectModel:
         )
 
     def update_project(self, id, update_data):
+        if "project_image" not in update_data:
+            project_image = self.collection.find_one({"_id": id})["project_image"]
+        else:
+            project_image = update_data["project_image"]
         result = self.collection.update_one({"_id": id}, {"$set": update_data})
-        return result
+
+        return project_image
 
     def delete_project(self, id):
         project_info = self.collection.find_one({"_id": id}, {"name": 1, "_id": 0})

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Table, Title, TextInput, Textarea, MultiSelect, Modal, TagsInput, Autocomplete, FileInput, Select, Checkbox } from "@mantine/core";
+import { Button, Table, Title, TextInput, Textarea, MultiSelect, Modal, TagsInput, Autocomplete, FileInput, Select, Checkbox, Alert } from "@mantine/core";
 import Delete from "./Delete";
 import { fetchProjects, createProject, deleteProject, updateProject } from "../reducers/projectSlice";
 import { fetchStudents } from "../reducers/studentSlice";
@@ -173,6 +173,7 @@ const ManageProjects = () => {
               onChange={(event) => setNewDescription(event.target.value)}
               required
             />
+            <Alert variant="light" color="red" title="Warning">Do not update project images often!</Alert>
             <FileInput 
             size="md"
             radius="xl"

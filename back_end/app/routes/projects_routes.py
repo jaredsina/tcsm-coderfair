@@ -77,14 +77,12 @@ def update_project(project_id):
         is_featured = request.form.get("is_featured")
 
         if not project_image:
-            project_image = ""
             update_data = {
                 "student_id": ObjectId(student_id),
                 "coderfair_id": ObjectId(coderfair_id),
                 "name": name,
                 "description": description,
                 "category": category,
-                "project_image": project_image,
                 "presentation_video_url": presentation_video_url,
                 "code_access_link": code_access_link,
                 "coding_language": coding_language,
@@ -123,7 +121,7 @@ def update_project(project_id):
                 "is_featured": is_featured,
             }
         project = ProjectModel(current_app.mongo)
-        project.update_project(ObjectId(project_id), update_data)
+        image = project.update_project(ObjectId(project_id), update_data)
 
     except Exception as e:
         print(e)
@@ -137,6 +135,7 @@ def update_project(project_id):
             "_id": project_id,
             "student_id": student_id,
             "coderfair_id": coderfair_id,
+            "project_image": image,
         }
     ), 200
 
