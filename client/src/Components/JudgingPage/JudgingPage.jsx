@@ -11,6 +11,7 @@ import {
   Autocomplete,
   MultiSelect,
   Select,
+  Alert,
 } from "@mantine/core";
 import { Podium } from "../../Pages/HomePage/HomePage";
 import { useEffect, useState } from "react";
@@ -151,7 +152,9 @@ function JudgingPage() {
                   </List.Item>
                   <List.Item>
                     <div>Project Name</div>
-                    <Text>{projectInfo.find((project)=> project.student_id === selectedStudent?._id)?.name || "ERROR: COULDNT FIND PROJECT, SELECT ANOTHER STUDENT"}</Text>
+                    {
+                      projectInfo.find((project)=> project.student_id === selectedStudent?._id)?.name ? <Alert variant="light" color="green" title="Project Name Found:">{projectInfo.find((project)=> project.student_id === selectedStudent?._id)?.name}</Alert>: <Alert variant="light" color="red" title="Warning">ERROR: No project found for this student. Select another student!</Alert>
+                    }
                   </List.Item>
                 </Flex>
                 <Flex direction={"column"} gap={"md"} flex>
