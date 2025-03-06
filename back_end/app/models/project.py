@@ -54,6 +54,13 @@ class ProjectModel:
     def find_project_by_name(self, name):
         return self.collection.find_one({"name": name})
 
+    def check_duplicate(self, student_id, codefair_id):
+        existing_project = self.collection.aggregate(
+            [{"$match": {"coderfair_id": codefair_id, "student_id": student_id}}]
+        )
+
+        return list(existing_project)
+
     # find by id
     def find_project_by_id(self, id):
         return self.collection.find_one(

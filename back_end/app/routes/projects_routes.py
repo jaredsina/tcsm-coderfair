@@ -155,6 +155,14 @@ def create_project():
         project_password = request.form.get("project_password")
         notes = request.form.get("notes")
 
+        project = ProjectModel(current_app.mongo)
+
+        # Check if student has a project for the coderfair
+        if project.check_duplicate(ObjectId(student_id), ObjectId(coderfair_id)):
+            raise ValueError(
+                f"A project with student_id {student_id} and coderfair_id {coderfair_id} already exists."
+            )
+
         if project_image:
             cloudinary.uploader.upload(
                 project_image,
@@ -168,7 +176,6 @@ def create_project():
         else:
             project_image = ""
 
-        project = ProjectModel(current_app.mongo)
         response = project.create_project(
             ObjectId(student_id),
             ObjectId(coderfair_id),
