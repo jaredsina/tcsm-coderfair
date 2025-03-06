@@ -19,6 +19,7 @@ class ProjectModel:
         project_username,
         project_password,
         notes,
+        is_featured,
     ):
         project_data = {
             "student_id": student_id,
@@ -33,6 +34,7 @@ class ProjectModel:
             "project_username": project_username,
             "project_password": project_password,
             "notes": notes,
+            "is_featured": is_featured,
         }
 
         # insert_one --> add data (document) into collection
@@ -106,6 +108,7 @@ class ProjectModel:
                             "project_username": 0,
                             "project_password": 0,
                             "notes": 0,
+                            "is_featured": 1,
                             "grade._id": 0,
                             "grade.concept_tier": 0,
                             "grade.concept_mastery": 0,
@@ -151,6 +154,7 @@ class ProjectModel:
                             "project_password": 1,
                             "notes": 1,
                             "student.name": 1,
+                            "is_featured": 1,
                         }
                     },
                 ]

@@ -74,6 +74,7 @@ def update_project(project_id):
         project_username = request.form.get("project_username")
         project_password = request.form.get("project_password")
         notes = request.form.get("notes")
+        is_featured = request.form.get("is_featured")
 
         if not project_image:
             project_image = ""
@@ -90,6 +91,7 @@ def update_project(project_id):
                 "project_username": project_username,
                 "project_password": project_password,
                 "notes": notes,
+                "is_featured": is_featured,
             }
 
         else:
@@ -118,6 +120,7 @@ def update_project(project_id):
                 "project_username": project_username,
                 "project_password": project_password,
                 "notes": notes,
+                "is_featured": is_featured,
             }
         project = ProjectModel(current_app.mongo)
         project.update_project(ObjectId(project_id), update_data)
@@ -154,6 +157,7 @@ def create_project():
         project_username = request.form.get("project_username")
         project_password = request.form.get("project_password")
         notes = request.form.get("notes")
+        is_featured = request.form.get("is_featured")
 
         project = ProjectModel(current_app.mongo)
 
@@ -189,6 +193,7 @@ def create_project():
             project_username,
             project_password,
             notes,
+            is_featured,
         )
 
     except Exception as e:
@@ -208,6 +213,7 @@ def create_project():
             "project_username": project_username,
             "project_password": project_password,
             "notes": notes,
+            "is_featured": is_featured,
             "_id": response,
         }
     ), 201
