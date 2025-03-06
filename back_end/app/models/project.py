@@ -173,6 +173,8 @@ class ProjectModel:
                             # "grade.project_id": 1,
                             # "grade.overall_comments": 1,
                             "grade.overall_grade": 1,
+                            "student.name": 1,
+                            "student.avatar_image": 1,
                             # "student.bio": 1,
                         }
                     },
