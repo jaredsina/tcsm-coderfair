@@ -24,6 +24,9 @@ import {
 import './HomePage.css';
 import { Carousel } from '@mantine/carousel';
 import { Link } from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux'
+import { useEffect, useState } from 'react';
+import { fetchCoderFairProjects } from '../../reducers/projectSlice';
 
 const data1 = [
   { rank: 4, name: 'Josh', score: 5000 },
@@ -138,6 +141,17 @@ export function Podium() {
 }
 
 const HomePage = () => {
+
+  const projects = useSelector((state)=>state.projects.projects)
+  const projectStatus = useSelector((state)=>state.projects.status)
+ 
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    projectStatus === "idle" ? dispatch(fetchCoderFairProjects('67b4f809f02dfc6eecbeed34')) : null;
+  }, [projectStatus, dispatch])
+  console.log(projects)
+  console.log(projectStatus)
   return (
     <Container size="xl" py={40}>
       <Box mb={60}>
@@ -172,31 +186,14 @@ const HomePage = () => {
           controlSize={'3rem'}
           loop
         >
-          <Carousel.Slide style={{ width: '100%' }}>
+          {projects?.filter((project)=>{return project.is_featured === "true"}).map((project)=>{
+            return(
+            <Carousel.Slide style={{ width: '100%' }}>
             <Center>
-              <ProjectCard style={{ width: '100%' }} />
+              <ProjectCard style={{ width: '100%' }} title={project.name} language={project.coding_language ? project.coding_language : "Other"} description={project.description} image={project.project_image ? project.project_image : "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png"}/>
             </Center>
-          </Carousel.Slide>
-          <Carousel.Slide style={{ width: '100%' }}>
-            <Center>
-              <ProjectCard style={{ width: '100%' }} />
-            </Center>
-          </Carousel.Slide>
-          <Carousel.Slide style={{ width: '100%' }}>
-            <Center>
-              <ProjectCard style={{ width: '100%' }} />
-            </Center>
-          </Carousel.Slide>
-          <Carousel.Slide style={{ width: '100%' }}>
-            <Center>
-              <ProjectCard style={{ width: '100%' }} />
-            </Center>
-          </Carousel.Slide>
-          <Carousel.Slide style={{ width: '100%' }}>
-            <Center>
-              <ProjectCard style={{ width: '100%' }} />
-            </Center>
-          </Carousel.Slide>
+          </Carousel.Slide>)
+          })}
           <Carousel.Slide>
             <Flex mih={300} justify="center" align="center" direction="row">
               <Link to="/projects" onClick={() => setOpened(false)}>
