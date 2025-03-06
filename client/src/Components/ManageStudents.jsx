@@ -95,21 +95,21 @@ const ManageStudents = () => {
         overlayProps={{ style: { zIndex: 7000 } }}
         zIndex={8000}
       >
-        <TextInput
+        {editingStudentId ? null : <TextInput
           required
           label="Student Name"
           placeholder="Enter student name"
           value={newStudentName}
           onChange={(event) => setNewStudentName(event.target.value)}
-        />
-        <FileInput
+        />}
+        {editingStudentId ? null : <FileInput
           size="md"
           radius="xl"
           label="Student Image"
           placeholder="Click to upload image"
           onChange={(file) => setNewStudentImage(file)}
           accept="image/*"
-        />
+        />}
         <Textarea
           required
           label="Student Bio"
