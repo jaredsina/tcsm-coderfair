@@ -59,10 +59,15 @@ export const fetchCoderFairProjects = createAsyncThunk(
 
 export const createProject = createAsyncThunk(
   'projects/createProject',
-  async (project, { rejectWithValue }) => {
+  async (project, { getState, rejectWithValue }) => {
     try {
+      const token = getState().auth.accessToken;
+
       const request = await axios.post(`${projectBaseUrl}/create`, project, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
       });
       const response = request.data;
       notifications.show({
@@ -86,12 +91,18 @@ export const createProject = createAsyncThunk(
 
 export const updateProject = createAsyncThunk(
   'projects/updateProject',
-  async (info, { rejectWithValue }) => {
+  async (info, { getState, rejectWithValue }) => {
     try {
+      const token = getState().auth.accessToken;
       const { _id, updatedProjectData } = info; // Destructure the info object
       const request = await axios.put(
         `${projectBaseUrl}/update/${_id}`,
         updatedProjectData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          },
+        },
       );
       const response = request.data;
       notifications.show({
@@ -115,9 +126,14 @@ export const updateProject = createAsyncThunk(
 
 export const deleteProject = createAsyncThunk(
   'projects/deleteProject',
-  async (_id, { rejectWithValue }) => {
+  async (_id, { getState, rejectWithValue }) => {
     try {
-      const request = await axios.delete(`${projectBaseUrl}/delete/${_id}`);
+      const token = getState().auth.accessToken;
+      const request = await axios.delete(`${projectBaseUrl}/delete/${_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+      });
       const response = request.data;
       notifications.show({
         title: 'Project Deleted',

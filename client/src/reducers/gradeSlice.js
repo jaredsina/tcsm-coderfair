@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { notifications } from '@mantine/notifications';
-
+import { useStore } from 'react-redux';
 const gradeBaseUrl = 'http://localhost:8000/grades';
 
 const initialState = {
@@ -30,9 +30,15 @@ export const fetchGrades = createAsyncThunk('grades/fetchGrades', async () => {
 // * Create a grade
 export const createGrade = createAsyncThunk(
   'grades/createGrade',
-  async (grade, { rejectWithValue }) => {
+  async (grade, { getState, rejectWithValue }) => {
     try {
-      const request = await axios.post(`${gradeBaseUrl}/create`, grade);
+      // Get the token from the Redux store
+      const token = getState().auth.accessToken;
+      const request = await axios.post(`${gradeBaseUrl}/create`, grade, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+      });
       const response = request.data;
       notifications.show({
         title: 'Grade Created',
@@ -54,12 +60,19 @@ export const createGrade = createAsyncThunk(
 // * Update a grade
 export const updateGrade = createAsyncThunk(
   'grades/updateGrade',
-  async (info, { rejectWithValue }) => {
+  async (info, { getState, rejectWithValue }) => {
     try {
+      const token = getState().auth.accessToken;
+
       const { _id, updatedGradeData } = info;
       const request = await axios.put(
         `${gradeBaseUrl}/update/${_id}`,
         updatedGradeData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          },
+        },
       );
       const response = request.data;
       notifications.show({
@@ -82,9 +95,15 @@ export const updateGrade = createAsyncThunk(
 // * Delete a grade
 export const deleteGrade = createAsyncThunk(
   'grades/deleteGrade',
-  async (id, { rejectWithValue }) => {
+  async (id, { getState, rejectWithValue }) => {
     try {
-      const request = await axios.delete(`${gradeBaseUrl}/delete/${id}`);
+      const token = getState().auth.accessToken;
+
+      const request = await axios.delete(`${gradeBaseUrl}/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+      });
       const response = request.data;
       notifications.show({
         title: 'Grade Deleted',

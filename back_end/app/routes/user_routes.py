@@ -71,6 +71,7 @@ def create_users():
             is_staff,
             hashed_password,
         )
+
         new_judge = JudgeModel(current_app.mongo)
         new_judge.create_judge(ObjectId(response), coderfair_id)
 

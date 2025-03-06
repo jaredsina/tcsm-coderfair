@@ -24,9 +24,15 @@ export const fetchJudges = createAsyncThunk('judges/fetchJudges', async () => {
 // * Create a judge
 export const createJudge = createAsyncThunk(
   'judges/createJudge',
-  async (judge) => {
+  async (judge, { getState, rejectWithValue }) => {
     try {
-      const request = await axios.post(`${judgeBaseURL}/create`, judge);
+      const token = getState().auth.accessToken;
+
+      const request = await axios.post(`${judgeBaseURL}/create`, judge, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+      });
       const response = request.data;
       notifications.show({
         title: 'Judge Created',
@@ -40,7 +46,7 @@ export const createJudge = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(err.response.data);
     }
   },
 );
@@ -48,10 +54,16 @@ export const createJudge = createAsyncThunk(
 // * Update a judge
 export const updateJudge = createAsyncThunk(
   'judges/updateJudge',
-  async (info) => {
+  async (info, { getState, rejectWithValue }) => {
     try {
+      const token = getState().auth.accessToken;
+
       const { _id, updated_judge: judge } = info; // Destructure the info object
-      const request = await axios.put(`${judgeBaseURL}/update/${_id}`, judge);
+      const request = await axios.put(`${judgeBaseURL}/update/${_id}`, judge, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+      });
       const response = request.data;
       notifications.show({
         title: 'Judge Updated',
@@ -65,7 +77,7 @@ export const updateJudge = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(err.response.data);
     }
   },
 );
@@ -73,9 +85,15 @@ export const updateJudge = createAsyncThunk(
 // * Delete a judge
 export const deleteJudge = createAsyncThunk(
   'judges/deleteJudge',
-  async (_id) => {
+  async (_id, { getState, rejectWithValue }) => {
     try {
-      const request = await axios.delete(`${judgeBaseURL}/delete/${_id}`);
+      const token = getState().auth.accessToken;
+
+      const request = await axios.delete(`${judgeBaseURL}/delete/${_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+      });
       const response = request.data;
       notifications.show({
         title: 'Judge Deleted',
@@ -89,7 +107,7 @@ export const deleteJudge = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(err.response.data);
     }
   },
 );
