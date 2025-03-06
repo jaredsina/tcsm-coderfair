@@ -42,6 +42,7 @@ class UserModel:
                 "is_admin": 1,
                 "is_staff": 1,
                 "password": 1,
+                "avatar_image": 1,
             },
         )
 

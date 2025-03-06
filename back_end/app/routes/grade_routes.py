@@ -48,6 +48,7 @@ def delete_grade(grade_id):
 
 
 @grade_routes.route("/update/<string:grade_id>", methods=["PUT"])
+@jwt_required()
 def update_grade(grade_id):
     try:
         data = request.get_json()
