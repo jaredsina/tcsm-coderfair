@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, TextInput, Textarea, FileInput, Image, Modal } from "@mantine/core";
+import { Button, TextInput, Textarea, FileInput, Image, Modal, Alert } from "@mantine/core";
 import "./ManageStudents.css";
 import { createStudent, deleteStudent, fetchStudents, updateStudent } from "../reducers/studentSlice";
 import {useDispatch, useSelector} from "react-redux"
@@ -27,13 +27,13 @@ const ManageStudents = () => {
   const handleAddStudent = async() => {
     if (!newStudentName.trim()) return;
 
-    const newStudent = {
-      name: newStudentName,
-      bio: newStudentBio,
-      avatar_image: "" // !! NEEDS to send form data
-    };
+    const formData = new FormData();
+    formData.append("name", newStudentName);
+    formData.append("bio", newStudentBio);
+    formData.append("avatar_image", newStudentImage);
+
     try{
-      dispatch(createStudent(newStudent))
+      dispatch(createStudent(formData))
       //setStudents([...students, newStudent]);
     }
     catch (error){
@@ -55,12 +55,14 @@ const ManageStudents = () => {
 
   const handleSaveEdit = () => {
     if (!newStudentName.trim()) return;
-    const updatedStudentData = {
-          name: newStudentName,
-          bio: newStudentBio,
-          avatar_image: "" // !! NEEDS to send form data
-    };  
-    dispatch(updateStudent({"_id": editingStudentId, "updatedStudentData": updatedStudentData}))
+    
+    const formData = new FormData();
+
+    formData.append("name", newStudentName);
+    formData.append("bio", newStudentBio);
+    formData.append("avatar_image", newStudentImage);
+
+    dispatch(updateStudent({"_id": editingStudentId, "updatedStudentData": formData}))
     //setStudents(updatedStudents);
     resetForm();
   };
@@ -93,14 +95,15 @@ const ManageStudents = () => {
         overlayProps={{ style: { zIndex: 7000 } }}
         zIndex={8000}
       >
-        <TextInput
+        {editingStudentId ? null : <TextInput
           required
           label="Student Name"
           placeholder="Enter student name"
           value={newStudentName}
           onChange={(event) => setNewStudentName(event.target.value)}
-        />
-        <FileInput
+        />}
+        <Alert variant="light" color="red" title="Warning">Do not update student images often!</Alert>
+         <FileInput
           size="md"
           radius="xl"
           label="Student Image"

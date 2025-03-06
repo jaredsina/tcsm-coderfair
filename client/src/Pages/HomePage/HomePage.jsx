@@ -4,19 +4,12 @@ import {
   Center,
   Button,
   Flex,
-  rem,
-  Select,
-  SimpleGrid,
   Container,
   Text,
   Avatar,
-  Space,
   Table,
   Badge,
   Grid,
-  Card,
-  Group,
-  Anchor,
   Paper,
   Title,
   Box,
@@ -24,6 +17,9 @@ import {
 import './HomePage.css';
 import { Carousel } from '@mantine/carousel';
 import { Link } from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux'
+import { useEffect } from 'react';
+import { fetchCoderFairProjects } from '../../reducers/projectSlice';
 
 const data1 = [
   { rank: 4, name: 'Josh', score: 5000 },
@@ -31,17 +27,26 @@ const data1 = [
   { rank: 6, name: 'JS', score: 4200 },
   { rank: 7, name: 'J', score: 4000 },
 ];
-const data = [
-  { rank: 1, name: 'Josh', score: 5000 },
-  { rank: 2, name: 'Joshua', score: 4500 },
-  { rank: 3, name: 'JS', score: 4200 },
-];
+
 
 export function Leaderboard() {
-  const rows = data1.map((data1) => (
-    <Table.Tr>
+  
+
+  const projects = useSelector((state)=>state.projects.projects)
+
+  // Get the grade totals for each project
+  const gradeTotals = projects?.map(project=>{
+    const totalGrade = project?.grade?.reduce((sum,g)=> sum + (g.overall_grade * 100) , 0)
+    return {...project, totalGrade}
+  })
+
+  // Get projects in places 4-7
+  const leaderboardProjects = gradeTotals.sort((a,b)=>b.totalGrade - a.totalGrade).slice(3)
+
+  const rows = leaderboardProjects.map((project, index) => (
+    <Table.Tr key={index}>
       <Table.Td>
-        <Badge color="blue" variant="filled" size="lg">{data1.rank}</Badge>
+        <Badge color="blue" variant="filled" size="lg">{index+4}</Badge>
       </Table.Td>
       <Table.Td>
         <Link
@@ -50,16 +55,17 @@ export function Leaderboard() {
           onClick={() => setOpened(false)}
           style={{ textDecoration: 'none', fontWeight: 600 }}
         >
-          {data1.name}
+          {project?.student?.[0]?.name || "Unknown"}
         </Link>
       </Table.Td>
-      <Table.Td style={{ fontWeight: 600 }}>{data1.score}</Table.Td>
+      <Table.Td style={{ fontWeight: 600 }}>{project.totalGrade}</Table.Td>
     </Table.Tr>
   ));
+
   return (
     <Box mt={60} mb={60}>
       <Title order={2} align="center" mb={30}>Leaderboard</Title>
-      <Table highlightOnHover striped withBorder withColumnBorders>
+      <Table highlightOnHover striped withColumnBorders>
         <Table.Thead>
           <Table.Tr>
             <Table.Th style={{ textAlign: 'center' }}>Rank</Table.Th>
@@ -73,17 +79,32 @@ export function Leaderboard() {
   );
 }
 
-// Sort by score
-const podium = [...data].sort((a, b) => b.score - a.score);
-
+// * If ever removing Podium make sure the HomePage component fetchesCoderFairProjects
 export function Podium() {
-  const heights = [175, 150, 120];
+  const heights = [175, 150, 140];
   const colors = ['#FFD700', '#C0C0C0', '#CD7F32'];
+
+  const projects = useSelector((state)=>state.projects.projects)
+  const projectStatus = useSelector((state)=>state.projects.status)
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    projectStatus === "idle" ? dispatch(fetchCoderFairProjects('67b4f809f02dfc6eecbeed34')) : null;
+  }, [projectStatus, dispatch])
+
+  // Get the grade totals for each project
+  const gradeTotals = projects?.map(project=>{
+    const totalGrade = project?.grade?.reduce((sum,g)=> sum + (g.overall_grade * 100) , 0)
+    return {...project, totalGrade}
+  })
+
+  // Get the top 3 students
+  const top3Students = gradeTotals.sort((a,b)=>b.totalGrade - a.totalGrade).slice(0,3)
 
   return (
     <Grid justify="center" align="end" style={{ height: 250, marginTop: 40 }}>
-      {podium.map((player, index) => (
-        <Grid.Col span={4} key={player.name}>
+      {top3Students?.map((project, index) => (
+        <Grid.Col span={4} key={project._id || index}>
           <Center>
             <Paper
               shadow="lg"
@@ -111,7 +132,7 @@ export function Podium() {
                 <Badge size="md" variant="filled" color={index === 0 ? "yellow" : index === 1 ? "gray" : "orange"}>
                   #{index + 1}
                 </Badge>
-                <Avatar size="md" radius="xl" />
+                <Avatar src= {project?.student?.[0]?.avatar_image || null} size="md" radius="xl" />
                 <Text size="xs" weight={700} color="dark" ta="center" style={{
                   wordBreak: 'break-word',
                   maxWidth: '90%',
@@ -124,10 +145,10 @@ export function Podium() {
                     onClick={() => setOpened(false)}
                     style={{ textDecoration: 'none' }}
                   >
-                    {player.name}
+                    {project?.student?.[0]?.name || "Unknown"}
                   </Link>
                 </Text>
-                <Text size="xs" weight={500}>{player.score} pts</Text>
+                <Text size="xs" weight={500}>{project.totalGrade} pts</Text>
               </Flex>
             </Paper>
           </Center>
@@ -138,6 +159,17 @@ export function Podium() {
 }
 
 const HomePage = () => {
+
+  const projects = useSelector((state)=>state.projects.projects)
+  //const projectStatus = useSelector((state)=>state.projects.status)
+ 
+  // * If ever Podium is removed make sure the HomePage component fetchesCoderFairProjects
+  // const dispatch = useDispatch();
+
+  // useEffect(()=>{
+  //   projectStatus === "idle" ? dispatch(fetchCoderFairProjects('67b4f809f02dfc6eecbeed34')) : null;
+  // }, [projectStatus, dispatch])
+ 
   return (
     <Container size="xl" py={40}>
       <Box mb={60}>
@@ -172,31 +204,14 @@ const HomePage = () => {
           controlSize={'3rem'}
           loop
         >
-          <Carousel.Slide style={{ width: '100%' }}>
+          {projects?.filter((project)=>{return project.is_featured === "true"}).map((project)=>{
+            return(
+            <Carousel.Slide style={{ width: '100%' }} key={project._id}>
             <Center>
-              <ProjectCard style={{ width: '100%' }} />
+              <ProjectCard style={{ width: '100%' }} title={project.name} language={project.coding_language ? project.coding_language : "Other"} description={project.description} image={project.project_image ? project.project_image : "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png"}/>
             </Center>
-          </Carousel.Slide>
-          <Carousel.Slide style={{ width: '100%' }}>
-            <Center>
-              <ProjectCard style={{ width: '100%' }} />
-            </Center>
-          </Carousel.Slide>
-          <Carousel.Slide style={{ width: '100%' }}>
-            <Center>
-              <ProjectCard style={{ width: '100%' }} />
-            </Center>
-          </Carousel.Slide>
-          <Carousel.Slide style={{ width: '100%' }}>
-            <Center>
-              <ProjectCard style={{ width: '100%' }} />
-            </Center>
-          </Carousel.Slide>
-          <Carousel.Slide style={{ width: '100%' }}>
-            <Center>
-              <ProjectCard style={{ width: '100%' }} />
-            </Center>
-          </Carousel.Slide>
+          </Carousel.Slide>)
+          })}
           <Carousel.Slide>
             <Flex mih={300} justify="center" align="center" direction="row">
               <Link to="/projects" onClick={() => setOpened(false)}>

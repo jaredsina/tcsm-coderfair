@@ -15,8 +15,12 @@ class StudentModel:
         return str(result.inserted_id)
 
     def update_student(self, id, update_data):
+        if "avatar_image" not in update_data:
+            avatar_image = self.collection.find_one({"_id": id})["avatar_image"]
+        else:
+            avatar_image = update_data["avatar_image"]
         result = self.collection.update_one({"_id": id}, {"$set": update_data})
-        return result
+        return avatar_image
 
     def delete_student(self, id):
         student_info = self.collection.find_one({"_id": id}, {"name": 1, "_id": 0})

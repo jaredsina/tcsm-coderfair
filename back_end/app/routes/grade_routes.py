@@ -17,7 +17,7 @@ def get_grades():
     except Exception as e:
         return jsonify({"message": "Error getting grades", "error": str(e)}), 400
 
-    return jsonify([grades]), 200
+    return jsonify(grades), 200
 
 
 @grade_routes.route("/<string:grade_id>", methods=["GET"])
@@ -44,24 +44,30 @@ def delete_grade(grade_id):
     except Exception as e:
         return jsonify({"message": "Error deleting grade", "error": str(e)}), 400
 
-    return jsonify({"message": f"deleted grade with ID {grade_id}"}), 200
+    return jsonify({"_id": str(grade_id)}), 200
 
 
 @grade_routes.route("/update/<string:grade_id>", methods=["PUT"])
-@jwt_required()
 def update_grade(grade_id):
     try:
         data = request.get_json()
-        update_data = data["update_data"]
+
+        update_data = {
+            "concept_tier": data["concept_tier"],
+            "concept_mastery": data["concept_mastery"],
+            "presentation": data["presentation"],
+            "creativity": data["creativity"],
+            "overall_grade": data["overall_grade"],
+            "overall_comments": data["overall_comments"],
+        }
+
         grade = GradeModel(current_app.mongo)
         response = grade.update_grade(ObjectId(grade_id), update_data)
 
     except Exception as e:
         return jsonify({"message": "Error updating grade", "error": str(e)}), 400
 
-    return jsonify(
-        {"message": "Grade updated successfully", "grade_id": str(response)}
-    ), 201
+    return jsonify({**update_data, "_id": str(grade_id)}), 201
 
 
 @grade_routes.route("/create", methods=["POST"])
@@ -93,6 +99,4 @@ def create_grade():
     except Exception as e:
         return jsonify({"message": "Error creating grade", "error": str(e)}), 400
 
-    return jsonify(
-        {"message": "Grade created sucessfully", "grade_id": str(response)}
-    ), 201
+    return jsonify(response[0]), 201

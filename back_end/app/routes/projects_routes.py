@@ -17,14 +17,29 @@ projects_routes = Blueprint("projects_routes", __name__)
 def get_projects():
     try:
         new_project = ProjectModel(current_app.mongo)
-        project = new_project.list___all_projects()
+        projects = new_project.list_all_projects()
 
     except Exception as e:
         # If an exception is raised, return an error message and status code 400
         return jsonify({"message": "Error getting projects", "error": str(e)}), 400
 
         # If no exceptions are raised, return a success message and status code 200
-    return jsonify(project), 200
+    return jsonify(projects), 200
+
+
+# Define a simple route inside this blueprint
+@projects_routes.route("/coderfair/<string:coderfair_id>", methods=["GET"])
+def get_coderfair_projects(coderfair_id):
+    try:
+        new_project = ProjectModel(current_app.mongo)
+        projects = new_project.list_coderfair_projects(ObjectId(coderfair_id))
+
+    except Exception as e:
+        # If an exception is raised, return an error message and status code 400
+        return jsonify({"message": "Error getting projects", "error": str(e)}), 400
+
+        # If no exceptions are raised, return a success message and status code 200
+    return jsonify(projects), 200
 
 
 @projects_routes.route("/<string:project_id>", methods=["GET"])
@@ -58,7 +73,7 @@ def delete_project(project_id):
         return jsonify({"message": "Error deleting project", "error": str(e)}), 400
 
     # If no exceptions are raised, return a success message and status code 200
-    return jsonify({"message": f"project with ID {project_id}"}), 200
+    return jsonify({"project_id": str(project_id)}), 200
 
 
 @projects_routes.route("/update/<string:project_id>", methods=["PUT"])
@@ -77,22 +92,22 @@ def update_project(project_id):
         project_username = request.form.get("project_username")
         project_password = request.form.get("project_password")
         notes = request.form.get("notes")
+        is_featured = request.form.get("is_featured")
 
         if not project_image:
-            project_image = ""
             update_data = {
-                "student_id": student_id,
-                "coderfair_id": coderfair_id,
+                "student_id": ObjectId(student_id),
+                "coderfair_id": ObjectId(coderfair_id),
                 "name": name,
                 "description": description,
                 "category": category,
-                "project_image": project_image,
                 "presentation_video_url": presentation_video_url,
                 "code_access_link": code_access_link,
                 "coding_language": coding_language,
                 "project_username": project_username,
                 "project_password": project_password,
                 "notes": notes,
+                "is_featured": is_featured,
             }
 
         else:
@@ -109,8 +124,8 @@ def update_project(project_id):
             project_image = auto_crop_url
 
             update_data = {
-                "student_id": student_id,
-                "coderfair_id": coderfair_id,
+                "student_id": ObjectId(student_id),
+                "coderfair_id": ObjectId(coderfair_id),
                 "name": name,
                 "description": description,
                 "category": category,
@@ -121,10 +136,10 @@ def update_project(project_id):
                 "project_username": project_username,
                 "project_password": project_password,
                 "notes": notes,
+                "is_featured": is_featured,
             }
-
         project = ProjectModel(current_app.mongo)
-        project.update_project(project_id, update_data)
+        image = project.update_project(ObjectId(project_id), update_data)
 
     except Exception as e:
         print(e)
@@ -132,7 +147,15 @@ def update_project(project_id):
         return jsonify({"message": "Error updating project", "error": str(e)}), 400
 
     # If no exceptions are raised, return a success message and status code 200
-    return jsonify({**update_data, "_id": project_id}), 200
+    return jsonify(
+        {
+            **update_data,
+            "_id": project_id,
+            "student_id": student_id,
+            "coderfair_id": coderfair_id,
+            "project_image": image,
+        }
+    ), 200
 
 
 @projects_routes.route("/create/", methods=["POST"])
@@ -152,6 +175,15 @@ def create_project():
         project_username = request.form.get("project_username")
         project_password = request.form.get("project_password")
         notes = request.form.get("notes")
+        is_featured = request.form.get("is_featured")
+
+        project = ProjectModel(current_app.mongo)
+
+        # Check if student has a project for the coderfair
+        if project.check_duplicate(ObjectId(student_id), ObjectId(coderfair_id)):
+            raise ValueError(
+                f"A project with student_id {student_id} and coderfair_id {coderfair_id} already exists."
+            )
 
         if project_image:
             cloudinary.uploader.upload(
@@ -166,10 +198,9 @@ def create_project():
         else:
             project_image = ""
 
-        project = ProjectModel(current_app.mongo)
         response = project.create_project(
-            student_id,
-            coderfair_id,
+            ObjectId(student_id),
+            ObjectId(coderfair_id),
             name,
             description,
             category,
@@ -180,11 +211,27 @@ def create_project():
             project_username,
             project_password,
             notes,
+            is_featured,
         )
 
     except Exception as e:
         return jsonify({"message": "Error creating project", "error": str(e)}), 400
 
     return jsonify(
-        {"message": "Project created successfully", "project_id": str(response)}
+        {
+            "student_id": student_id,
+            "coderfair_id": coderfair_id,
+            "name": name,
+            "description": description,
+            "category": category,
+            "project_image": project_image,
+            "presentation_video_url": presentation_video_url,
+            "code_access_link": code_access_link,
+            "coding_language": coding_language,
+            "project_username": project_username,
+            "project_password": project_password,
+            "notes": notes,
+            "is_featured": is_featured,
+            "_id": response,
+        }
     ), 201
