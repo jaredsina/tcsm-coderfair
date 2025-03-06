@@ -30,10 +30,23 @@ const data1 = [
 
 
 export function Leaderboard() {
-  const rows = data1.map((data1) => (
-    <Table.Tr>
+  
+
+  const projects = useSelector((state)=>state.projects.projects)
+
+  // Get the grade totals for each project
+  const gradeTotals = projects?.map(project=>{
+    const totalGrade = project?.grade?.reduce((sum,g)=> sum + (g.overall_grade * 100) , 0)
+    return {...project, totalGrade}
+  })
+
+  // Get projects in places 4-7
+  const leaderboardProjects = gradeTotals.sort((a,b)=>b.totalGrade - a.totalGrade).slice(3)
+
+  const rows = leaderboardProjects.map((project, index) => (
+    <Table.Tr key={index}>
       <Table.Td>
-        <Badge color="blue" variant="filled" size="lg">{data1.rank}</Badge>
+        <Badge color="blue" variant="filled" size="lg">{index+4}</Badge>
       </Table.Td>
       <Table.Td>
         <Link
@@ -42,12 +55,13 @@ export function Leaderboard() {
           onClick={() => setOpened(false)}
           style={{ textDecoration: 'none', fontWeight: 600 }}
         >
-          {data1.name}
+          {project?.student?.[0]?.name || "Unknown"}
         </Link>
       </Table.Td>
-      <Table.Td style={{ fontWeight: 600 }}>{data1.score}</Table.Td>
+      <Table.Td style={{ fontWeight: 600 }}>{project.totalGrade}</Table.Td>
     </Table.Tr>
   ));
+
   return (
     <Box mt={60} mb={60}>
       <Title order={2} align="center" mb={30}>Leaderboard</Title>
