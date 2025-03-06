@@ -6,23 +6,24 @@ from app.models.user import UserModel
 from flask_jwt_extended import create_access_token
 
 # used to convert string to ObjectId
-from bson import ObjectId
 
 auth_routes = Blueprint("auth_routes", __name__)
 
 
 # Define a simple route inside this blueprint
-@auth_routes.route("/log_in/<string:user_id>", methods=["POST"])
-def log_in(user_id):
+@auth_routes.route("/log_in/", methods=["POST"])
+def log_in():
     data = request.get_json()
     username = data["username"]
+
+    user = UserModel(current_app.mongo)
+    user_database = user.find_user_by_username(username)
+
+    print(user_database)
+
     password = data["password"]
     bcrypt = Bcrypt(current_app)
     # retrive hasshed password from the database
-    user = UserModel(current_app.mongo)
-    user_id = ObjectId(user_id)
-    user_database = user.find_user_by_id(user_id)
-
     hashed_password = user_database["password"]
 
     is_valid = bcrypt.check_password_hash(hashed_password, password)
