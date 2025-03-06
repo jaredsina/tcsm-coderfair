@@ -1,5 +1,6 @@
 # app/routes/user_routes.py
 from app.models.user import UserModel
+from app.models.judge import JudgeModel
 from flask import Blueprint, jsonify, request, current_app
 from flask_bcrypt import Bcrypt
 import cloudinary
@@ -28,7 +29,7 @@ def get_users(user_id):
 
 # route for creating users
 @user_routes.route("/create", methods=["POST"])
-@jwt_required()
+# @jwt_required()
 def create_users():
     try:
         # Use form data instead of JSON
@@ -40,6 +41,7 @@ def create_users():
         is_staff = request.form.get("is_staff") == "true"
         avatar_image = request.files.get("avatar_image")
         password = request.form.get("password")
+        coderfair_id = request.form.get("coderfair_id")
 
         bcrypt = Bcrypt(current_app)
         hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
@@ -69,6 +71,8 @@ def create_users():
             is_staff,
             hashed_password,
         )
+        new_judge = JudgeModel(current_app.mongo)
+        new_judge.create_judge(ObjectId(response), coderfair_id)
 
     except Exception as e:
         return jsonify({"message": "Error creating user", "error": str(e)}), 400

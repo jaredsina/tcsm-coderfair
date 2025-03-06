@@ -83,7 +83,6 @@ def update_judge(judge_id):
 
 
 @judge_routes.route("/create", methods=["POST"])
-@jwt_required()
 def create_judge():
     try:
         # we will get the judge data from the request json
