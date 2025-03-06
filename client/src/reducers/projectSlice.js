@@ -154,7 +154,11 @@ export const getProjectById = createAsyncThunk(
 const projectSlice = createSlice({
   name: 'projects',
   initialState,
-  reducers: {},
+  reducers: {
+    resetProjectStatus: (state) => {
+      state.status = 'idle';
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addMatcher(
@@ -238,4 +242,5 @@ const projectSlice = createSlice({
   },
 });
 
+export const { resetProjectStatus } = projectSlice.actions;
 export default projectSlice.reducer;
