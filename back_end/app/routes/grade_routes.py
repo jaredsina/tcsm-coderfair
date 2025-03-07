@@ -1,7 +1,7 @@
 # app/routes/role_routes.py
 from flask import Blueprint, jsonify, request, current_app
 from app.models.grade import GradeModel
-
+from flask_jwt_extended import jwt_required
 from bson import ObjectId
 
 grade_routes = Blueprint("grade_routes", __name__)
@@ -20,6 +20,20 @@ def get_grades():
     return jsonify(grades), 200
 
 
+# Define a simple route inside this blueprint
+@grade_routes.route("/judge/<string:judge_id>", methods=["GET"])
+def get_judge_grades(judge_id):
+    try:
+        grade = GradeModel(current_app.mongo)
+        grades = grade.list_judge_grades(ObjectId(judge_id))
+
+    except Exception as e:
+        return jsonify({"message": "Error getting grades", "error": str(e)}), 400
+
+    print(grades)
+    return jsonify(grades), 200
+
+
 @grade_routes.route("/<string:grade_id>", methods=["GET"])
 def get_grade(grade_id):
     try:
@@ -34,6 +48,7 @@ def get_grade(grade_id):
 
 
 @grade_routes.route("/delete/<string:grade_id>", methods=["DELETE"])
+@jwt_required()
 def delete_grade(grade_id):
     try:
         grade_id = ObjectId(grade_id)
@@ -47,6 +62,7 @@ def delete_grade(grade_id):
 
 
 @grade_routes.route("/update/<string:grade_id>", methods=["PUT"])
+@jwt_required()
 def update_grade(grade_id):
     try:
         data = request.get_json()
@@ -70,6 +86,7 @@ def update_grade(grade_id):
 
 
 @grade_routes.route("/create", methods=["POST"])
+@jwt_required()
 def create_grade():
     try:
         data = request.get_json()
@@ -78,7 +95,7 @@ def create_grade():
         presentation = data["presentation"]
         creativity = data["creativity"]
         overall_grade = data["overall_grade"]
-        judge_id = ObjectId(data["judge_id"])
+        user_id = ObjectId(data["user_id"])
         project_id = ObjectId(data["project_id"])
         overall_comments = data["overall_comments"]
 
@@ -89,7 +106,7 @@ def create_grade():
             presentation,
             creativity,
             overall_grade,
-            judge_id,
+            user_id,
             project_id,
             overall_comments,
         )

@@ -1,5 +1,7 @@
 import configparser
 from flask_pymongo import PyMongo
+from flask_jwt_extended import JWTManager
+from datetime import timedelta
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
@@ -12,6 +14,11 @@ def init_config(app):
 
     # Set the uri for MongoDB
     app.config["MONGO_URI"] = config["MONGO"]["DB_URI"]
+
+    # making the maanger of the tokens
+    app.config["JWT_SECRET_KEY"] = config["TOKEN"]["YOUR_SECRET_KEY"]
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
+    jwt = JWTManager(app)
 
     # Initialize PyMongo with the Flask app
     mongo = PyMongo(app)

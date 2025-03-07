@@ -5,23 +5,20 @@ import {
   Textarea,
   Text,
   List,
-  TextInput,
   Rating,
   Title,
-  Autocomplete,
-  MultiSelect,
   Select,
   Alert,
 } from "@mantine/core";
 import { Podium } from "../../Pages/HomePage/HomePage";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createGrade, fetchGrades } from "../../reducers/gradeSlice";
+import { createGrade } from "../../reducers/gradeSlice";
 import { fetchStudents } from "../../reducers/studentSlice";
-import { fetchCoderFairProjects, fetchProjects, resetProjectStatus } from "../../reducers/projectSlice";
+import {  resetProjectStatus } from "../../reducers/projectSlice";
 import { notifications } from "@mantine/notifications";
 
-const data = ["Sina", "Francis", "David", "Terisa"];
+
 const concept_tiers = ["Beginner", "Intermediate", "Advanced"];
 
 export function Judging() {
@@ -45,7 +42,7 @@ function JudgingPage() {
   const [selectedStudent, setSelectedStudent] = useState(null)
 
   const dispatch = useDispatch()
-
+  
   const handleAddGrade = () => {
     if (!selectedStudent || !newGrade.concept_mastery || !newGrade.creativity || !newGrade.presentation || !newGrade.overall_comments || !newGrade.concept_tier){
       return notifications.show({
@@ -55,10 +52,12 @@ function JudgingPage() {
         color: 'red',
       });
     } 
+  
+    if(!user_id) return
 
-    newGrade.judge_id = "67a6204ac5e2b4a4e0bf6df6"
     // const studentId = studentInfo.find((student)=> student.name === selectedStudent)
     const project = projectInfo.find((project)=> project.student_id === selectedStudent._id)
+    newGrade.user_id = user_id
     newGrade.project_id = project?._id
     newGrade.student_id = selectedStudent?._id
     newGrade.overall_grade = (newGrade.concept_mastery + newGrade.creativity + newGrade.presentation)
@@ -75,26 +74,27 @@ function JudgingPage() {
 
   const gradeStatus = useSelector((state) => state.grades.status);
   const studentStatus = useSelector((state) => state.students.status);
+  const judgeStatus = useSelector((state)=>state.judges.status)
 
   // * If ever removing Podium make sure the HomePage component fetchesCoderFairProjects
   //const projectStatus = useSelector((state) => state.projects.status);
 
-  const gradeInfo = useSelector((state) => state.grades.grades);
   const studentInfo = useSelector((state) => state.students.studentInfo);
+  const user = useSelector((state)=>state.auth.user)
+  const user_id = user._id
   
+
   // * If ever removing Podium make sure the HomePage component fetchesCoderFairProjects
   const projectInfo = useSelector((state) => state.projects.projects);
   //const coachInfo = useSelector((state) => state.coaches.coachInfo);
 
   useEffect(() => {
-    gradeStatus === "idle" ? dispatch(fetchGrades()) : null;
     studentStatus === "idle" ? dispatch(fetchStudents()) : null;
 
+
     // * If ever removing Podium make sure the HomePage component fetchesCoderFairProjects
-    //projectStatus === "idle" ? dispatch(fetchProjects()) : null;
-    //coachStatus === "idle" ? dispatch(fetchCoaches()) : null;
-    
-  }, [gradeStatus, studentStatus, dispatch])
+    //projectStatus === "idle" ? dispatch(fetchProjects()) : null;    
+  }, [studentStatus, dispatch])
 
   return (
     <main>
@@ -119,15 +119,11 @@ function JudgingPage() {
                 gap={{ base: "15", md: "50px" }}
               >
                 <Flex direction={"column"} gap={"md"}>
-                  <List.Item>
-                    <div>Your Name</div>
-                    <Select
-                      placeholder="Enter Your Response"
-                      data={data}
-                      searchable
-                      clearable
-                    />
-                  </List.Item>
+                {user_id ? <Alert variant="light" color="green" title="Judge Info:">
+                  <Text>Name: {user.first_name} {user.last_name}</Text>
+                  <Text>Username: {user.username}</Text>
+                  <Text>Email: {user.email}</Text>
+                  </Alert>: <Alert variant="light" color="red" title="Warning">Can't find your judge info!</Alert>}
                   <List.Item>
                     <div>Name of Coder</div>
                     <Select

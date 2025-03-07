@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import NavBar from "./Components/navbar";
 import Home from "./Pages/HomePage/HomePage";
 import Results from "./Pages/Results";
@@ -13,16 +13,20 @@ import Account from './Pages/AccountPage/AccountPage';
 import JudgingPage from './Components/JudgingPage/JudgingPage';
 import CoachesPage from './Pages/CoachesPage/CoachesPage';
 import Reset from './Pages/ResetPass/Reset';
+import { AuthProvider, useAuth } from "./auth/AuthContext";
+
+const ProtectedRoute = ({ element }) => {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? element : <Navigate to="/" />;
+};
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
+    <AuthProvider>
     <Router>
       {/* Render NavBar at the top of every page */}
-      <NavBar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
-
-      
+      <NavBar />
       <AppShell
         styles={{
           root: {
@@ -39,15 +43,18 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/signin" element={<SignIn setIsAuthenticated={setIsAuthenticated} />} />
+            <Route path="/signin" element={<SignIn />} />
             <Route path="/results" element={<Results />} />
             <Route path="/create-account" element={<CreateAccountPage />} />
             <Route path="/projects" element={<ProjectPage />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/judging" element={<JudgingPage />} />
-            <Route path="/coach" element={<CoachesPage />} />
-            <Route path="/reset" element={<Reset />} />
             <Route path="single-project" element = {<SingleProject></SingleProject>}/>
+            <Route path="/account" element={<Account />} />
+
+             {/* Protected Routes */}
+             <Route path="/judging" element={<ProtectedRoute element={<JudgingPage />} />} />
+             <Route path="/coach" element={<ProtectedRoute element={<CoachesPage />} />} />
+             
+            <Route path="/reset" element={<Reset />} />
           </Routes>
         </div>
       </AppShell>
@@ -55,6 +62,7 @@ const App = () => {
       {/* Render Footer at the bottom of every page */}
       <Footer />
     </Router>
+    </AuthProvider>
   );
 };
 

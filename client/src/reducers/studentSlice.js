@@ -35,10 +35,15 @@ export const fetchStudents = createAsyncThunk(
 // * Create a student
 export const createStudent = createAsyncThunk(
   'students/createStudent',
-  async (student, { rejectWithValue }) => {
+  async (student, { getState, rejectWithValue }) => {
     try {
+      const token = getState().auth.accessToken;
+
       const request = await axios.post(`${studentBaseUrl}/create`, student, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
       });
       const response = request.data;
       notifications.show({
@@ -61,12 +66,19 @@ export const createStudent = createAsyncThunk(
 // * Update a student
 export const updateStudent = createAsyncThunk(
   'students/updateStudent',
-  async (info, { rejectWithValue }) => {
+  async (info, { getState, rejectWithValue }) => {
     try {
+      const token = getState().auth.accessToken;
+
       const { _id, updatedStudentData } = info; // Destructure the info object
       const request = await axios.put(
         `${studentBaseUrl}/update/${_id}`,
         updatedStudentData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          },
+        },
       );
       const response = request.data;
       notifications.show({
@@ -89,9 +101,15 @@ export const updateStudent = createAsyncThunk(
 // * Delete a student
 export const deleteStudent = createAsyncThunk(
   'students/deleteStudent',
-  async (id, { rejectWithValue }) => {
+  async (id, { getState, rejectWithValue }) => {
     try {
-      const request = await axios.delete(`${studentBaseUrl}/delete/${id}`);
+      const token = getState().auth.accessToken;
+
+      const request = await axios.delete(`${studentBaseUrl}/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+      });
       const response = request.data;
       notifications.show({
         title: 'Student Deleted',

@@ -6,15 +6,24 @@ class UserModel:
         self.collection = mongo.cx["test"]["users"]
 
     def create_user(
-        self, first_name, last_name, email, username, avatar_image, is_admin, is_staff
+        self,
+        first_name,
+        last_name,
+        email,
+        username,
+        avatar_image,
+        is_admin,
+        is_staff,
+        password,
     ):
         user_data = {
             "first_name": first_name,
             "last_name": last_name,
             "email": email,
             "username": username,
-            "avatar_image": avatar_image,
+            "password": password,
             # is_admin and is_staff are booleans
+            "avatar_image": avatar_image,
             "is_admin": is_admin,
             "is_staff": is_staff,
         }
@@ -22,7 +31,20 @@ class UserModel:
         return str(result.inserted_id)
 
     def find_user_by_username(self, username):
-        return self.collection.find_one({"username": username})
+        return self.collection.find_one(
+            {"username": username},
+            {
+                "_id": {"$toString": "$_id"},
+                "first_name": 1,
+                "last_name": 1,
+                "username": 1,
+                "email": 1,
+                "is_admin": 1,
+                "is_staff": 1,
+                "password": 1,
+                "avatar_image": 1,
+            },
+        )
 
     def find_user_by_id(self, id):
         return self.collection.find_one({"_id": id}, {"_id": 0})

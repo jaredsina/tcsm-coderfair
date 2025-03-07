@@ -8,6 +8,7 @@ const initialState = {
   loading: false,
   judges: [],
   error: '',
+  status: 'idle',
 };
 
 // * Fetch all judges
@@ -24,9 +25,15 @@ export const fetchJudges = createAsyncThunk('judges/fetchJudges', async () => {
 // * Create a judge
 export const createJudge = createAsyncThunk(
   'judges/createJudge',
-  async (judge) => {
+  async (judge, { getState, rejectWithValue }) => {
     try {
-      const request = await axios.post(`${judgeBaseURL}/create`, judge);
+      const token = getState().auth.accessToken;
+
+      const request = await axios.post(`${judgeBaseURL}/create`, judge, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+      });
       const response = request.data;
       notifications.show({
         title: 'Judge Created',
@@ -40,7 +47,7 @@ export const createJudge = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(err.response.data);
     }
   },
 );
@@ -48,10 +55,16 @@ export const createJudge = createAsyncThunk(
 // * Update a judge
 export const updateJudge = createAsyncThunk(
   'judges/updateJudge',
-  async (info) => {
+  async (info, { getState, rejectWithValue }) => {
     try {
+      const token = getState().auth.accessToken;
+
       const { _id, updated_judge: judge } = info; // Destructure the info object
-      const request = await axios.put(`${judgeBaseURL}/update/${_id}`, judge);
+      const request = await axios.put(`${judgeBaseURL}/update/${_id}`, judge, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+      });
       const response = request.data;
       notifications.show({
         title: 'Judge Updated',
@@ -65,7 +78,7 @@ export const updateJudge = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(err.response.data);
     }
   },
 );
@@ -73,9 +86,15 @@ export const updateJudge = createAsyncThunk(
 // * Delete a judge
 export const deleteJudge = createAsyncThunk(
   'judges/deleteJudge',
-  async (_id) => {
+  async (_id, { getState, rejectWithValue }) => {
     try {
-      const request = await axios.delete(`${judgeBaseURL}/delete/${_id}`);
+      const token = getState().auth.accessToken;
+
+      const request = await axios.delete(`${judgeBaseURL}/delete/${_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+      });
       const response = request.data;
       notifications.show({
         title: 'Judge Deleted',
@@ -89,7 +108,7 @@ export const deleteJudge = createAsyncThunk(
         message: 'An error has occured',
         color: 'red',
       });
-      return err.response.data;
+      return rejectWithValue(err.response.data);
     }
   },
 );
@@ -114,65 +133,79 @@ const judgeSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchJudges.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(createJudge.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(updateJudge.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(deleteJudge.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(getJudgeById.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchJudges.fulfilled, (state, action) => {
-        state.loading = false;
-        state.judges = action.payload;
-      })
-      .addCase(createJudge.fulfilled, (state, action) => {
-        state.loading = false;
-        state.judges.push(action.payload);
-      })
-      .addCase(updateJudge.fulfilled, (state, action) => {
-        state.loading = false;
-        state.judges = state.judges.map((judge) =>
-          judge._id === action.payload._id ? action.payload : judge,
-        );
-      })
-      .addCase(deleteJudge.fulfilled, (state, action) => {
-        state.loading = false;
-        state.judges = state.judges.filter(
-          (judge) => judge._id !== action.payload._id,
-        );
-      })
-      .addCase(getJudgeById.fulfilled, (state, action) => {
-        state.loading = false;
-        state.judges = action.payload;
-      })
-      .addCase(fetchJudges.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(createJudge.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(updateJudge.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(deleteJudge.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(getJudgeById.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
+      .addMatcher(
+        (action) => {
+          return (
+            action.type === fetchJudges.pending.type ||
+            action.type === createJudge.pending.type ||
+            action.type === updateJudge.pending.type ||
+            action.type === deleteJudge.pending.type
+          );
+        },
+        (state) => {
+          state.loading = true;
+          state.status = 'loading';
+        },
+      )
+      .addMatcher(
+        (action) => {
+          return action.type === fetchJudges.fulfilled.type;
+        },
+        (state, action) => {
+          state.loading = false;
+          state.judges = action.payload;
+          state.status = 'fullfilled';
+        },
+      )
+      .addMatcher(
+        (action) => {
+          return action.type === fetchJudges.fulfilled.type;
+        },
+        (state, action) => {
+          state.loading = false;
+          state.judges.push(action.payload);
+          state.status = 'fullfilled';
+        },
+      )
+      .addMatcher(
+        (action) => {
+          return action.type === updateJudge.fulfilled.type;
+        },
+        (state, action) => {
+          state.loading = false;
+          state.judges = state.judges.map((judge) =>
+            judge._id === action.payload._id ? action.payload : judge,
+          );
+          state.status = 'fullfilled';
+        },
+      )
+      .addMatcher(
+        (action) => {
+          return action.type === deleteJudge.fulfilled.type;
+        },
+        (state, action) => {
+          state.loading = false;
+          state.judges = state.judges.filter(
+            (judge) => judge._id !== action.payload.judge_id,
+          );
+          state.status = 'fullfilled';
+        },
+      )
+      .addMatcher(
+        (action) => {
+          return (
+            action.type === fetchJudges.rejected.type ||
+            action.type === createJudge.rejected.type ||
+            action.type === updateJudge.rejected.type ||
+            action.type === deleteJudge.rejected.type
+          );
+        },
+        (state, action) => {
+          state.loading = false;
+          state.status = 'error';
+          state.error = action.error.message;
+        },
+      );
   },
 });
 

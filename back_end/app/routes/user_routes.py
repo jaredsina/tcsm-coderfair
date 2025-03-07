@@ -1,9 +1,11 @@
 # app/routes/user_routes.py
 from app.models.user import UserModel
+from app.models.judge import JudgeModel
 from flask import Blueprint, jsonify, request, current_app
+from flask_bcrypt import Bcrypt
 import cloudinary
 from cloudinary.utils import cloudinary_url
-
+from flask_jwt_extended import jwt_required
 
 from bson import ObjectId
 
@@ -12,6 +14,7 @@ user_routes = Blueprint("user_routes", __name__)
 
 # Define a simple route inside this blueprint
 @user_routes.route("/<string:user_id>")
+@jwt_required()
 def get_users(user_id):
     try:
         user_id = ObjectId(user_id)
@@ -26,6 +29,7 @@ def get_users(user_id):
 
 # route for creating users
 @user_routes.route("/create", methods=["POST"])
+# @jwt_required()
 def create_users():
     try:
         # Use form data instead of JSON
@@ -36,6 +40,11 @@ def create_users():
         is_admin = request.form.get("is_admin") == "true"
         is_staff = request.form.get("is_staff") == "true"
         avatar_image = request.files.get("avatar_image")
+        password = request.form.get("password")
+        coderfair_id = request.form.get("coderfair_id")
+
+        bcrypt = Bcrypt(current_app)
+        hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
 
         if avatar_image:
             cloudinary.uploader.upload(
@@ -53,8 +62,18 @@ def create_users():
 
         user_model = UserModel(current_app.mongo)
         response = user_model.create_user(
-            first_name, last_name, email, username, avatar_image, is_admin, is_staff
+            first_name,
+            last_name,
+            email,
+            username,
+            avatar_image,
+            is_admin,
+            is_staff,
+            hashed_password,
         )
+
+        new_judge = JudgeModel(current_app.mongo)
+        new_judge.create_judge(ObjectId(response), coderfair_id)
 
     except Exception as e:
         return jsonify({"message": "Error creating user", "error": str(e)}), 400
@@ -65,6 +84,7 @@ def create_users():
 
 
 @user_routes.route("/delete/<string:user_id>", methods=["DELETE"])
+@jwt_required()
 def delete_user(user_id):
     try:
         user_id = ObjectId(user_id)
@@ -78,6 +98,7 @@ def delete_user(user_id):
 
 
 @user_routes.route("/update/<string:user_id>", methods=["PUT"])
+@jwt_required()
 def update_user(user_id):
     try:
         user_id = ObjectId(user_id)

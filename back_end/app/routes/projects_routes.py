@@ -4,6 +4,7 @@ from cloudinary.utils import cloudinary_url
 
 from flask import Blueprint, jsonify, current_app, request
 from app.models.project import ProjectModel
+from flask_jwt_extended import jwt_required
 
 # used to convert string to ObjectId
 from bson import ObjectId
@@ -59,6 +60,7 @@ def get_project(project_id):
 
 
 @projects_routes.route("/delete/<string:project_id>", methods=["DELETE"])
+@jwt_required()
 def delete_project(project_id):
     try:
         # Need to convert the string to an ObjectId to match the data type in the database
@@ -75,6 +77,7 @@ def delete_project(project_id):
 
 
 @projects_routes.route("/update/<string:project_id>", methods=["PUT"])
+@jwt_required()
 def update_project(project_id):
     try:
         student_id = request.form.get("student_id")
@@ -155,7 +158,8 @@ def update_project(project_id):
     ), 200
 
 
-@projects_routes.route("/create", methods=["POST"])
+@projects_routes.route("/create/", methods=["POST"])
+@jwt_required()
 def create_project():
     try:
         # we will get the project data from the request json

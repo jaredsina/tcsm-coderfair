@@ -2,14 +2,23 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, Burger, Avatar } from "@mantine/core";
 import "./navbar.css";
+import { logOut } from "../reducers/authSlice";
+import {useDispatch} from 'react-redux'
+import { useAuth } from "../auth/AuthContext";
+import { resetGrades } from "../reducers/gradeSlice";
 
-const NavBar = ({ isAuthenticated, setIsAuthenticated }) => {
+const NavBar = () => {
   const [opened, setOpened] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { logout } = useAuth();  // Access logout method from context
+  const {isAuthenticated} = useAuth()
 
   const handleAuthAction = () => {
     if (isAuthenticated) {
-      setIsAuthenticated(false); // Log out user
+      dispatch(logOut());
+      logout();
+      resetGrades()
       navigate("/signin");
     } else {
       navigate("/signin"); // Navigate to sign-in page
@@ -42,12 +51,13 @@ const NavBar = ({ isAuthenticated, setIsAuthenticated }) => {
         <li>
           <Link to="/projects" onClick={() => setOpened(false)}>Projects</Link>
         </li>
-        <li>
+        {isAuthenticated ? <><li>
           <Link to="/judging" onClick={() => setOpened(false)}>Judging</Link>
         </li>
         <li>
           <Link to="/coach" onClick={() => setOpened(false)}>Coach Dashboard</Link>
-        </li>
+        </li> </>: null}
+        
       </ul>
 
       {/* User Profile Dropdown */}
@@ -58,9 +68,6 @@ const NavBar = ({ isAuthenticated, setIsAuthenticated }) => {
         <Menu.Dropdown>
           {isAuthenticated ? (
             <>
-              <Menu.Item component={Link} to="/account">
-                Account
-              </Menu.Item>
               <Menu.Item onClick={handleAuthAction} className="sign-out">
                 Sign Out
               </Menu.Item>

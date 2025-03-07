@@ -1,5 +1,6 @@
 from flask_pymongo import PyMongo
 
+
 class JudgeModel:
     def __init__(self, mongo: PyMongo):
         self.collection = mongo.cx["test"]["judges"]
@@ -41,24 +42,19 @@ class JudgeModel:
         return list(self.collection.find({"coderfair_id": coderfair_id}))
 
     def list_all_judges(self):
-        # Aggregate is used to get the user data from the users collection and join it with the judges collection
-        judges_with_users = self.collection.aggregate(
-            [
-                {
-                    "$lookup": {
-                        "from": "users",
-                        "localField": "user_id",
-                        "foreignField": "_id",
-                        "as": "user",
+        return list(
+            self.collection.aggregate(
+                [
+                    {
+                        "$project": {
+                            "_id": {"$toString": "$_id"},
+                            "user_id": {"$toString": "$user_id"},
+                            "coderfair_id": {"$toString": "$coderfair_id"},
+                        }
                     }
-                },
-                {
-                    "$project": {"user_id": 0, "_id": 0, "user._id": 0}
-                },  # Project lets us choose which fields to include or exclude
-            ]
+                ]
+            )
         )
-
-        return list(judges_with_users)
 
     # id is used to choose the judge to update
     # update data is the new data for any field
