@@ -17,7 +17,7 @@ def init_config(app):
 
     # making the maanger of the tokens
     app.config["JWT_SECRET_KEY"] = config["TOKEN"]["YOUR_SECRET_KEY"]
-    # app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(minutes=179)
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
     jwt = JWTManager(app)
 
     # Initialize PyMongo with the Flask app
