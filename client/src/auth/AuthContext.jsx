@@ -14,6 +14,7 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Check if the user is authenticated on load
   useEffect(() => {
@@ -21,6 +22,7 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       setIsAuthenticated(true);
     }
+    setLoading(false)
   }, []);
 
   const login = (response) => {
@@ -50,7 +52,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const value = useMemo(
-    () => ({ isAuthenticated, login, logout }),
+    () => ({ isAuthenticated, login, logout, loading }),
     [isAuthenticated, login, logout], // Add login and logout to the dependency array
   );
 

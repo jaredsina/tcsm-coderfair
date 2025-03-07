@@ -16,7 +16,9 @@ import Reset from './Pages/ResetPass/Reset';
 import { AuthProvider, useAuth } from "./auth/AuthContext";
 
 const ProtectedRoute = ({ element }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
+  if (loading) return <div>Loading...</div>; // Prevents premature redirect
+
   return isAuthenticated ? element : <Navigate to="/" />;
 };
 
