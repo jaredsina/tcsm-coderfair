@@ -7,7 +7,7 @@ from flask_cors import CORS
 
 
 def create_app():
-    app = Flask("website")
+    app = Flask("coderfair.com")
 
     # Enable cross-origin resource sharing
     CORS(app, supports_credentials=True)
