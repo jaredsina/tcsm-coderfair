@@ -1,6 +1,5 @@
 # app/routes/user_routes.py
 import cloudinary
-from cloudinary.utils import cloudinary_url
 
 from flask import Blueprint, jsonify, current_app, request
 from app.models.project import ProjectModel
@@ -111,17 +110,10 @@ def update_project(project_id):
             }
 
         else:
-            cloudinary.uploader.upload(
+            upload_response = cloudinary.uploader.upload(
                 project_image, public_id=f"{name.replace(' ','')}_image", overwrite=True
             )
-            auto_crop_url, _ = cloudinary_url(
-                f"{name.replace(' ','')}_image",
-                width=500,
-                height=500,
-                crop="auto",
-                gravity="auto",
-            )
-            project_image = auto_crop_url
+            project_image = upload_response.get("secure_url", "")
 
             update_data = {
                 "student_id": ObjectId(student_id),
@@ -186,15 +178,17 @@ def create_project():
             )
 
         if project_image:
-            cloudinary.uploader.upload(
+            upload_response = cloudinary.uploader.upload(
                 project_image,
                 public_id=f"{name.replace(' ','')}_image",
             )
 
-            auto_crop_url, _ = cloudinary_url(
-                project_username, width=500, height=500, crop="auto", gravity="auto"
-            )
-            project_image = auto_crop_url
+            # auto_crop_url, _ = cloudinary_url(
+            #     project_username, width=500, height=500, crop="auto", gravity="auto"
+            # )
+            # project_image = auto_crop_url
+            # Get the URL of the uploaded image
+            project_image = upload_response.get("secure_url", "")
         else:
             project_image = ""
 
