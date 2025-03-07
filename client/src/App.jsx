@@ -49,7 +49,7 @@ const App = () => {
             <Route path="/results" element={<Results />} />
             <Route path="/create-account" element={<CreateAccountPage />} />
             <Route path="/projects" element={<ProjectPage />} />
-            <Route path="single-project" element = {<SingleProject></SingleProject>}/>
+            <Route path="single-project/:id" element = {<SingleProject></SingleProject>}/>
             <Route path="/account" element={<Account />} />
 
              {/* Protected Routes */}

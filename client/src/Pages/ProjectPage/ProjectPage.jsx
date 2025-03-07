@@ -10,6 +10,7 @@ const ProjectPage = () => {
 
   const [shownProjects,setShownProjects] = useState([])
 
+  
   const projects = useSelector((state)=>state.projects.projects)
   const projectStatus = useSelector((state)=>state.projects.status)
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const ProjectPage = () => {
       <Flex mih={50} gap="md" direction="row" justify="center" wrap="wrap">
         {shownProjects?.map((project, index) => (
           <div className="ProjectCard" key={index}>
-            <ProjectCard title={project.name} language={project.coding_language ? project.coding_language : "Other"} description={project.description} image={project.project_image ? project.project_image : "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png"}/>
+            <ProjectCard project_id={project._id || ""} title={project.name} language={project.coding_language ? project.coding_language : "Other"} description={project.description} image={project.project_image ? project.project_image : "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png"}/>
           </div>
         ))}
       </Flex>
