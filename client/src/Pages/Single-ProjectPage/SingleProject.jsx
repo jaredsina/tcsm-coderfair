@@ -74,7 +74,6 @@ export default function SingleProject() {
               color={liked === true ? 'green' : 'red'}
               leftSection={<BiLike size={40} />}
               onClick={function () {
-                console.log('pressed');
                 setLiked(true);
               }}
             >
