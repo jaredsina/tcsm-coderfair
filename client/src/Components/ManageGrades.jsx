@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Table, Title, Select, Pill, Modal, Textarea } from "@mantine/core";
+import { Button, Table, Title, Select, Pill, Modal, Textarea, Alert, Text } from "@mantine/core";
 import { useDispatch, useSelector } from "react-redux";
 import {updateGrade, deleteGrade, fetchJudgeGrades} from "../reducers/gradeSlice";
 
@@ -39,6 +39,14 @@ const ManageGrades = () => {
   };
   return (
     <div className="section">
+      {user ? 
+      <Alert variant="light" color="green" title="Showing Grades For This Judge:">
+          <Text>Name: {user.first_name} {user.last_name}</Text>
+          <Text>Username: {user.username}</Text>
+          <Text>Email: {user.email}</Text>
+      </Alert>: 
+      <Alert variant="light" color="red" title="Warning">Can't find your judge info!</Alert>
+      }
       <Title order={2}>Manage Grades</Title>
       <div className="table-container">
         <Table striped highlightOnHover>
@@ -53,8 +61,8 @@ const ManageGrades = () => {
             </tr>
           </thead>
           <tbody>
-            {grades?.map((grade) => (
-              <tr key={grade._id}>
+            {grades?.map((grade,index) => (
+              <tr key={grade._id || index+100}>
                 <td>{grade.project?.[0]?.name}</td>
                 <td>{grade.concept_tier}</td>
                 <td>{grade.concept_mastery}</td>
