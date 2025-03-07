@@ -65,8 +65,49 @@ class ProjectModel:
 
     # find by id
     def find_project_by_id(self, id):
-        return self.collection.find_one(
-            {"_id": id}, {"_id": 0, "student_id": 0, "coderfair_id": 0}
+        return next(
+            self.collection.aggregate(
+                [
+                    {"$match": {"_id": id}},
+                    {
+                        "$lookup": {
+                            "from": "grades",
+                            "localField": "_id",
+                            "foreignField": "project_id",
+                            "as": "grade",
+                        }
+                    },
+                    {
+                        "$lookup": {
+                            "from": "students",
+                            "localField": "student_id",
+                            "foreignField": "_id",
+                            "as": "student",
+                        }
+                    },
+                    {
+                        "$project": {
+                            "_id": {"$toString": "$_id"},
+                            "student_id": {"$toString": "$student_id"},
+                            "coderfair_id": {"$toString": "$coderfair_id"},
+                            "name": 1,
+                            "description": 1,
+                            "category": 1,
+                            "project_image": 1,
+                            "presentation_video_url": 1,
+                            "code_access_link": 1,
+                            "coding_language": 1,
+                            "project_username": 1,
+                            "project_password": 1,
+                            "notes": 1,
+                            "is_featured": 1,
+                            "grade.overall_grade": 1,
+                            "student.name": 1,
+                        }
+                    },
+                ]
+            ),
+            None,
         )
 
     # list projects by coderfair

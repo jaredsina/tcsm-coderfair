@@ -11,12 +11,29 @@ import { CiShare1 } from 'react-icons/ci';
 import { BiLike } from 'react-icons/bi';
 import { FaRegShareSquare } from 'react-icons/fa';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch,useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { getProjectById } from '../../reducers/projectSlice';
 
 export default function SingleProject() {
   const [liked, setLiked] = useState(false); // tells us if the project is liked
   const [shared, setShared] = useState(false);
 
+  const [projectFetched, setProjectFetched] = useState(false); // Track if project data has been fetched
+  const { id } = useParams();
+ 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (id && !projectFetched) {  // Only dispatch if not already fetched
+      dispatch(getProjectById(id));
+      setProjectFetched(true);  // Set to true after the first fetch
+    }
+  }, [id, dispatch, projectFetched]);
+
+  const projectInfo = useSelector(state=>state.projects.singleProject)
+  console.log(projectInfo)
   return (
     <Flex
       gap={{ base: '10', md: '90' }}
@@ -34,13 +51,13 @@ export default function SingleProject() {
         >
           <Text display={{ md: 'none' }} size="1.75rem" fw={700} Bold>
             {' '}
-            Flappy Bird
+            {projectInfo.name || "No Project Name Found"}
           </Text>
           <Text size="1.5rem" fw={700} Bold>
-            Score/Rank
+            Score/Rank: {projectInfo?.grade?.[0]?.overall_grade * 100 || 0}
           </Text>
           <Flex direction={'column'} ta={'center'}>
-            <Anchor href={'https://flappybird.io/'} target="_blank">
+            <Anchor href={projectInfo.code_access_link} target="_blank">
               <Button
                 variant="light"
                 color="green"
@@ -72,7 +89,7 @@ export default function SingleProject() {
               leftSection={<FaRegShareSquare size={40} />}
               onClick={function () {
                 setShared(true);
-                navigator.clipboard.writeText('https://flappybird.io/');
+                navigator.clipboard.writeText(projectInfo.code_access_link);
               }}
             >
               <Text fw={700} Bold ta={'center'}>
@@ -84,7 +101,7 @@ export default function SingleProject() {
         <Image
           radius="md"
           src={
-            'https://lincolnliontales.com/wp-content/uploads/2014/02/Flappy-Bird-Teaser.jpg'
+            projectInfo.project_image ? projectInfo.project_image :'https://lincolnliontales.com/wp-content/uploads/2014/02/Flappy-Bird-Teaser.jpg'
           }
           h="auto"
           w="100%"
@@ -106,15 +123,15 @@ export default function SingleProject() {
                 Name of Project:
               </Text>
               <ListItem>
-                <Text size="1.25rem">Flappy Bird</Text>
+                <Text size="1.25rem">{projectInfo.name || "No project name found"}</Text>
               </ListItem>
             </List.Item>
             <List.Item ta={'center'}>
               <Text size="1.5rem" fw={600} Bold>
-                Name of Coder:
+                Name of Coder: 
               </Text>
               <ListItem>
-                <Text size="1.25rem">Sid</Text>
+                <Text size="1.25rem">{projectInfo.student?.[0]?.name || "No student name found"}</Text>
               </ListItem>
             </List.Item>
             <List.Item ta={'center'} size="xl">
@@ -122,7 +139,7 @@ export default function SingleProject() {
                 Coding Language:
               </Text>
               <ListItem>
-                <Text size="1.25rem">Python</Text>
+                <Text size="1.25rem">{projectInfo.coding_language || "No coding language found" }</Text>
               </ListItem>
             </List.Item>
             <List.Item ta={'center'} size="xl">
@@ -130,7 +147,7 @@ export default function SingleProject() {
                 Coder Skill Level
               </Text>
               <ListItem>
-                <Text size="1.25rem">Pro</Text>
+                <Text size="1.25rem">{projectInfo.category || "Beginner"}</Text>
               </ListItem>
             </List.Item>
           </List>

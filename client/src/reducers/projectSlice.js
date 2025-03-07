@@ -9,6 +9,7 @@ const initialState = {
   projects: [{}],
   error: '',
   status: 'idle',
+  singleProject: [{}],
 };
 
 // * Fetch all projects
@@ -158,11 +159,16 @@ export const getProjectById = createAsyncThunk(
   'projects/getProjectById',
   async (_id) => {
     try {
-      const request = await axios.get(`${projectBaseUrl}/get/${_id}`);
+      const request = await axios.get(`${projectBaseUrl}/${_id}`);
       const response = request.data;
       return response;
     } catch (err) {
-      return err.response.data;
+      notifications.show({
+        title: 'Error',
+        message: 'An error has occured',
+        color: 'red',
+      });
+      return rejectWithValue(err.response.data);
     }
   },
 );
@@ -217,6 +223,15 @@ const projectSlice = createSlice({
       )
       .addMatcher(
         (action) => {
+          return action.type === getProjectById.fulfilled.type;
+        },
+        (state, action) => {
+          state.loading = false;
+          state.singleProject = action.payload;
+        },
+      )
+      .addMatcher(
+        (action) => {
           return action.type === updateProject.fulfilled.type;
         },
         (state, action) => {
@@ -253,6 +268,15 @@ const projectSlice = createSlice({
           state.loading = false;
           state.status = 'error';
           state.error = action.error.message;
+        },
+      )
+      .addMatcher(
+        (action) => {
+          return action.type === getProjectById.rejected.type;
+        },
+        (state, action) => {
+          state.error = action.error.message;
+          state.loading = false;
         },
       );
   },

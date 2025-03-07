@@ -1,11 +1,13 @@
 import { Card, Image, Text, Badge, Button, Flex } from '@mantine/core';
 import './ProjectCard.css';
+import { Link } from 'react-router-dom';
 
 const ProjectCard = ({
   title = 'Project Name',
   description = 'Project Description',
   language = 'Other',
   image,
+  project_id,
   style,
 }) => {
   return (
@@ -32,10 +34,11 @@ const ProjectCard = ({
       <Text size="sm" c="dimmed">
         {description}
       </Text>
-
+      <Link className='link' to={`/single-project/${project_id}`} >
       <Button color="blue" fullWidth mt="md" radius="md">
-        View Project
+          View Project
       </Button>
+      </Link>
     </Card>
   );
 };

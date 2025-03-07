@@ -142,7 +142,6 @@ export function Podium() {
                   <Link
                     className={'link'}
                     to={'/account'}
-                    onClick={() => setOpened(false)}
                     style={{ textDecoration: 'none' }}
                   >
                     {project?.student?.[0]?.name || "Unknown"}
@@ -208,7 +207,7 @@ const HomePage = () => {
             return(
             <Carousel.Slide style={{ width: '100%' }} key={project._id}>
             <Center>
-              <ProjectCard style={{ width: '100%' }} title={project.name} language={project.coding_language ? project.coding_language : "Other"} description={project.description} image={project.project_image ? project.project_image : "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png"}/>
+              <ProjectCard style={{ width: '100%' }} project_id={project._id || ""} title={project.name} language={project.coding_language ? project.coding_language : "Other"} description={project.description} image={project.project_image ? project.project_image : "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png"}/>
             </Center>
           </Carousel.Slide>)
           })}

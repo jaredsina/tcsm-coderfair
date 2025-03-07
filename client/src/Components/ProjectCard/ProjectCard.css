@@ -22,3 +22,15 @@ h1 {
   font-size: 50px;
   font-weight: 200px;
 }
+
+.link {
+  text-decoration: none;
+  margin: 0;
+  color: black;
+  font-weight: 600;
+  transition: all .3s ease;
+}
+
+.link:hover {
+  font-weight: 900;
+}
