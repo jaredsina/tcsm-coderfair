@@ -6,7 +6,7 @@ const authBaseUrl = 'http://localhost:8000/auth';
 
 const initialState = {
   loading: false,
-  user: localStorage.getItem('user') || {},
+  user: JSON.parse(localStorage.getItem('user')) || {},
   accessToken: localStorage.getItem('accessToken') || null,
   refreshToken: localStorage.getItem('refreshToken') || null,
   error: '',

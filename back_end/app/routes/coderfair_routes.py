@@ -65,7 +65,7 @@ def delete_coderfair(coderfair_id):
 @jwt_required()
 def update_coderfair(coderfair_id):
     try:
-        # we will get the judge_id from the request json
+        # we will get the user_id from the request json
         data = request.get_json()
         updated_coderfair = data["updated_coderfair"]
 
