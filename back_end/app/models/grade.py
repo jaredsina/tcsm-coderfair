@@ -76,7 +76,34 @@ class GradeModel:
         return list(self.collection.find({"project_id": project_id}))
 
     def list_judge_grades(self, user_id):
-        return list(self.collection.find({"user_id": user_id}))
+        grades = self.collection.aggregate(
+            [
+                {"$match": {"user_id": user_id}},
+                {
+                    "$lookup": {
+                        "from": "projects",
+                        "localField": "project_id",
+                        "foreignField": "_id",
+                        "as": "project",
+                    }
+                },
+                {
+                    "$project": {
+                        "_id": {"$toString": "$_id"},
+                        "concept_tier": 1,
+                        "concept_mastery": 1,
+                        "presentation": 1,
+                        "creativity": 1,
+                        "overall_grade": 1,
+                        "user_id": {"$toString": "$user_id"},
+                        "project_id": {"$toString": "$project_id"},
+                        "overall_comments": 1,
+                        "project.name": 1,
+                    }
+                },
+            ]
+        )
+        return list(grades)
 
     def list_grades(self):
         grades = self.collection.aggregate(

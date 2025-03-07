@@ -27,6 +27,25 @@ export const fetchGrades = createAsyncThunk('grades/fetchGrades', async () => {
   }
 });
 
+// * Fetch all grades
+export const fetchJudgeGrades = createAsyncThunk(
+  'grades/fetchJudgeGrades',
+  async (user_id, { getState, rejectWithValue }) => {
+    try {
+      const request = await axios.get(`${gradeBaseUrl}/judge/${user_id}`);
+      const response = request.data;
+      return response;
+    } catch (err) {
+      notifications.show({
+        title: 'Error',
+        message: 'An error has occured trying to get grades from the database',
+        color: 'red',
+      });
+      return rejectWithValue(err.response.data);
+    }
+  },
+);
+
 // * Create a grade
 export const createGrade = createAsyncThunk(
   'grades/createGrade',
@@ -134,7 +153,8 @@ const gradeSlice = createSlice({
             action.type === fetchGrades.pending.type ||
             action.type === createGrade.pending.type ||
             action.type === deleteGrade.pending.type ||
-            action.type === updateGrade.pending.type
+            action.type === updateGrade.pending.type ||
+            action.type === fetchJudgeGrades.pending.type
           );
         },
         (state) => {
@@ -145,7 +165,10 @@ const gradeSlice = createSlice({
       )
       .addMatcher(
         (action) => {
-          return action.type === fetchGrades.fulfilled.type;
+          return (
+            action.type === fetchGrades.fulfilled.type ||
+            action.type === fetchJudgeGrades.fulfilled.type
+          );
         },
         (state, action) => {
           state.loading = false;
@@ -193,7 +216,8 @@ const gradeSlice = createSlice({
             action.type === fetchGrades.rejected.type ||
             action.type === createGrade.rejected.type ||
             action.type === deleteGrade.rejected.type ||
-            action.type === updateGrade.rejected.type
+            action.type === updateGrade.rejected.type ||
+            action.type === fetchJudgeGrades.rejected.type
           );
         },
         (state, action) => {

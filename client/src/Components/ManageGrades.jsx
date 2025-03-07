@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Table, Title, Select, Pill, Modal, Textarea } from "@mantine/core";
 import { useDispatch, useSelector } from "react-redux";
-import {fetchGrades, updateGrade, deleteGrade} from "../reducers/gradeSlice";
+import {fetchGrades, updateGrade, deleteGrade, fetchJudgeGrades} from "../reducers/gradeSlice";
 
 const ManageGrades = () => {
   const [showEditModal, setShowEditModal] = useState(false);
@@ -12,9 +12,10 @@ const ManageGrades = () => {
 
   const status = useSelector((state) => state.grades.status);
   const gradeInfo = useSelector((state) => state.grades.grades);
+  const user = useSelector((state)=>state.auth.user)
 
   useEffect(() => {
-    status === "idle" ? dispatch(fetchGrades()) : setGrades([{}]);
+    status === "idle" ? dispatch(fetchJudgeGrades(user._id)) : setGrades([{}]);
     setGrades(gradeInfo);
   }, [status, dispatch]);
 

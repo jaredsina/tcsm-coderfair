@@ -20,6 +20,20 @@ def get_grades():
     return jsonify(grades), 200
 
 
+# Define a simple route inside this blueprint
+@grade_routes.route("/judge/<string:judge_id>", methods=["GET"])
+def get_judge_grades(judge_id):
+    try:
+        grade = GradeModel(current_app.mongo)
+        grades = grade.list_judge_grades(ObjectId(judge_id))
+
+    except Exception as e:
+        return jsonify({"message": "Error getting grades", "error": str(e)}), 400
+
+    print(grades)
+    return jsonify(grades), 200
+
+
 @grade_routes.route("/<string:grade_id>", methods=["GET"])
 def get_grade(grade_id):
     try:
