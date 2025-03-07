@@ -42,7 +42,6 @@ def get_student(student_id):
         student_id = ObjectId(student_id)
         student = StudentModel(current_app.mongo)
         student = student.find_student_by_id(student_id)
-
     except Exception as e:
         return jsonify({"message": "Error getting student", "error": str(e)}), 400
 

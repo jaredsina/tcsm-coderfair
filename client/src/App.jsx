@@ -50,7 +50,7 @@ const App = () => {
             <Route path="/create-account" element={<CreateAccountPage />} />
             <Route path="/projects" element={<ProjectPage />} />
             <Route path="single-project/:id" element = {<SingleProject></SingleProject>}/>
-            <Route path="/account" element={<Account />} />
+            <Route path="/account/:id" element={<Account />} />
 
              {/* Protected Routes */}
              <Route path="/judging" element={<ProtectedRoute element={<JudgingPage />} />} />

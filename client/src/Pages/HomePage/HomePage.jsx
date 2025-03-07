@@ -141,7 +141,7 @@ export function Podium() {
                 }}>
                   <Link
                     className={'link'}
-                    to={'/account'}
+                    to={`/account/${project?.student_id}`}
                     style={{ textDecoration: 'none' }}
                   >
                     {project?.student?.[0]?.name || "Unknown"}
