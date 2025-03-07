@@ -1,42 +1,71 @@
-import React from "react";
-import "./App.css";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import NavBar from "./Components/navbar";
-import JudgingPage from "./Components/JudgingPage/JudgingPage";
-import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
-import ProjectPage from "./Pages/ProjectPage";
-import Results from "./Pages/Results";
-import Account from "./Pages/AccountPage/AccountPage";
 import Home from "./Pages/HomePage/HomePage";
+import Results from "./Pages/Results";
 import SignIn from "./Pages/SignIn"; // Import the Sign-In page
-import Reset from "./Pages/ResetPass/Reset";
+import SingleProject from "./Pages/Single-ProjectPage/SingleProject";
 import Footer from "./Components/Footer";
-function App() {
-  // Custom Hook to show/hide NavBar based on the current route
-  const location = useLocation();
-  const showElements = location.pathname !== "/" && location.pathname !== "/reset";
+import { AppShell } from "@mantine/core";
+import CreateAccountPage from './Pages/CreateAccountPage/CreateAccountPage';
+import ProjectPage from './Pages/ProjectPage/ProjectPage';
+import Account from './Pages/AccountPage/AccountPage';
+import JudgingPage from './Components/JudgingPage/JudgingPage';
+import CoachesPage from './Pages/CoachesPage/CoachesPage';
+import Reset from './Pages/ResetPass/Reset';
+import { AuthProvider, useAuth } from "./auth/AuthContext";
+
+const ProtectedRoute = ({ element }) => {
+  const { isAuthenticated, loading } = useAuth();
+  if (loading) return <div>Loading...</div>; // Prevents premature redirect
+
+  return isAuthenticated ? element : <Navigate to="/" />;
+};
+
+const App = () => {
 
   return (
-    <>
-      {showElements && <NavBar />} {/* Only show NavBar if not on the SignIn page */}
-      <Routes>
-        {/* Default route is the Sign-In page */}
-        <Route path="/" element={<SignIn />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/results" element={<Results />} />
-        <Route path="/projects" element={<ProjectPage />} />
-        <Route path="/account" element={<Account />} />
-        <Route path="/judging" element={<JudgingPage />} />
-        <Route path="/reset" element={<Reset />} />
-      </Routes>
-      {showElements && <Footer />}
-    </>
-  );
-}
-
-export default function AppWithRouter() {
-  return (
+    <AuthProvider>
     <Router>
-      <App />
+      {/* Render NavBar at the top of every page */}
+      <NavBar />
+      <AppShell
+        styles={{
+          root: {
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column'
+          },
+          main: {
+            flex: 1,
+            paddingBottom: 0
+          }
+        }}
+      >        <div>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/results" element={<Results />} />
+            <Route path="/create-account" element={<CreateAccountPage />} />
+            <Route path="/projects" element={<ProjectPage />} />
+            <Route path="single-project/:id" element = {<SingleProject></SingleProject>}/>
+            <Route path="/account/:id" element={<Account />} />
+
+             {/* Protected Routes */}
+             <Route path="/judging" element={<ProtectedRoute element={<JudgingPage />} />} />
+             <Route path="/coach" element={<ProtectedRoute element={<CoachesPage />} />} />
+             
+            <Route path="/reset" element={<Reset />} />
+          </Routes>
+        </div>
+      </AppShell>
+
+      {/* Render Footer at the bottom of every page */}
+      <Footer />
     </Router>
+    </AuthProvider>
   );
-}
+};
+
+export default App;

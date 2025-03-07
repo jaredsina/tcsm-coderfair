@@ -1,19 +1,31 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./SignIn.css";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { data, useNavigate } from 'react-router-dom';
+import './SignIn.css';
+import { Link } from 'react-router-dom';
+import {useDispatch} from"react-redux"
+import { logIn } from '../reducers/authSlice';
+import { useAuth } from '../auth/AuthContext';
+
 const SignIn = () => {
-  const [accountName, setAccountName] = useState("");
-  const [password, setPassword] = useState("");
+  const [accountName, setAccountName] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSignIn = (e) => {
+  const dispatch = useDispatch();
+  const {login} =useAuth();
+
+  const handleSignIn = async(e) => {
     e.preventDefault();
     // Simulated login (Replace with actual authentication logic)
     if (accountName && password) {
-      navigate("/home"); // Redirect to homepage or dashboard
+      const response = await dispatch(logIn({username:accountName, password:password }))
+      
+      if (response.payload.refresh_token && response?.payload?.access_token){
+        login(response)
+        navigate("/"); // Redirect to homepage or dashboard
+      }
     } else {
-      alert("Please enter account name and password.");
+      alert('Please enter account name and password.');
     }
   };
 
@@ -42,7 +54,9 @@ const SignIn = () => {
               required
             />
           </div>
-          <button type="submit" className="sign-in-btn">Sign In</button>
+          <button type="submit" className="sign-in-btn">
+            Sign In
+          </button>
           <br />
           <Link to="/reset">Reset Password</Link>
         </form>

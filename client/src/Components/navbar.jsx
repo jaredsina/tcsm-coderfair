@@ -1,20 +1,37 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
-import { Menu, Burger } from '@mantine/core';
-import './navbar.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Menu, Burger, Avatar } from "@mantine/core";
+import "./navbar.css";
+import { logOut } from "../reducers/authSlice";
+import {useDispatch} from 'react-redux'
+import { useAuth } from "../auth/AuthContext";
+import { resetGrades } from "../reducers/gradeSlice";
 
 const NavBar = () => {
   const [opened, setOpened] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { logout } = useAuth();  // Access logout method from context
+  const {isAuthenticated} = useAuth()
+
+  const handleAuthAction = () => {
+    if (isAuthenticated) {
+      dispatch(logOut());
+      logout();
+      resetGrades()
+      navigate("/signin");
+    } else {
+      navigate("/signin"); // Navigate to sign-in page
+    }
+  };
 
   return (
     <nav className="navbar">
-      {/* Logo or title */}
+      {/* Logo and Burger Icon */}
       <div className="nav-header">
-        <Link to="/home" className="logo">
+        <Link to="/" className="logo" onClick={() => setOpened(false)}>
           CoderFair
         </Link>
-        {/* Burger icon for mobile */}
         <Burger
           opened={opened}
           onClick={() => setOpened((prev) => !prev)}
@@ -23,34 +40,45 @@ const NavBar = () => {
         />
       </div>
 
-      {/* Navigation links */}
-      <ul className={`nav-links ${opened ? 'open' : ''}`}>
+      {/* Navigation Links */}
+      <ul className={`nav-links ${opened ? "open" : ""}`}>
         <li>
-          <Link to="/home" onClick={() => setOpened(false)}>
-            Home
-          </Link>
+          <Link to="/" onClick={() => setOpened(false)}>Home</Link>
         </li>
         <li>
-          <Link to="/results" onClick={() => setOpened(false)}>
-            Results
-          </Link>
+          <Link to="/results" onClick={() => setOpened(false)}>Results</Link>
         </li>
         <li>
-          <Link to="/projects" onClick={() => setOpened(false)}>
-            Projects
-          </Link>
+          <Link to="/projects" onClick={() => setOpened(false)}>Projects</Link>
+        </li>
+        {isAuthenticated ? <><li>
+          <Link to="/judging" onClick={() => setOpened(false)}>Judging</Link>
         </li>
         <li>
-          <Link to="/account" onClick={() => setOpened(false)}>
-            Account
-          </Link>
-        </li>
-        <li>
-          <Link to="/judging" onClick={()=> setOpened(false)}>
-            Judging
-          </Link>
-        </li>
+          <Link to="/coach" onClick={() => setOpened(false)}>Coach Dashboard</Link>
+        </li> </>: null}
+        
       </ul>
+
+      {/* User Profile Dropdown */}
+      <Menu shadow="md" width={150}>
+        <Menu.Target>
+          <Avatar className="user-avatar" radius="xl" />
+        </Menu.Target>
+        <Menu.Dropdown>
+          {isAuthenticated ? (
+            <>
+              <Menu.Item onClick={handleAuthAction} className="sign-out">
+                Sign Out
+              </Menu.Item>
+            </>
+          ) : (
+            <Menu.Item component={Link} to="/signin" className="sign-in">
+              Sign In
+            </Menu.Item>
+          )}
+        </Menu.Dropdown>
+      </Menu>
     </nav>
   );
 };

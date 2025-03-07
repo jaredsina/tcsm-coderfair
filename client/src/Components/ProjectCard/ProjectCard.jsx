@@ -1,17 +1,18 @@
 import { Card, Image, Text, Badge, Button, Flex } from '@mantine/core';
 import './ProjectCard.css';
+import { Link } from 'react-router-dom';
 
 const ProjectCard = ({
   title = 'Project Name',
   description = 'Project Description',
-  language = [],
-  children,
-  className,
+  language = 'Other',
+  image,
+  project_id,
   style,
 }) => {
   return (
     <Card
-      style={{ ...style, width: style?.width || 300 }}
+      style={{ ...style, width: style?.width || 310 }}
       shadow="sm"
       padding="lg"
       radius="md"
@@ -19,26 +20,25 @@ const ProjectCard = ({
     >
       <Card.Section>
         <Image
-          src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png"
+          src={image}
           height={160}
-          alt="Norway"
+          alt="Project Image"
         />
       </Card.Section>
 
       <Flex justify="space-between" align="center" mt="md" mb="xs">
-        <Text fw={500}>{title}</Text>
+        <Text fw={500}style={{ whiteSpace:'nowrap', overflow:'scroll', maxWidth:140}}>{title}</Text>
         {/* {language && <Badge color="blue">{language}</Badge>} */}
-        {language.map((projectLanguage) => (
-          <Badge color="blue">{projectLanguage}</Badge>
-        ))}
+          <Badge color="blue">{language}</Badge>
       </Flex>
       <Text size="sm" c="dimmed">
         {description}
       </Text>
-
+      <Link className='link' to={`/single-project/${project_id}`} >
       <Button color="blue" fullWidth mt="md" radius="md">
-        View Project
+          View Project
       </Button>
+      </Link>
     </Card>
   );
 };
