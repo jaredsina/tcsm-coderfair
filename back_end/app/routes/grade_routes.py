@@ -30,7 +30,6 @@ def get_judge_grades(judge_id):
     except Exception as e:
         return jsonify({"message": "Error getting grades", "error": str(e)}), 400
 
-    print(grades)
     return jsonify(grades), 200
 
 
