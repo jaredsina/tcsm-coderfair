@@ -5,22 +5,18 @@ import {
   Textarea,
   Text,
   List,
-  TextInput,
   Rating,
   Title,
-  Autocomplete,
-  MultiSelect,
   Select,
   Alert,
 } from "@mantine/core";
 import { Podium } from "../../Pages/HomePage/HomePage";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector, useStore } from "react-redux";
-import { createGrade, fetchGrades } from "../../reducers/gradeSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { createGrade } from "../../reducers/gradeSlice";
 import { fetchStudents } from "../../reducers/studentSlice";
 import {  resetProjectStatus } from "../../reducers/projectSlice";
 import { notifications } from "@mantine/notifications";
-import { fetchJudges } from "../../reducers/judgeSlice";
 
 
 const concept_tiers = ["Beginner", "Intermediate", "Advanced"];
@@ -83,7 +79,6 @@ function JudgingPage() {
   // * If ever removing Podium make sure the HomePage component fetchesCoderFairProjects
   //const projectStatus = useSelector((state) => state.projects.status);
 
-  const gradeInfo = useSelector((state) => state.grades.grades);
   const studentInfo = useSelector((state) => state.students.studentInfo);
   const user = useSelector((state)=>state.auth.user)
   const user_id = user._id
@@ -94,15 +89,12 @@ function JudgingPage() {
   //const coachInfo = useSelector((state) => state.coaches.coachInfo);
 
   useEffect(() => {
-    gradeStatus === "idle" ? dispatch(fetchGrades()) : null;
     studentStatus === "idle" ? dispatch(fetchStudents()) : null;
 
 
     // * If ever removing Podium make sure the HomePage component fetchesCoderFairProjects
-    //projectStatus === "idle" ? dispatch(fetchProjects()) : null;
-    //coachStatus === "idle" ? dispatch(fetchCoaches()) : null;
-    
-  }, [gradeStatus, studentStatus, dispatch])
+    //projectStatus === "idle" ? dispatch(fetchProjects()) : null;    
+  }, [studentStatus, dispatch])
 
   return (
     <main>
