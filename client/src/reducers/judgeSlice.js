@@ -8,6 +8,7 @@ const initialState = {
   loading: false,
   judges: [],
   error: '',
+  status: 'idle',
 };
 
 // * Fetch all judges
@@ -132,65 +133,79 @@ const judgeSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchJudges.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(createJudge.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(updateJudge.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(deleteJudge.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(getJudgeById.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchJudges.fulfilled, (state, action) => {
-        state.loading = false;
-        state.judges = action.payload;
-      })
-      .addCase(createJudge.fulfilled, (state, action) => {
-        state.loading = false;
-        state.judges.push(action.payload);
-      })
-      .addCase(updateJudge.fulfilled, (state, action) => {
-        state.loading = false;
-        state.judges = state.judges.map((judge) =>
-          judge._id === action.payload._id ? action.payload : judge,
-        );
-      })
-      .addCase(deleteJudge.fulfilled, (state, action) => {
-        state.loading = false;
-        state.judges = state.judges.filter(
-          (judge) => judge._id !== action.payload._id,
-        );
-      })
-      .addCase(getJudgeById.fulfilled, (state, action) => {
-        state.loading = false;
-        state.judges = action.payload;
-      })
-      .addCase(fetchJudges.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(createJudge.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(updateJudge.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(deleteJudge.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(getJudgeById.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
+      .addMatcher(
+        (action) => {
+          return (
+            action.type === fetchJudges.pending.type ||
+            action.type === createJudge.pending.type ||
+            action.type === updateJudge.pending.type ||
+            action.type === deleteJudge.pending.type
+          );
+        },
+        (state) => {
+          state.loading = true;
+          state.status = 'loading';
+        },
+      )
+      .addMatcher(
+        (action) => {
+          return action.type === fetchJudges.fulfilled.type;
+        },
+        (state, action) => {
+          state.loading = false;
+          state.judges = action.payload;
+          state.status = 'fullfilled';
+        },
+      )
+      .addMatcher(
+        (action) => {
+          return action.type === fetchJudges.fulfilled.type;
+        },
+        (state, action) => {
+          state.loading = false;
+          state.judges.push(action.payload);
+          state.status = 'fullfilled';
+        },
+      )
+      .addMatcher(
+        (action) => {
+          return action.type === updateJudge.fulfilled.type;
+        },
+        (state, action) => {
+          state.loading = false;
+          state.judges = state.judges.map((judge) =>
+            judge._id === action.payload._id ? action.payload : judge,
+          );
+          state.status = 'fullfilled';
+        },
+      )
+      .addMatcher(
+        (action) => {
+          return action.type === deleteJudge.fulfilled.type;
+        },
+        (state, action) => {
+          state.loading = false;
+          state.judges = state.judges.filter(
+            (judge) => judge._id !== action.payload.judge_id,
+          );
+          state.status = 'fullfilled';
+        },
+      )
+      .addMatcher(
+        (action) => {
+          return (
+            action.type === fetchJudges.rejected.type ||
+            action.type === createJudge.rejected.type ||
+            action.type === updateJudge.rejected.type ||
+            action.type === deleteJudge.rejected.type
+          );
+        },
+        (state, action) => {
+          state.loading = false;
+          state.status = 'error';
+          state.error = action.error.message;
+        },
+      );
   },
 });
 
