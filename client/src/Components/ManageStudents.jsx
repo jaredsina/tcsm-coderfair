@@ -142,8 +142,8 @@ const ManageStudents = () => {
             </tr>
           </thead>
           <tbody>
-            {students.map((student) => (
-              <tr key={student._id}>
+            {students.map((student,index) => (
+              <tr key={student._id || index+100}>
                 <td>{student.name}</td>
                 <td>{student.bio}</td>
                 <td>
