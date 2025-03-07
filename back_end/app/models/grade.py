@@ -3,7 +3,7 @@ from flask_pymongo import PyMongo
 
 class GradeModel:
     def __init__(self, mongo: PyMongo):
-        self.collection = mongo.cx["test"]["grades"]
+        self.collection = mongo.cx["production"]["grades"]
 
     def create_grade(
         self,
