@@ -30,7 +30,7 @@ class StudentModel:
 
     def find_student_by_id(self, id):
         # essentially, the aggregate thing lets you get properties from a model, remove certain ones, and add related properties form a different model
-        return list(
+        return next(
             self.collection.aggregate(
                 [
                     {"$match": {"_id": id}},
@@ -44,14 +44,41 @@ class StudentModel:
                     },
                     {
                         "$project": {
-                            "_id": 0,
-                            "project._id": 0,
-                            "project.student_id": 0,
-                            "project.coderfair_id": 0,
+                            "_id": {"$toString": "$_id"},
+                            "name": 1,
+                            "bio": 1,
+                            "avatar_image": 1,
+                            "project": {
+                                "$map": {
+                                    "input": "$project",
+                                    "as": "proj",
+                                    "in": {
+                                        "_id": {"$toString": "$$proj._id"},
+                                        "student_id": {
+                                            "$toString": "$$proj.student_id"
+                                        },
+                                        "coderfair_id": {
+                                            "$toString": "$$proj.coderfair_id"
+                                        },
+                                        "name": "$$proj.name",
+                                        "description": "$$proj.description",
+                                        "category": "$$proj.category",
+                                        "project_image": "$$proj.project_image",
+                                        "presentation_video_url": "$$proj.presentation_video_url",
+                                        "code_access_link": "$$proj.code_access_link",
+                                        "coding_language": "$$proj.coding_language",
+                                        "project_username": "$$proj.project_username",
+                                        "project_password": "$$proj.project_password",
+                                        "notes": "$$proj.notes",
+                                        "is_featured": "$$proj.is_featured",
+                                    },
+                                }
+                            },
                         }
                     },
                 ]
-            )
+            ),
+            None,
         )
 
     def list_students(self):

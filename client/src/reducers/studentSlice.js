@@ -10,6 +10,7 @@ const initialState = {
   searchResults: {},
   error: '',
   status: 'idle',
+  singleStudent: {},
 };
 
 // * Fetch all students
@@ -55,7 +56,7 @@ export const createStudent = createAsyncThunk(
     } catch (err) {
       notifications.show({
         title: 'Error',
-        message: 'An error has occured',
+        message: err?.response?.data?.error || 'Error occured',
         color: 'red',
       });
       return rejectWithValue(err.response.data);
@@ -131,13 +132,18 @@ export const deleteStudent = createAsyncThunk(
 // * Get a student by ID
 export const getStudentById = createAsyncThunk(
   'students/getStudentById',
-  async (id) => {
+  async (_id) => {
     try {
-      const request = await axios.get(`${studentBaseUrl}/${id}`);
+      const request = await axios.get(`${studentBaseUrl}/${_id}`);
       const response = request.data;
       return response;
     } catch (err) {
-      return err.response.data;
+      notifications.show({
+        title: 'Error',
+        message: err?.response?.data?.error || 'Error occured',
+        color: 'red',
+      });
+      return rejectWithValue(err.response.data);
     }
   },
 );
@@ -185,6 +191,15 @@ const studentSlice = createSlice({
       )
       .addMatcher(
         (action) => {
+          return action.type === getStudentById.fulfilled.type;
+        },
+        (state, action) => {
+          state.loading = false;
+          state.singleStudent = action.payload;
+        },
+      )
+      .addMatcher(
+        (action) => {
           return action.type === deleteStudent.fulfilled.type;
         },
         (state, action) => {
@@ -220,6 +235,15 @@ const studentSlice = createSlice({
           state.loading = false;
           state.error = action.error.message;
           state.status = 'error';
+        },
+      )
+      .addMatcher(
+        (action) => {
+          return action.type === getStudentById.rejected.type;
+        },
+        (state, action) => {
+          state.error = action.error.message;
+          state.loading = false;
         },
       );
   },
