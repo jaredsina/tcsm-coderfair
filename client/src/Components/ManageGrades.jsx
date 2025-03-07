@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Table, Title, Select, Pill, Modal, Textarea } from "@mantine/core";
 import { useDispatch, useSelector } from "react-redux";
-import {fetchGrades, updateGrade, deleteGrade, fetchJudgeGrades} from "../reducers/gradeSlice";
+import {updateGrade, deleteGrade, fetchJudgeGrades} from "../reducers/gradeSlice";
 
 const ManageGrades = () => {
   const [showEditModal, setShowEditModal] = useState(false);
@@ -32,12 +32,11 @@ const ManageGrades = () => {
 
   const handleSaveEdit = () => {
     if (!editingGrade.concept_tier || !editingGrade.concept_mastery || !editingGrade.presentation || !editingGrade.creativity) return;
-    
-    dispatch(updateGrade({"_id":editingGrade._id, "updatedGradeData": editingGrade}));
+    const updatedGrade = {...editingGrade, overall_grade: (editingGrade.concept_mastery + editingGrade.creativity + editingGrade.presentation)}
+    dispatch(updateGrade({"_id":editingGrade._id, "updatedGradeData": updatedGrade}));
     setShowEditModal(false);
     setEditingGrade(null);
   };
-
   return (
     <div className="section">
       <Title order={2}>Manage Grades</Title>
@@ -84,27 +83,27 @@ const ManageGrades = () => {
           <>
             <Select
               label="Concept Tier"
-              data={["1", "2", "3", "4", "5"]}
+              data={["Beginner","Intermediate","Advanced"]}
               value={editingGrade.concept_tier}
               onChange={(value) => setEditingGrade({ ...editingGrade, concept_tier: value })}
             />
             <Select
               label="Concept Mastery"
               data={["1", "2", "3", "4", "5"]}
-              value={editingGrade.concept_mastery}
-              onChange={(value) => setEditingGrade({ ...editingGrade, concept_mastery: value })}
+              value={editingGrade.concept_mastery.toString()}
+              onChange={(value) => setEditingGrade({ ...editingGrade, concept_mastery: parseInt(value) })}
             />
             <Select
               label="Presentation"
               data={["1", "2", "3", "4", "5"]}
-              value={editingGrade.presentation}
-              onChange={(value) => setEditingGrade({ ...editingGrade, presentation: value })}
+              value={editingGrade.presentation.toString()}
+              onChange={(value) => setEditingGrade({ ...editingGrade, presentation: parseInt(value) })}
             />
             <Select
               label="Creativity"
               data={["1", "2", "3", "4", "5"]}
-              value={editingGrade.creativity}
-              onChange={(value) => setEditingGrade({ ...editingGrade, creativity: value })}
+              value={editingGrade.creativity.toString()}
+              onChange={(value) => setEditingGrade({ ...editingGrade, creativity: parseInt(value) })}
             />
             <Textarea
               label="Overall Comments"
