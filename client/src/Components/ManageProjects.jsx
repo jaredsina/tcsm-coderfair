@@ -16,7 +16,7 @@ const ManageProjects = () => {
   const [newNotes, setNewNotes] = useState("");
   const [newFeatured, setNewFeatured] = useState(false)
   const [newProjectImage, setNewProjectImage] = useState(null);
-  const [newStudentName, setNewStudentName] = useState(""); // New field for student name
+  const [newStudentName, setNewStudentName] = useState(" "); // New field for student name
   const [showForm, setShowForm] = useState(false);
   const [editingProjectId, setEditingProjectId] = useState(null);
   const [projects, setProjects] = useState([{}]);
@@ -148,7 +148,10 @@ const ManageProjects = () => {
 
       {showForm && (
         <div className="popup-overlay" onClick={() => resetForm()}>
-          <div className="popup-box" onClick={(e) => e.stopPropagation()}>
+          <div className="popup-box" onClick={(e) => e.stopPropagation()} style={{
+            maxHeight: "90vh", // Limits height to 80% of viewport
+            overflowY: "auto", // Enables vertical scrolling
+          }}>
             <h3>{editingProjectId ? "Edit Project" : "Create New Project"}</h3>
             <TextInput
               label="Project Name "
@@ -195,15 +198,15 @@ const ManageProjects = () => {
               onChange={(event) => setNewCodeLink(event.target.value)}
             />
             <Select
-              label="Coding Languages Used"
-              data={['HTML/CSS','Javascript','React', 'Python', 'Java', 'C++', 'C#', 'C', 'Ruby', 'PHP', 'Swift', 'TypeScript', 'Rust', 'Kotlin', 'R', 'Scratch/Block Based', 'SQL',]}
-              value={newLanguages ? newLanguages : ""}
-              onChange={setNewLanguages}
-              styles={{dropdown: { zIndex: 10000 }}}
-              clearable
-              searchable
-              required
-            />
+  label="Coding Languages Used"
+  data={['HTML/CSS', 'Javascript', 'React', 'Python', 'Java', 'C++', 'C#', 'C', 'Ruby', 'PHP', 'Swift', 'TypeScript', 'Rust', 'Kotlin', 'R', 'Scratch/Block Based', 'SQL']}
+  value={newLanguages}  // Single value should be a string
+  onChange={setNewLanguages}  // On change, set the value directly
+  styles={{ dropdown: { zIndex: 10000 } }}
+  clearable
+  required
+/>
+
             
             <TextInput
             label="Project Username"

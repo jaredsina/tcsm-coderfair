@@ -63,12 +63,12 @@ export const createProject = createAsyncThunk(
   async (project, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.accessToken;
-
-      const request = await axios.post(`${projectBaseUrl}/create`, project, {
+      const request = await axios.post(`${projectBaseUrl}/create/`, project, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`, // Include the token in the Authorization header
         },
+        withCredentials: true,
       });
       const response = request.data;
       notifications.show({
