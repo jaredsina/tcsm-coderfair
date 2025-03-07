@@ -33,7 +33,6 @@ export default function SingleProject() {
   }, [id, dispatch, projectFetched]);
 
   const projectInfo = useSelector(state=>state.projects.singleProject)
-  console.log(projectInfo)
   return (
     <Flex
       gap={{ base: '10', md: '90' }}
@@ -49,11 +48,11 @@ export default function SingleProject() {
           justify={'center'}
           align={'center'}
         >
-          <Text display={{ md: 'none' }} size="1.75rem" fw={700} Bold>
+          <Text display={{ md: 'none' }} size="1.75rem" fw={700} >
             {' '}
             {projectInfo.name || "No Project Name Found"}
           </Text>
-          <Text size="1.5rem" fw={700} Bold>
+          <Text size="1.5rem" fw={700} >
             Score/Rank: {projectInfo?.grade?.[0]?.overall_grade * 100 || 0}
           </Text>
           <Flex direction={'column'} ta={'center'}>
@@ -63,7 +62,7 @@ export default function SingleProject() {
                 color="green"
                 leftSection={<CiShare1 size={40} />}
               >
-                <Text fw={700} Bold ta={'center'}>
+                <Text fw={700}  ta={'center'}>
                   Open in New Tab
                 </Text>
               </Button>
@@ -79,7 +78,7 @@ export default function SingleProject() {
                 setLiked(true);
               }}
             >
-              <Text fw={700} Bold>
+              <Text fw={700} >
                 Like
               </Text>
             </Button>
@@ -92,7 +91,7 @@ export default function SingleProject() {
                 navigator.clipboard.writeText(projectInfo.code_access_link);
               }}
             >
-              <Text fw={700} Bold ta={'center'}>
+              <Text fw={700}  ta={'center'}>
                 {shared === true ? 'Copied' : 'Copy'}
               </Text>
             </Button>
@@ -113,42 +112,34 @@ export default function SingleProject() {
         w={455}
         gap={{ md: '40', base: '20' }}
       >
-        <Text size="2rem" fw={700} Bold tt="uppercase" pl={200} pt={30}>
+        <Text size="2rem" fw={700}  tt="uppercase" pl={200} pt={30}>
           Info:
         </Text>
         <Flex direction={'column'}>
           <List withPadding spacing={30}>
             <List.Item ta={'center'}>
-              <Text size="1.5rem" fw={600} Bold>
+              <Text size="1.5rem" fw={600} >
                 Name of Project:
               </Text>
-              <ListItem>
                 <Text size="1.25rem">{projectInfo.name || "No project name found"}</Text>
-              </ListItem>
             </List.Item>
             <List.Item ta={'center'}>
-              <Text size="1.5rem" fw={600} Bold>
+              <Text size="1.5rem" fw={600} >
                 Name of Coder: 
               </Text>
-              <ListItem>
                 <Text size="1.25rem">{projectInfo.student?.[0]?.name || "No student name found"}</Text>
-              </ListItem>
             </List.Item>
             <List.Item ta={'center'} size="xl">
-              <Text size="1.5rem" fw={600} Bold>
+              <Text size="1.5rem" fw={600} >
                 Coding Language:
               </Text>
-              <ListItem>
                 <Text size="1.25rem">{projectInfo.coding_language || "No coding language found" }</Text>
-              </ListItem>
             </List.Item>
             <List.Item ta={'center'} size="xl">
-              <Text size="1.5rem" fw={600} Bold>
+              <Text size="1.5rem" fw={600} >
                 Coder Skill Level
               </Text>
-              <ListItem>
                 <Text size="1.25rem">{projectInfo.category || "Beginner"}</Text>
-              </ListItem>
             </List.Item>
           </List>
         </Flex>
