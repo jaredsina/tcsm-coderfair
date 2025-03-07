@@ -2,7 +2,9 @@ import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { notifications } from '@mantine/notifications';
 
-const studentBaseUrl = 'http://localhost:8000/students';
+// const studentBaseUrl = 'http://localhost:8000/students';
+const backendURL = import.meta.env.VITE_BACKENDURL;
+const studentBaseUrl = `${backendURL}/students`;
 
 const initialState = {
   loading: false,

@@ -2,7 +2,9 @@ import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { notifications } from '@mantine/notifications';
 import { useStore } from 'react-redux';
-const gradeBaseUrl = 'http://localhost:8000/grades';
+// const gradeBaseUrl = 'http://localhost:8000/grades';
+const backendURL = import.meta.env.VITE_BACKENDURL;
+const gradeBaseUrl = `${backendURL}/grades`;
 
 const initialState = {
   loading: false,

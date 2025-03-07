@@ -2,7 +2,8 @@ import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { notifications } from '@mantine/notifications';
 
-const projectBaseUrl = 'http://localhost:8000/projects';
+const backendURL = import.meta.env.VITE_BACKENDURL;
+const projectBaseUrl = `${backendURL}/projects`;
 
 const initialState = {
   loading: false,

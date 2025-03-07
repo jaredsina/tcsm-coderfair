@@ -2,7 +2,9 @@ import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { notifications } from '@mantine/notifications';
 
-const authBaseUrl = 'http://localhost:8000/auth';
+// const authBaseUrl = 'http://localhost:8000/auth';
+const backendURL = import.meta.env.VITE_BACKENDURL;
+const authBaseUrl = `${backendURL}/auth`;
 
 const initialState = {
   loading: false,
