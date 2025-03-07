@@ -103,6 +103,7 @@ export const updateProject = createAsyncThunk(
           headers: {
             Authorization: `Bearer ${token}`, // Include the token in the Authorization header
           },
+          withCredentials: true,
         },
       );
       const response = request.data;
@@ -134,6 +135,7 @@ export const deleteProject = createAsyncThunk(
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the Authorization header
         },
+        withCredentials: true,
       });
       const response = request.data;
       notifications.show({

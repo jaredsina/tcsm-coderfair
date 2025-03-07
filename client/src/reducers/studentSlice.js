@@ -45,6 +45,7 @@ export const createStudent = createAsyncThunk(
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`, // Include the token in the Authorization header
         },
+        withCredentials: true,
       });
       const response = request.data;
       notifications.show({
@@ -79,6 +80,7 @@ export const updateStudent = createAsyncThunk(
           headers: {
             Authorization: `Bearer ${token}`, // Include the token in the Authorization header
           },
+          withCredentials: true,
         },
       );
       const response = request.data;
@@ -110,6 +112,7 @@ export const deleteStudent = createAsyncThunk(
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the Authorization header
         },
+        withCredentials: true,
       });
       const response = request.data;
       notifications.show({

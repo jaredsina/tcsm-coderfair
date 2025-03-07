@@ -57,6 +57,7 @@ export const createGrade = createAsyncThunk(
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the Authorization header
         },
+        withCredentials: true,
       });
       const response = request.data;
       notifications.show({
@@ -91,6 +92,7 @@ export const updateGrade = createAsyncThunk(
           headers: {
             Authorization: `Bearer ${token}`, // Include the token in the Authorization header
           },
+          withCredentials: true,
         },
       );
       const response = request.data;
@@ -122,6 +124,7 @@ export const deleteGrade = createAsyncThunk(
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the Authorization header
         },
+        withCredentials: true,
       });
       const response = request.data;
       notifications.show({
