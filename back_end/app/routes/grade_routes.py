@@ -81,7 +81,7 @@ def create_grade():
         presentation = data["presentation"]
         creativity = data["creativity"]
         overall_grade = data["overall_grade"]
-        judge_id = ObjectId(data["judge_id"])
+        user_id = ObjectId(data["user_id"])
         project_id = ObjectId(data["project_id"])
         overall_comments = data["overall_comments"]
 
@@ -92,7 +92,7 @@ def create_grade():
             presentation,
             creativity,
             overall_grade,
-            judge_id,
+            user_id,
             project_id,
             overall_comments,
         )

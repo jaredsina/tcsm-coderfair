@@ -12,7 +12,7 @@ class GradeModel:
         presentation,
         creativity,
         overall_grade,
-        judge_id,
+        user_id,
         project_id,
         overall_comments,
     ):
@@ -22,7 +22,7 @@ class GradeModel:
             "presentation": presentation,
             "creativity": creativity,
             "overall_grade": overall_grade,
-            "judge_id": judge_id,
+            "user_id": user_id,
             "project_id": project_id,
             "overall_comments": overall_comments,
         }
@@ -46,7 +46,7 @@ class GradeModel:
                         "presentation": 1,
                         "creativity": 1,
                         "overall_grade": 1,
-                        "judge_id": {"$toString": "$judge_id"},
+                        "user_id": {"$toString": "$user_id"},
                         "project_id": {"$toString": "$project_id"},
                         "overall_comments": 1,
                         "project.name": 1,
@@ -64,7 +64,7 @@ class GradeModel:
                     {
                         "$project": {
                             "_id": 0,
-                            "judge_id": 0,
+                            "user_id": 0,
                             "project_id": 0,
                         }
                     },
@@ -75,8 +75,8 @@ class GradeModel:
     def list_project_grades(self, project_id):
         return list(self.collection.find({"project_id": project_id}))
 
-    def list_judge_grades(self, judge_id):
-        return list(self.collection.find({"judge_id": judge_id}))
+    def list_judge_grades(self, user_id):
+        return list(self.collection.find({"user_id": user_id}))
 
     def list_grades(self):
         grades = self.collection.aggregate(
@@ -97,7 +97,7 @@ class GradeModel:
                         "presentation": 1,
                         "creativity": 1,
                         "overall_grade": 1,
-                        "judge_id": {"$toString": "$judge_id"},
+                        "user_id": {"$toString": "$user_id"},
                         "project_id": {"$toString": "$project_id"},
                         "overall_comments": 1,
                         "project.name": 1,
