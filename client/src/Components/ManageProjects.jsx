@@ -176,7 +176,7 @@ const ManageProjects = () => {
               onChange={(event) => setNewDescription(event.target.value)}
               required
             />
-            <Alert variant="light" color="red" title="Warning">Do not update project images often!</Alert>
+            <Alert variant="light" color="red" title="Warning">GIFS are for featured or top 3 projects only! Do not update project images often!</Alert>
             <FileInput 
             size="md"
             radius="xl"
