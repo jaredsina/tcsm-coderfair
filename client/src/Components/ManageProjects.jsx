@@ -254,8 +254,8 @@ const ManageProjects = () => {
             </tr>
           </thead>
           <tbody>
-            {projects ? projects.map((project) => (
-              <tr key={project._id}>
+            {projects ? projects.map((project,index) => (
+              <tr key={project._id || index+10}>
                 <td>{project.name}</td>
                 <td>{project.student?.[0]?.name || "Can't Find Student Name"}</td>
                 <td className="actions-column">
