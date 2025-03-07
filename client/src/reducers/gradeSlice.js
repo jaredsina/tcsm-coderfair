@@ -6,7 +6,7 @@ const gradeBaseUrl = 'http://localhost:8000/grades';
 
 const initialState = {
   loading: false,
-  grades: [{}],
+  grades: [],
   error: '',
   status: 'idle',
 };
@@ -144,7 +144,14 @@ export const deleteGrade = createAsyncThunk(
 const gradeSlice = createSlice({
   name: 'grades',
   initialState,
-  reducers: {},
+  reducers: {
+    resetGrades: (state) => {
+      state.status = 'idle';
+      state.grades = [];
+      state.loading = false;
+      state.error = '';
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addMatcher(
@@ -228,5 +235,7 @@ const gradeSlice = createSlice({
       );
   },
 });
+
+export const { resetGrades } = gradeSlice.actions;
 
 export default gradeSlice.reducer;

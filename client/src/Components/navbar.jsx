@@ -5,6 +5,7 @@ import "./navbar.css";
 import { logOut } from "../reducers/authSlice";
 import {useDispatch} from 'react-redux'
 import { useAuth } from "../auth/AuthContext";
+import { resetGrades } from "../reducers/gradeSlice";
 
 const NavBar = () => {
   const [opened, setOpened] = useState(false);
@@ -17,6 +18,7 @@ const NavBar = () => {
     if (isAuthenticated) {
       dispatch(logOut());
       logout();
+      resetGrades()
       navigate("/signin");
     } else {
       navigate("/signin"); // Navigate to sign-in page
