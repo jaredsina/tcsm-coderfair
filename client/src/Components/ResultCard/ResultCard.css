@@ -46,3 +46,15 @@
     width: calc(100% - 20px); /* 1 card per row */
   }
 }
+
+.link {
+  text-decoration: none;
+  margin: 0;
+  color: black;
+  font-weight: 600;
+  transition: all .3s ease;
+}
+
+.link:hover {
+  font-weight: 900;
+}

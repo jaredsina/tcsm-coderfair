@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, Text, Group, Badge, Button, Box } from "@mantine/core";
 import "./ResultCard.css";
+import { Link } from "react-router-dom";
 
 const ResultCard = ({
   awardName = "Award Name",
@@ -26,7 +27,7 @@ const ResultCard = ({
 
       {/* Project Boxes */}
       <Box mt="lg" className="project-boxes">
-        {projects.map((project, index) => (
+        {projects?.map((project, index) => (
           <Card
             key={index}
             shadow="sm"
@@ -42,9 +43,11 @@ const ResultCard = ({
       </Box>
 
       {/* View More Button */}
+      <Link to="/projects" className="link">
       <Button color="green" fullWidth mt="xl" radius="md" size="md">
         View All Projects
       </Button>
+      </Link>
     </Card>
   );
 };
