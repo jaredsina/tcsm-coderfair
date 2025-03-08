@@ -98,24 +98,24 @@ const ManageGrades = () => {
             <Select
               label="Concept Mastery"
               data={["1", "2", "3", "4", "5"]}
-              value={editingGrade.concept_mastery.toString()}
+              value={editingGrade.concept_mastery.toString() ?? null}
               onChange={(value) => setEditingGrade({ ...editingGrade, concept_mastery: parseInt(value) })}
             />
             <Select
               label="Presentation"
               data={["1", "2", "3", "4", "5"]}
-              value={editingGrade.presentation.toString()}
+              value={editingGrade.presentation.toString() ?? null}
               onChange={(value) => setEditingGrade({ ...editingGrade, presentation: parseInt(value) })}
             />
             <Select
               label="Creativity"
               data={["1", "2", "3", "4", "5"]}
-              value={editingGrade.creativity.toString()}
+              value={editingGrade.creativity.toString() ?? null}
               onChange={(value) => setEditingGrade({ ...editingGrade, creativity: parseInt(value) })}
             />
             <Textarea
               label="Overall Comments"
-              value={editingGrade.overall_comments || ""}
+              value={editingGrade.overall_comments ?? null}
               onChange={(event) => setEditingGrade({ ...editingGrade, overall_comments: event.currentTarget.value })}
               placeholder="Enter overall comments"
               mt="md"

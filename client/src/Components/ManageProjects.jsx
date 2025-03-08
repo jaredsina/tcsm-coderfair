@@ -164,7 +164,7 @@ const ManageProjects = () => {
               label="Student Name "
               placeholder="Enter student name"
               data={students.map((student) => student.name)}
-              value={selectedStudent}
+              value={selectedStudent || null}
               onChange={(value) => setSelectedStudent(value)}
               styles={{dropdown: { zIndex: 10000 }}}
               required
@@ -198,14 +198,14 @@ const ManageProjects = () => {
               onChange={(event) => setNewCodeLink(event.target.value)}
             />
             <Select
-  label="Coding Languages Used"
-  data={['HTML/CSS', 'Javascript', 'React', 'Python', 'Java', 'C++', 'C#', 'C', 'Ruby', 'PHP', 'Swift', 'TypeScript', 'Rust', 'Kotlin', 'R', 'Scratch/Block Based', 'SQL']}
-  value={newLanguages}  // Single value should be a string
-  onChange={setNewLanguages}  // On change, set the value directly
-  styles={{ dropdown: { zIndex: 10000 } }}
-  clearable
-  required
-/>
+              label="Coding Languages Used"
+              data={['HTML/CSS', 'Javascript', 'React', 'Python', 'Java', 'C++', 'C#', 'C', 'Ruby', 'PHP', 'Swift', 'TypeScript', 'Rust', 'Kotlin', 'R', 'Scratch/Block Based', 'SQL', 'Other']}
+              value={newLanguages ?? null}  // Single value should be a string
+              onChange={setNewLanguages}  // On change, set the value directly
+              styles={{ dropdown: { zIndex: 10000 } }}
+              clearable
+              required
+            />
 
             
             <TextInput

@@ -131,7 +131,7 @@ function JudgingPage() {
                       data={studentInfo?.length > 1 ? studentInfo?.map((student) => student.name): null}
                       searchable
                       clearable
-                      value={selectedStudent?.name || null}
+                      value={selectedStudent?.name ?? null}
                       onChange={(value)=> handleEditStudent(value)}
                     />
                   </List.Item>
@@ -139,10 +139,10 @@ function JudgingPage() {
                     <div>Concept Tier</div>
                     <Select
                       placeholder="Enter Your Response"
-                      data={concept_tiers}
+                      data={concept_tiers ?? null}
                       searchable
                       clearable
-                      value={newGrade.concept_tier}
+                      value={newGrade.concept_tier ?? null}
                       onChange={(value)=> setNewGrade({...newGrade, concept_tier: value})}
                     />
                   </List.Item>

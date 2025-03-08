@@ -57,7 +57,7 @@ const SearchBar = ({setShownProjects}) => {
           clearable 
           placeholder="Search project" 
           data={projects && projects.filter(project => Object.keys(project).length > 0).map(project => project.name) || []}
-          value={searchedProject}
+          value={searchedProject ?? null}
           onChange={(value)=>handleSearch(value)}
         />
       </div>
