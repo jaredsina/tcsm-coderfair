@@ -19,25 +19,39 @@ const ProjectCard = ({
       withBorder
     >
       <Card.Section>
-        <Image
-          src={image}
-          height={160}
-          alt="Project Image"
-        />
+        <Image src={image} height={160} alt="Project Image" />
       </Card.Section>
 
-      <Flex justify="space-between" align="center" mt="md" mb="xs" direction={{base:"column",md:'row'}} gap={{base:8}}>
-        <Text fw={500} style={{ whiteSpace:'normal', overflow:'scroll', textOverflow:'ellipsis'}}>{title}</Text>
+      <Flex
+        justify="space-between"
+        align="center"
+        mt="md"
+        mb="xs"
+        direction={{ base: 'column', md: 'row' }}
+        gap={{ base: 10 }}
+      >
+        <Text
+          fw={500}
+          maw="100%"
+          style={{
+            whiteSpace: 'nowrap',
+            overflow: 'auto',
+          }}
+        >
+          {title}
+        </Text>
         {/* {language && <Badge color="blue">{language}</Badge>} */}
-          <Badge color="blue">{language}</Badge>
+        <Badge color="blue" miw="fit-content">
+          {language}
+        </Badge>
       </Flex>
       <Text size="sm" c="dimmed">
         {description}
       </Text>
-      <Link className='link' to={`/single-project/${project_id}`} >
-      <Button color="blue" fullWidth mt="md" radius="md">
+      <Link className="link" to={`/single-project/${project_id}`}>
+        <Button color="blue" fullWidth mt="md" radius="md">
           View Project
-      </Button>
+        </Button>
       </Link>
     </Card>
   );
