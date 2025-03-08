@@ -51,7 +51,7 @@ export function Leaderboard() {
       <Table.Td>
         <Link
           className={'link'}
-          to={'/account'}
+          to={`/account/${project?.student_id}`}
           onClick={() => setOpened(false)}
           style={{ textDecoration: 'none', fontWeight: 600 }}
         >
