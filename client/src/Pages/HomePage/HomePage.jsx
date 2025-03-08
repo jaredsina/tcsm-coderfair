@@ -195,9 +195,9 @@ const HomePage = () => {
         </Title>
 
         <Carousel
-          withIndicators
+          // withIndicators
           slideSize="80%"
-          height={'22rem'}
+          // height={'22rem'}
           slideGap="md"
           style={{ width: '100%' }}
           controlSize={'3rem'}
@@ -211,8 +211,9 @@ const HomePage = () => {
             </Center>
           </Carousel.Slide>)
           })}
-          <Carousel.Slide>
-            <Flex mih={300} justify="center" align="center" direction="row">
+        </Carousel>
+      </Box>
+      <Flex mih={50} justify="center" align="center" direction="row">
               <Link to="/projects">
                 <Button
                   variant="gradient"
@@ -223,10 +224,7 @@ const HomePage = () => {
                 </Button>
               </Link>
             </Flex>
-          </Carousel.Slide>
-        </Carousel>
-      </Box>
-
+      <Title mt={60} align="center" >Rankings</Title>
       <Podium />
       <Leaderboard />
     </Container>

@@ -26,8 +26,8 @@ const ProjectCard = ({
         />
       </Card.Section>
 
-      <Flex justify="space-between" align="center" mt="md" mb="xs">
-        <Text fw={500}style={{ whiteSpace:'nowrap', overflow:'scroll', maxWidth:140}}>{title}</Text>
+      <Flex justify="space-between" align="center" mt="md" mb="xs" direction={{base:"column",md:'row'}} gap={{base:8}}>
+        <Text fw={500} style={{ whiteSpace:'normal', overflow:'scroll', textOverflow:'ellipsis'}}>{title}</Text>
         {/* {language && <Badge color="blue">{language}</Badge>} */}
           <Badge color="blue">{language}</Badge>
       </Flex>
