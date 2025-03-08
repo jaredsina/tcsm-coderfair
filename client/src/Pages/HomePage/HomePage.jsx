@@ -213,7 +213,7 @@ const HomePage = () => {
           })}
           <Carousel.Slide>
             <Flex mih={300} justify="center" align="center" direction="row">
-              <Link to="/projects" onClick={() => setOpened(false)}>
+              <Link to="/projects">
                 <Button
                   variant="gradient"
                   gradient={{ from: 'blue', to: 'cyan' }}
