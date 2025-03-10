@@ -3,7 +3,7 @@ from flask_pymongo import PyMongo
 
 class ProjectModel:
     def __init__(self, mongo: PyMongo):
-        self.collection = mongo.cx["production"]["projects"]
+        self.collection = mongo.cx["test"]["projects"]
 
     def create_project(
         self,

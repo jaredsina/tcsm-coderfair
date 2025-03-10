@@ -3,7 +3,7 @@ from flask_pymongo import PyMongo
 
 class StudentModel:
     def __init__(self, mongo: PyMongo):
-        self.collection = mongo.cx["production"]["students"]
+        self.collection = mongo.cx["test"]["students"]
 
     def create_student(self, name, bio, avatar_image):
         student_data = {

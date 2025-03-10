@@ -27,7 +27,7 @@ def init_config(app):
     app.mongo = mongo
 
     # Add the database to the Flask app
-    app.db = mongo.cx["production"]
+    app.db = mongo.cx["test"]
 
     # Check the connection to MongoDB
     try:

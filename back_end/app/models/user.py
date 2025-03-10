@@ -3,7 +3,7 @@ from flask_pymongo import PyMongo
 
 class UserModel:
     def __init__(self, mongo: PyMongo):
-        self.collection = mongo.cx["production"]["users"]
+        self.collection = mongo.cx["test"]["users"]
 
     def create_user(
         self,
