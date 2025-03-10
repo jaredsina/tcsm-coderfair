@@ -9,27 +9,27 @@ const Results = () => {
       <div className="results-grid">
         <ResultCard
           awardName="Best Design"
-          projects={["Project Alpha", "Project Beta", "Project Gamma"]}
+          projects={["TBA", "TBA", "TBA"]}
         />
         <ResultCard
           awardName="Most Innovative"
-          projects={["Project Delta", "Project Epsilon", "Project Zeta"]}
+          projects={["TBA", "TBA", "TBA"]}
         />
         <ResultCard
           awardName="Community Impact"
-          projects={["Project Theta", "Project Iota", "Project Kappa"]}
+          projects={["TBA", "TBA", "TBA"]}
         />
         <ResultCard
           awardName="Best Design"
-          projects={["Project Alpha", "Project Beta", "Project Gamma"]}
+          projects={["TBA", "TBA", "TBA"]}
         />
         <ResultCard
           awardName="Most Innovative"
-          projects={["Project Delta", "Project Epsilon", "Project Zeta"]}
+          projects={["TBA", "TBA", "TBA"]}
         />
         <ResultCard
           awardName="Community Impact"
-          projects={["Project Theta", "Project Iota", "Project Kappa"]}
+          projects={["TBA", "TBA", "TBA"]}
         />
       </div>
     </div>

@@ -7,12 +7,14 @@ from .judge_routes import judge_routes
 from .studentmodel_routes import studentmodel_routes
 from .grade_routes import grade_routes
 from .auth_routes import auth_routes
+from .react_routes import react_routes
 
 
 # Registering blueprints (routes) here
 def init_routes(app):
     # Register user routes blueprint
 
+    app.register_blueprint(react_routes)
     app.register_blueprint(grade_routes, url_prefix="/grades")
     app.register_blueprint(user_routes, url_prefix="/users")
     app.register_blueprint(projects_routes, url_prefix="/projects")

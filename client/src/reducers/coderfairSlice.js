@@ -2,7 +2,9 @@ import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { notifications } from '@mantine/notifications';
 
-const coderfairBaseUrl = 'http://localhost:8000/coderfair';
+// const coderfairBaseUrl = 'http://localhost:8000/coderfair';
+const backendURL = import.meta.env.VITE_BACKENDURL;
+const coderfairBaseUrl = `${backendURL}/coderfair`;
 
 const initialState = {
   loading: false,

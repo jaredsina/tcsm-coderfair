@@ -2,12 +2,11 @@ from flask import Flask
 from .routes import init_routes
 from .config import init_config, init_cloudinary
 from .routes.error_handlers import init_error_handlers
-
 from flask_cors import CORS
 
 
 def create_app():
-    app = Flask("website")
+    app = Flask("website", static_folder="../client/dist", static_url_path="/")
 
     # Enable cross-origin resource sharing
     CORS(app, supports_credentials=True)
