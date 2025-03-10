@@ -8,6 +8,7 @@ const ProjectCard = ({
   language = 'Other',
   image,
   project_id,
+  classname,
   style,
 }) => {
   return (
@@ -19,7 +20,7 @@ const ProjectCard = ({
       withBorder
     >
       <Card.Section>
-        <Image src={image} height={160} alt="Project Image" />
+        <Image src={image} className={classname} height={160} alt="Project Image" />
       </Card.Section>
 
       <Flex
@@ -27,7 +28,7 @@ const ProjectCard = ({
         align="center"
         mt="md"
         mb="xs"
-        direction={{ base: 'column', md: 'row' }}
+        direction={{ base: 'column', sm: 'row' }}
         gap={{ base: 10 }}
       >
         <Text

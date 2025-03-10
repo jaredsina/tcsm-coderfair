@@ -261,6 +261,7 @@ const HomePage = () => {
                 <Carousel.Slide style={{ width: '100%' }} key={project._id}>
                   <Center>
                     <ProjectCard
+                      classname = 'homepage-image'
                       style={{ width: '100%' }}
                       project_id={project._id || ''}
                       title={project.name}
