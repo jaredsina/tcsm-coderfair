@@ -33,6 +33,14 @@ export default function SingleProject() {
   }, [id, dispatch, projectFetched]);
 
   const projectInfo = useSelector(state=>state.projects.singleProject)
+
+  // Get the grade totals for each project
+   const totalGrade = projectInfo?.grade?.reduce(
+      (sum, g) => sum + g.overall_grade * 100,
+      0,
+    );
+    
+  console.log(totalGrade)
   return (
     <Flex
       gap={{ base: '10', md: '90' }}
@@ -53,7 +61,7 @@ export default function SingleProject() {
             {projectInfo.name || "No Project Name Found"}
           </Text>
           <Text size="1.5rem" fw={700} >
-            Score/Rank: {projectInfo?.grade?.[0]?.overall_grade * 100 || 0}
+            Score: {totalGrade || 0}
           </Text>
           <Flex direction={'column'} ta={'center'}>
             <Anchor href={projectInfo.code_access_link} target="_blank">
@@ -134,12 +142,7 @@ export default function SingleProject() {
               </Text>
                 <Text size="1.25rem">{projectInfo.coding_language || "No coding language found" }</Text>
             </List.Item>
-            <List.Item ta={'center'} size="xl">
-              <Text size="1.5rem" fw={600} >
-                Coder Skill Level
-              </Text>
-                <Text size="1.25rem">{projectInfo.category || "Beginner"}</Text>
-            </List.Item>
+            
           </List>
         </Flex>
       </Flex>
