@@ -43,7 +43,7 @@ export function Leaderboard() {
   // Get projects in places 4-7
   const leaderboardProjects = gradeTotals
     .sort((a, b) => b.totalGrade - a.totalGrade)
-    .slice(3);
+    .slice(3,7);
 
   const rows = leaderboardProjects.map((project, index) => (
     <Table.Tr key={index}>
