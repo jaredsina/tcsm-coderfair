@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 const ResultCard = ({
   awardName = "Award Name",
   projects = ["Project 1", "Project 2", "Project 3"],
+  student_id = ["1","1","1","1"]
 }) => {
   return (
     <Card
@@ -35,9 +36,10 @@ const ResultCard = ({
             radius="md"
             className="project-box"
           >
-            <Text size="md" fw={500}>
+            <Link to={`/account/${student_id[index]}`} className="link"><Text size="md" fw={500}>
               {project}
-            </Text>
+            </Text></Link>
+            
           </Card>
         ))}
       </Box>
