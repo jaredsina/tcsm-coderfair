@@ -97,7 +97,7 @@ def create_coderfair():
         # Use the JudgeModel class to create a new judge
         new_coderfair = CoderfairModel(current_app.mongo)
 
-        response = new_coderfair.create_coderfair(description, fair_date)
+        response = new_coderfair.create_coderfair(description, fair_date, True)
     except Exception as e:
         # If an exception is raised, return an error message and status code 400
         return jsonify({"message": "Error creating coderfair", "error": str(e)}), 400
