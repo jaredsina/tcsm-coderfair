@@ -88,6 +88,8 @@ function JudgingPage() {
   const projectInfo = useSelector((state) => state.projects.projects);
   //const coachInfo = useSelector((state) => state.coaches.coachInfo);
 
+  const currentCoderFairStudents = projectInfo?.filter((p)=> p.coderfair_id === "69335b9cd90bafe5defe5e8e").map((project)=> project?.student[0]?.name)
+  console.log('Current Coder Fair Students:', currentCoderFairStudents);
   useEffect(() => {
     studentStatus === "idle" ? dispatch(fetchStudents()) : null;
 
@@ -128,7 +130,7 @@ function JudgingPage() {
                     <div>Name of Coder</div>
                     <Select
                       placeholder="Enter Your Response"
-                      data={studentInfo?.length > 1 ? studentInfo?.map((student) => student.name): null}
+                      data={studentInfo?.length > 1 ? currentCoderFairStudents: null}
                       searchable
                       clearable
                       value={selectedStudent?.name ?? null}
