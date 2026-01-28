@@ -54,7 +54,7 @@ const ManageProjects = () => {
     // Append text fields
     formData.append("name", newProjectName);
     formData.append("student_id", studentId);
-    formData.append("coderfair_id", "67b4f809f02dfc6eecbeed34"); // Dynamically change this value
+    formData.append("coderfair_id", "69335b9cd90bafe5defe5e8e"); // Dynamically change this value
     formData.append("description", newDescription);
     formData.append("presentation_video_url", newVideoURL);
     formData.append("code_access_link", newCodeLink);
@@ -103,7 +103,7 @@ const ManageProjects = () => {
     // Append text fields
     formData.append("name", newProjectName);
     formData.append("student_id", selectedStudent); // Dynamically change this value
-    formData.append("coderfair_id", "67b4f809f02dfc6eecbeed34"); // Dynamically change this value
+    formData.append("coderfair_id", "69335b9cd90bafe5defe5e8e"); // Dynamically change this value
     formData.append("description", newDescription);
     formData.append("presentation_video_url", newVideoURL);
     formData.append("code_access_link", newCodeLink);
