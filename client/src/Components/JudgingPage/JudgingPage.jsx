@@ -56,7 +56,7 @@ function JudgingPage() {
     if(!user_id) return
 
     // const studentId = studentInfo.find((student)=> student.name === selectedStudent)
-    const project = projectInfo.find((project)=> project.student_id === selectedStudent._id)
+    const project = projectInfo.find((project)=> project.student_id === selectedStudent._id && project.coderfair_id === "69335b9cd90bafe5defe5e8e")
     newGrade.user_id = user_id
     newGrade.project_id = project?._id
     newGrade.student_id = selectedStudent?._id
@@ -149,7 +149,7 @@ function JudgingPage() {
                   <List.Item>
                     <div>Project Name</div>
                     {
-                      projectInfo.find((project)=> project.student_id === selectedStudent?._id)?.name ? <Alert variant="light" color="green" title="Project Name Found:">{projectInfo.find((project)=> project.student_id === selectedStudent?._id)?.name}</Alert>: <Alert variant="light" color="red" title="Warning">ERROR: No project found for this student. Select another student!</Alert>
+                      projectInfo.find((project)=> project.student_id === selectedStudent?._id)?.name ? <Alert variant="light" color="green" title="Project Name Found:">{projectInfo.find((project)=> project.student_id === selectedStudent?._id && project.coderfair_id === "69335b9cd90bafe5defe5e8e")?.name}</Alert>: <Alert variant="light" color="red" title="Warning">ERROR: No project found for this student. Select another student!</Alert>
                     }
                   </List.Item>
                 </Flex>
