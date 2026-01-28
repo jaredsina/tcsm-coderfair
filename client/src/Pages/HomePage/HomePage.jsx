@@ -19,7 +19,7 @@ import { Carousel } from '@mantine/carousel';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { fetchCoderFairProjects } from '../../reducers/projectSlice';
+import { fetchCoderFairProjects, fetchProjects } from '../../reducers/projectSlice';
 
 const data1 = [
   { rank: 4, name: 'Josh', score: 5000 },
@@ -31,8 +31,14 @@ const data1 = [
 export function Leaderboard() {
   const projects = useSelector((state) => state.projects.projects);
 
+  const currentCoderFairId = '69335b9cd90bafe5defe5e8e'; // Replace with actual coder fair ID logic if needed
+
+  const currentCoderFairProjects = projects?.filter(
+    (project) => project.coder_fair_id === currentCoderFairId,
+  );
+
   // Get the grade totals for each project
-  const gradeTotals = projects?.map((project) => {
+  const gradeTotals = currentCoderFairProjects?.map((project) => {
     const totalGrade = project?.grade?.reduce(
       (sum, g) => sum + g.overall_grade * 100,
       0,
@@ -96,12 +102,19 @@ export function Podium() {
 
   useEffect(() => {
     projectStatus === 'idle'
-      ? dispatch(fetchCoderFairProjects('67b4f809f02dfc6eecbeed34'))
+      ? dispatch(fetchProjects())
       : null;
   }, [projectStatus, dispatch]);
 
+  const currentCoderFairId = '69335b9cd90bafe5defe5e8e'; // Replace with actual coder fair ID logic if needed
+
+  const currentCoderFairProjects = projects?.filter(
+    (project) => project.coderfair_id === currentCoderFairId,
+  );
+
+  console.log('Current Coder Fair Projects:', currentCoderFairProjects);
   // Get the grade totals for each project
-  const gradeTotals = projects?.map((project) => {
+  const gradeTotals = currentCoderFairProjects?.map((project) => {
     const totalGrade = project?.grade?.reduce(
       (sum, g) => sum + g.overall_grade * 100,
       0,
