@@ -49,12 +49,12 @@ const ManageProjects = () => {
     if (!newProjectName.trim() || !selectedStudent) return;
     // !! Neeed dynaminc coderfair_id 
     const studentId = students.find((student) => student.name === selectedStudent)._id;
-    const formData = new FormData();
+    const formData = new FormData()
 
     // Append text fields
     formData.append("name", newProjectName);
     formData.append("student_id", studentId);
-    formData.append("coderfair_id", "69335b9cd90bafe5defe5e8e"); // Dynamically change this value
+    formData.append("coderfair_id", "6a1a16bbf1518a419293995a"); // Dynamically change this value
     formData.append("description", newDescription);
     formData.append("presentation_video_url", newVideoURL);
     formData.append("code_access_link", newCodeLink);
@@ -103,7 +103,7 @@ const ManageProjects = () => {
     // Append text fields
     formData.append("name", newProjectName);
     formData.append("student_id", selectedStudent); // Dynamically change this value
-    formData.append("coderfair_id", "69335b9cd90bafe5defe5e8e"); // Dynamically change this value
+    formData.append("coderfair_id", "6a1a16bbf1518a419293995a"); // Dynamically change this value
     formData.append("description", newDescription);
     formData.append("presentation_video_url", newVideoURL);
     formData.append("code_access_link", newCodeLink);
